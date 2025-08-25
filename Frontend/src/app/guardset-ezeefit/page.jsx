@@ -78,58 +78,58 @@ export default function Hangers() {
   const products = [
     
     {
-      id: "guard-set",
-      name: "Guard Set",
-      // using same image as a placeholder so the UI never breaks
-      image: guardSet1,
-      images: [guardSet1, guardSet2],
-      price: 420,
-      countInStock: 12,
-      description:
-        "Professional-grade metal hanger for quad skates with superior durability and strength",
-      specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Silver", "Black"],
-      sizes: ["Medium", "Large"],
-    },
-    {
-      id: "foam-knee-pad",
-      name: "Foam Knee Pad",
-      image: foamKneePad,
-      images: [foamKneePad],
-      price: 400,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "hq-guard-set",
-      name: "HQ Guard Set ( No Fear)",
-      image: hqGuardSet1,
-      images: [hqGuardSet1],
-      price: 1200,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "ezeefit",
-      name: "Ezeefit",
-      image:  ezeefit,
-      images: [ezeefit],
-      price: 2500,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    } 
+  id: "guard-set",
+  name: "Guard Set",
+  image: guardSet1,
+  images: [guardSet1, guardSet2],
+  price: 420,
+  countInStock: 12,
+  description:
+    "Essential protective guard set offering reliable safety for knees, elbows, and wrists during skating.",
+  specs: { usage: "Recreational & Beginner Skating", protection: "Full set", material: "Impact-Resistant Plastic + Foam Padding" },
+  colors: ["Silver", "Black"],
+  sizes: ["Medium", "Large"],
+},
+{
+  id: "foam-knee-pad",
+  name: "Foam Knee Pad",
+  image: foamKneePad,
+  images: [foamKneePad],
+  price: 400,
+  countInStock: 20,
+  description:
+    "Comfortable foam knee pads providing shock absorption and protection from scrapes and falls.",
+  specs: { usage: "Skating, Training, Outdoor Sports", protection: "Knee Only", material: "Foam Cushion + Elastic Strap" },
+  colors: ["Black", "Red", "Blue"],
+  sizes: ["Small", "Medium", "Large"],
+},
+{
+  id: "hq-guard-set",
+  name: "HQ Guard Set (No Fear)",
+  image: hqGuardSet1,
+  images: [hqGuardSet1],
+  price: 1200,
+  countInStock: 20,
+  description:
+    "High-quality ‘No Fear’ guard set with extra padding and ergonomic design for professional-level protection.",
+  specs: { usage: "Professional Skating & Sports", protection: "Full set", material: "Reinforced Plastic + EVA Foam" },
+  colors: ["Black", "Red", "Blue"],
+  sizes: ["Small", "Medium", "Large"],
+},
+{
+  id: "ezeefit",
+  name: "Ezeefit",
+  image: ezeefit,
+  images: [ezeefit],
+  price: 2500,
+  countInStock: 20,
+  description:
+    "Premium Ezeefit ankle booties designed to prevent blisters and provide maximum comfort inside skates or shoes.",
+  specs: { usage: "Skating, Running, Cycling", protection: "Ankle & Heel", material: "Lycra + Neoprene" },
+  colors: ["Black", "Red", "Blue"],
+  sizes: ["Small", "Medium", "Large"],
+}
+
   ];
 
   return (

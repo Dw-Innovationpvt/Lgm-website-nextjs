@@ -85,34 +85,38 @@ export default function Hangers() {
   }, [selectedProduct]);
 
   const products = [
-    {
-      id: "lgm-helmets",
-      name: "LGM Helmets",
-      image: lgmHelmet1,
-      images: [lgmHelmet1, lgmHelmet2, lgmHelmet3, lgmHelmet4, lgmHelmet5, lgmHelmet6, lgmHelmet7, lgmHelmet8, lgmHelmet9, lgmHelmet10, lgmHelmet11, lgmHelmet12, lgmHelmet13],
-      price: 850,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "fluoescent helmet",
-      name: "Fluoescent Helmet",
-      // using same image as a placeholder so the UI never breaks
-      image: fluoescentHelmet1,
-      images: [fluoescentHelmet1, fluoescentHelmet2, fluoescentHelmet3],
-      price: 250,
-      countInStock: 12,
-      description:
-        "Professional-grade metal hanger for quad skates with superior durability and strength",
-      specs: { usage: "Professional Skating", material: "Stainless Steel" },
-      colors: ["Silver", "Black"],
-      sizes: ["Medium", "Large"],
-    }   
-  ];
+  {
+    id: "lgm-helmets",
+    name: "LGM Helmets",
+    image: lgmHelmet1,
+    images: [
+      lgmHelmet1, lgmHelmet2, lgmHelmet3, lgmHelmet4, lgmHelmet5,
+      lgmHelmet6, lgmHelmet7, lgmHelmet8, lgmHelmet9, lgmHelmet10,
+      lgmHelmet11, lgmHelmet12, lgmHelmet13
+    ],
+    price: 200,
+    countInStock: 20,
+    description:
+      "Lightweight, durable helmet offering reliable protection for everyday skating.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "fluoescent helmet",
+    name: "Fluoescent Helmet",
+    image: fluoescentHelmet1,
+    images: [fluoescentHelmet1, fluoescentHelmet2, fluoescentHelmet3],
+    price: 250,
+    countInStock: 12,
+    description:
+      "Bright fluorescent helmet designed for visibility, comfort, and extra safety.",
+    specs: { usage: "Professional Skating", material: "Stainless Steel" },
+    colors: ["Silver", "Black"],
+    sizes: ["Medium", "Large"],
+  }
+];
+
 
   return (
     <div className="min-h-screen bg-blue-50">

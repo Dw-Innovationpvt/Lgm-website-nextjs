@@ -929,7 +929,7 @@ export default function CheckoutPage() {
       {showCouponForm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
           <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
-            <h3 className="text-lg font-semibold mb-4">
+            <h3 className="text-lg font-semibold mb-4 text-black">
               Apply Academic Discount
             </h3>
             <form onSubmit={applyCoupon} className="space-y-3 text-black">
@@ -956,7 +956,7 @@ export default function CheckoutPage() {
                 name="studentId"
                 value={couponData.studentId}
                 onChange={handleCouponChange}
-                placeholder="Student ID / Institute Name"
+                placeholder="Student's Address"
                 className="w-full border px-3 py-2 rounded-lg"
                 required
               />

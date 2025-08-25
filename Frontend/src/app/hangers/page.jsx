@@ -83,60 +83,59 @@ export default function Hangers() {
   }, [selectedProduct]);
 
   const products = [
-    {
-      id: "quad-naylon-hanger-7mm",
-      name: "Quad Naylon Hanger 7mm",
-      image: quadNaylonHanger7mm1,
-      images: [quadNaylonHanger7mm1, quadNaylonHanger7mm2, quadNaylonHanger7mm3, quadNaylonHanger7mm4],
-      price: 400,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "quad-naylon-hanger-8mm",
-      name: "Metal Quad Hanger 8 mm",
-      // using same image as a placeholder so the UI never breaks
-      image: quadNaylonHanger8mm1,
-      images: [quadNaylonHanger8mm1, quadNaylonHanger8mm2, quadNaylonHanger8mm3],
-      price: 700,
-      countInStock: 12,
-      description:
-        "Professional-grade metal hanger for quad skates with superior durability and strength",
-      specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Silver", "Black"],
-      sizes: ["Medium", "Large"],
-    },
-    {
-      id: "quad-metal-hanger-7mm",
-      name: "Quad Metal Hanger 7mm",
-      image: quadMetalHanger7mm1,
-      images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
-      price: 400,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "quad-metal-hanger-8mm",
-      name: "Quad Metal Hanger 8mm",
-      image: quadMetalHanger8mm1,
-      images: [quadMetalHanger8mm1],
-      price: 400,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-  ];
+  {
+    id: "quad-naylon-hanger-7mm",
+    name: "Quad Nylon Hanger 7mm",
+    image: quadNaylonHanger7mm1,
+    images: [quadNaylonHanger7mm1, quadNaylonHanger7mm2, quadNaylonHanger7mm3, quadNaylonHanger7mm4],
+    price: 300,
+    countInStock: 20,
+    description:
+      "Lightweight 7mm nylon quad hanger, ideal for beginner and recreational skaters seeking smooth performance at an affordable price.",
+    specs: { usage: "Recreational Skating", wheels: "4 Wheel", material: "Durable Nylon" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "quad-naylon-hanger-8mm",
+    name: "Metal Quad Hanger 8mm",
+    image: quadNaylonHanger8mm1,
+    images: [quadNaylonHanger8mm1, quadNaylonHanger8mm2, quadNaylonHanger8mm3],
+    price: 400,
+    countInStock: 12,
+    description:
+      "Strong 8mm metal quad hanger built for durability and stability, perfect for intermediate to professional skaters.",
+    specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Silver", "Black"],
+    sizes: ["Medium", "Large"],
+  },
+  {
+    id: "quad-metal-hanger-7mm",
+    name: "Quad Metal Hanger 7mm",
+    image: quadMetalHanger7mm1,
+    images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
+    price: 700,
+    countInStock: 20,
+    description:
+      "Durable 7mm metal quad hanger that offers improved strength over nylon, suited for skaters wanting more control and longevity.",
+    specs: { usage: "Recreational & Training Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "quad-metal-hanger-8mm",
+    name: "Quad Metal Hanger 8mm",
+    image: quadMetalHanger8mm1,
+    images: [quadMetalHanger8mm1],
+    price: 800,
+    countInStock: 20,
+    description:
+      "Heavy-duty 8mm quad metal hanger designed for advanced skaters who need maximum durability and stability under pressure.",
+    specs: { usage: "Professional & Speed Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+];
 
   return (
     <div className="min-h-screen bg-gray-50">

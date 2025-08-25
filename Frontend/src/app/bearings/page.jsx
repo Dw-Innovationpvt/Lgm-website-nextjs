@@ -107,112 +107,112 @@ export default function Hangers() {
   }, [selectedProduct]);
 
   const products = [
-    {
-      id: "quad-inline-bearing-1",
-      name: "Quad & Inline Bearing (16 pcs)",
-      image: quadInlineBearing1,
-      images: [quadInlineBearing1, quadInlineBearing2],
-      price: 850,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "ABEC7-bearing-2",
-      name: "ABEC7 Bearing(16 pcs)",
-      // using same image as a placeholder so the UI never breaks
-      image: ABEC7bearing1,
-      images: [ABEC7bearing1, ABEC7bearing2, ABEC7bearing3],
-      price: 2200,
-      countInStock: 12,
-      description:
-        "Professional-grade metal hanger for quad skates with superior durability and strength",
-      specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Silver", "Black"],
-      sizes: ["Medium", "Large"],
-    },
-    {
-      id: "quad-inline-practice-bearing-3",
-      name: "Quad & Inline Practice Bearing (16 pcs)",
-      image: quadInlinepraBearing1,
-      images: [quadInlinepraBearing1, quadInlinepraBearing2, quadInlinepraBearing3, quadInlinepraBearing4],
-      price: 3500,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "swiss-gold-4",
-      name: "Swiss Gold ( 7 Ball ) (16pcs)",
-      image: swissgold1,
-      images: [swissgold1, swissgold2],
-      price: 11500,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "hybrid-antirust-white-ball-ceramic-bearing-5",
-      name: "Hybrid Antirust White Ball Ceramic Bearing (16pcs)",
-      image:  hybridAntirustWhiteBall1,
-      images: [hybridAntirustWhiteBall1, hybridAntirustWhiteBall2],
-      price: 10000,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    }, 
-    {
-      id: "white-ceramic-bearing-6",
-      name: "White Ceramic Bearing (16pcs)",
-      image:  whiteCeramicBearing1,
-      images: [whiteCeramicBearing1, whiteCeramicBearing2],
-      price: 12000,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],   
-    },  
-    {
-      id: "overlap-bearing-8",
-      name: "Overlap Bearing (11 balls) (16pcs)",
-      image:  overlapBearing1,
-      images: [overlapBearing1, overlapBearing2],
-      price: 16000,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],    
-    },
-    {
-      id: "minimizer-bearing-7",
-      name: "Minimizer Bearing (11 balls) (16pcs)",
-      image:  minimizerBearing1,
-      images: [minimizerBearing1, minimizerBearing2],
-      price: 45000,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],    
-    }       
-  ];
+  {
+    id: "quad-inline-bearing-1",
+    name: "Quad & Inline Bearing (16 pcs)",
+    image: quadInlineBearing1,
+    images: [quadInlineBearing1, quadInlineBearing2],
+    price: 850,
+    countInStock: 20,
+    description:
+      "Reliable entry-level bearings designed for smooth recreational skating and long-lasting performance.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "ABEC7-bearing-2",
+    name: "ABEC7 Bearing (16 pcs)",
+    image: ABEC7bearing1,
+    images: [ABEC7bearing1, ABEC7bearing2, ABEC7bearing3],
+    price: 2200,
+    countInStock: 12,
+    description:
+      "High-precision ABEC7 bearings built for speed and stability, perfect for professional skaters.",
+    specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Silver", "Black"],
+    sizes: ["Medium", "Large"],
+  },
+  {
+    id: "quad-inline-practice-bearing-3",
+    name: "Quad & Inline Practice Bearing (16 pcs)",
+    image: quadInlinepraBearing1,
+    images: [quadInlinepraBearing1, quadInlinepraBearing2, quadInlinepraBearing3, quadInlinepraBearing4],
+    price: 3500,
+    countInStock: 20,
+    description:
+      "Durable practice bearings designed for daily training with enhanced wear resistance and smooth glide.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "swiss-gold-4",
+    name: "Swiss Gold (7 Ball) (16 pcs)",
+    image: swissgold1,
+    images: [swissgold1, swissgold2],
+    price: 11500,
+    countInStock: 20,
+    description:
+      "Premium Swiss-engineered gold bearings offering ultra-smooth speed, perfect for competition skaters.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "hybrid-antirust-white-ball-ceramic-bearing-5",
+    name: "Hybrid Antirust White Ball Ceramic Bearing (16 pcs)",
+    image: hybridAntirustWhiteBall1,
+    images: [hybridAntirustWhiteBall1, hybridAntirustWhiteBall2],
+    price: 10000,
+    countInStock: 20,
+    description:
+      "Hybrid ceramic bearings with anti-rust protection, offering top performance in all weather conditions.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "white-ceramic-bearing-6",
+    name: "White Ceramic Bearing (16 pcs)",
+    image: whiteCeramicBearing1,
+    images: [whiteCeramicBearing1, whiteCeramicBearing2],
+    price: 12000,
+    countInStock: 20,
+    description:
+      "Lightweight ceramic bearings delivering maximum speed, minimal friction, and a smoother ride.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "overlap-bearing-8",
+    name: "Overlap Bearing (11 Balls) (16 pcs)",
+    image: overlapBearing1,
+    images: [overlapBearing1, overlapBearing2],
+    price: 16000,
+    countInStock: 20,
+    description:
+      "Advanced 11-ball design providing higher load capacity, smoother spin, and extended durability.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "minimizer-bearing-7",
+    name: "Minimizer Bearing (11 Balls) (16 pcs)",
+    image: minimizerBearing1,
+    images: [minimizerBearing1, minimizerBearing2],
+    price: 45000,
+    countInStock: 20,
+    description:
+      "Elite 11-ball minimizer bearings crafted for professional racers seeking unmatched precision and speed.",
+    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+];
+
 
   return (
     <div className="min-h-screen bg-blue-50">

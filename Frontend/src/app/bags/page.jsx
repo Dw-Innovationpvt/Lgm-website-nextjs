@@ -476,60 +476,64 @@ export default function Hangers() {
 
 
   const products = [
-    {
-      id: "small-quad-bag-1",
-      name: "Small Quad Bag",
-      image: smallQuadBag1,
-      images: [smallQuadBag1, smallQuadBag2, smallQuadBag3, smallQuadBag4, smallQuadBag4, smallQuadBag5, smallQuadBag6, smallQuadBag7, smallQuadBag8, smallQuadBag9],
-      price: 500,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "hq-quad-bag-2",
-      name: "HQ Quad Bag",
-      // using same image as a placeholder so the UI never breaks
-      image: hqQuadBag1,
-      images: [hqQuadBag1, hqQuadBag2, hqQuadBag3],
-      price: 950,
-      countInStock: 12,
-      description:
-        "Professional-grade metal hanger for quad skates with superior durability and strength",
-      specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Silver", "Black"],
-      sizes: ["Medium", "Large"],
-    },
-    {
-      id: "inline-bag-3",
-      name: "Inline Bag",
-      image: inlineBag1,
-      images: [inlineBag1, inlineBag2, inlineBag3, inlineBag4, inlineBag5, inlineBag6],
-      price: 1000,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    },
-    {
-      id: "pro-inline-bag-4",
-      name: "Pro Inline Bag",
-      image: proInlineBag1,
-      images: [proInlineBag1, proInlineBag2, proInlineBag3],
-      price: 2500,
-      countInStock: 20,
-      description:
-        "High-quality classic quad hanger for recreational skating with enhanced durability",
-      specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-      colors: ["Black", "Red", "Blue"],
-      sizes: ["Small", "Medium", "Large"],
-    }
-  ];
+  {
+    id: "small-quad-bag-1",
+    name: "Small Quad Bag",
+    image: smallQuadBag1,
+    images: [
+      smallQuadBag1, smallQuadBag2, smallQuadBag3, smallQuadBag4,
+      smallQuadBag4, smallQuadBag5, smallQuadBag6, smallQuadBag7,
+      smallQuadBag8, smallQuadBag9
+    ],
+    price: 500,
+    countInStock: 20,
+    description:
+      "Compact and lightweight quad skate bag, designed to carry your essentials with ease and style.",
+    specs: { usage: "Recreational Skating", capacity: "Fits small skates + accessories", material: "Durable Fabric" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "hq-quad-bag-2",
+    name: "HQ Quad Bag",
+    image: hqQuadBag1,
+    images: [hqQuadBag1, hqQuadBag2, hqQuadBag3],
+    price: 950,
+    countInStock: 12,
+    description:
+      "High-quality quad skate bag with reinforced stitching and extra compartments for professional use.",
+    specs: { usage: "Professional Skating", capacity: "Fits full quad set + gear", material: "Heavy-Duty Polyester" },
+    colors: ["Silver", "Black"],
+    sizes: ["Medium", "Large"],
+  },
+  {
+    id: "inline-bag-3",
+    name: "Inline Bag",
+    image: inlineBag1,
+    images: [inlineBag1, inlineBag2, inlineBag3, inlineBag4, inlineBag5, inlineBag6],
+    price: 1000,
+    countInStock: 20,
+    description:
+      "Stylish inline skate bag with breathable mesh panels, ensuring ventilation and easy portability.",
+    specs: { usage: "Skating", capacity: "Fits inline skates + helmet", material: "Water-Resistant Fabric" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+  {
+    id: "pro-inline-bag-4",
+    name: "Pro Inline Bag",
+    image: proInlineBag1,
+    images: [proInlineBag1, proInlineBag2, proInlineBag3],
+    price: 2500,
+    countInStock: 20,
+    description:
+      "Premium pro-level inline skate bag with padded compartments, ergonomic straps, and maximum storage capacity.",
+    specs: { usage: "Professional Skating", capacity: "Fits skates, pads, and helmet", material: "Premium Nylon" },
+    colors: ["Black", "Red", "Blue"],
+    sizes: ["Small", "Medium", "Large"],
+  },
+];
+
 
   return (
     <div className="min-h-screen bg-blue-50">
