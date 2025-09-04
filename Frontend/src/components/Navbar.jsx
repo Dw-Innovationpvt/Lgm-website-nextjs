@@ -8,6 +8,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { HiMenu } from "react-icons/hi";
 import { Truck, GraduationCap } from "lucide-react";
 import { FaUserShield, FaUserCircle } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -18,12 +19,47 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const loginDropdownRef = useRef(null);
   const router = useRouter();
+  const { cart } = useCart();
 
-  useEffect(() => {
+  // Check login status on component mount and when localStorage changes
+  const checkLoginStatus = () => {
     const admin = localStorage.getItem("admin");
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!admin || !!token);
     setIsAdmin(!!admin);
+  };
+  
+  useEffect(() => {
+    // Initial check
+    checkLoginStatus();
+    
+    // Listen for storage events (when localStorage changes in other tabs/components)
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+    
+    window.addEventListener("storage", handleStorageChange);
+    
+    // Custom event for same-tab localStorage changes
+    const handleAuthChange = () => {
+      checkLoginStatus();
+    };
+    
+    // Listen for cart changes
+    const handleCartChange = () => {
+      // Force cart refresh by triggering a re-render
+      // The cart state will be updated through the CartContext
+    };
+    
+    // Listen for both auth and cart changes
+    window.addEventListener("authChange", handleAuthChange);
+    window.addEventListener("cartChange", handleCartChange);
+    
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("authChange", handleAuthChange);
+      window.removeEventListener("cartChange", handleCartChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -77,6 +113,21 @@ export default function Navbar() {
           }
           .animate-blinkSlow {
             animation: blinkSlow 2.5s ease-in-out infinite;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out forwards;
+          }
+          @keyframes pulse-subtle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+          }
+          .animate-pulse-subtle {
+            animation: pulse-subtle 2s ease-in-out infinite;
           }
         `}</style>
       </div>
@@ -135,8 +186,13 @@ export default function Navbar() {
           </div>
 
           <Link href="/cart">
-            <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
+            <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
               <FiShoppingCart className="text-gray-800 text-xl" strokeWidth={2.5} />
+              {cart.length > 0 && (
+                <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse-subtle">
+                  {cart.length}
+                </div>
+              )}
             </button>
           </Link>
 
@@ -151,25 +207,37 @@ export default function Navbar() {
           <div className="relative" ref={loginDropdownRef}>
             <button
               onClick={handleProfileClick}
-              className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative"
+              className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 relative group"
             >
-              <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
+              {isLoggedIn && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-white z-10 animate-pulse"></div>
+              )}
+              <FiUser className="text-gray-800 text-xl group-hover:text-blue-600 transition-colors duration-200" strokeWidth={2.5} />
             </button>
 
             {!isLoggedIn && showLoginDropdown && (
-              <div className="absolute right-0 mt-2 w-44 bg-white border rounded shadow-lg z-50 text-black">
-                <Link href="/admin-login" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserShield className="text-gray-600" />
-                  Admin Access
+              <div className="absolute right-0 mt-3 w-52 bg-white border border-gray-100 rounded-lg shadow-xl z-50 text-black overflow-hidden transform transition-all duration-300 ease-in-out animate-fadeIn">
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 py-2 px-4 text-white text-sm font-medium">
+                  Account Access
+                </div>
+                <Link href="/admin-login" className="flex items-center gap-3 px-4 py-3 text-gray-700 font-medium hover:bg-blue-50 transition-colors duration-150">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <FaUserShield className="text-lg" />
+                  </div>
+                  <span>Admin Access</span>
                 </Link>
-                <hr className="my-1" />
-                <Link href="/user-login" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserCircle className="text-gray-600" />
-                  User Login
+                <div className="border-t border-gray-100"></div>
+                <Link href="/user-login" className="flex items-center gap-3 px-4 py-3 text-gray-700 font-medium hover:bg-blue-50 transition-colors duration-150">
+                  <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                    <FaUserCircle className="text-lg" />
+                  </div>
+                  <span>User Login</span>
                 </Link>
-                <Link href="/register" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserCircle className="text-gray-600" />
-                  User Sign Up
+                <Link href="/register" className="flex items-center gap-3 px-4 py-3 text-gray-700 font-medium hover:bg-blue-50 transition-colors duration-150">
+                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                    <FaUserCircle className="text-lg" />
+                  </div>
+                  <span>User Sign Up</span>
                 </Link>
               </div>
             )}
