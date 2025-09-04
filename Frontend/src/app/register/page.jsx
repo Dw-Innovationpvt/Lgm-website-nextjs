@@ -60,9 +60,12 @@ export default function RegisterPage() {
           })
         );
         localStorage.setItem("token", data.token); 
+        
+        // Dispatch custom event to notify other components about signup
+        window.dispatchEvent(new Event("authChange"));
 
         // Redirect to profile page
-        router.push("/userProfile");
+        router.replace("/userProfile");
       } else {
         setMessage(data.message || "Signup failed");
       }

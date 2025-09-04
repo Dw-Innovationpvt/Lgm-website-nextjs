@@ -36,6 +36,9 @@ export default function LoginPage() {
         const { name, email, phone } = data.user;
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify({ name, email, phone }));
+        
+        // Dispatch custom event to notify other components about login
+        window.dispatchEvent(new Event("authChange"));
 
         return data;
       })

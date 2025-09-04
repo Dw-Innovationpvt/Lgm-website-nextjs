@@ -13,13 +13,27 @@ export const createOrder = async (req, res) => {
     if (!formData || !cart || !finalAmount) {
       return res.status(400).json({ success: false, message: "Missing order data" });
     }
+    
+    // Extract user email from the form data
+    const userEmail = formData.email;
+    if (!userEmail) {
+      return res.status(400).json({ success: false, message: "User email is required" });
+    }
 
     // ✅ Start transaction: create order + update stock
     const order = await prisma.$transaction(async (tx) => {
       // 1. Create order
       const newOrder = await tx.order.create({
         data: {
-          ...formData,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: userEmail, // Explicitly set the email field
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+          paymentMethod: formData.paymentMethod,
           totalAmount: finalAmount,
           paymentStatus: "pending",
           items: {
@@ -32,16 +46,23 @@ export const createOrder = async (req, res) => {
         },
       });
 
-      // 2. Update stock for each product
+      // 2. Update stock for each product (only if product exists)
       for (const item of cart) {
-        await tx.product.update({
+        // Check if product exists before updating
+        const productExists = await tx.product.findUnique({
           where: { id: item.id },
-          data: {
-            stockQuantity: {
-              decrement: item.quantity, // ✅ Reduce stock
-            },
-          },
         });
+        
+        if (productExists) {
+          await tx.product.update({
+            where: { id: item.id },
+            data: {
+              stockQuantity: {
+                decrement: item.quantity, // ✅ Reduce stock
+              },
+            },
+          });
+        }
       }
 
       return newOrder;
