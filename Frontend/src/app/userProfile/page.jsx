@@ -5,7 +5,25 @@ import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState({ name: "", email: "", phone: "" });
+  // Import additional icons
+  const UserIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  );
+  
+  const OrderIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+    </svg>
+  );
+  
+  const LogoutIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg>
+  );
+  const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const router = useRouter();
@@ -14,17 +32,47 @@ export default function ProfilePage() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
 
-      // Fetch orders if user is logged in
-      if (parsedUser.email) {
-        fetchOrders(parsedUser.email);
+        // Fetch orders if user is logged in
+        if (parsedUser.email) {
+          fetchOrders(parsedUser.email);
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        // Handle invalid user data in localStorage
+        localStorage.removeItem("user");
+        router.replace("/user-login");
       }
     } else {
-      router.push("/user-login");
+      // No user found in localStorage, redirect to login
+      router.replace("/user-login");
+    }
+    
+    // Set active tab to orders if coming from checkout
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('tab') === 'orders') {
+      setActiveTab('orders');
     }
   }, []);
+  
+  // Listen for cart changes which might indicate a new order
+  useEffect(() => {
+    const refreshOrders = () => {
+      if (user?.email) {
+        fetchOrders(user.email);
+        setActiveTab('orders'); // Switch to orders tab
+      }
+    };
+    
+    window.addEventListener("cartChange", refreshOrders);
+    
+    return () => {
+      window.removeEventListener("cartChange", refreshOrders);
+    };
+  }, [user]);
 
   const fetchOrders = async (email) => {
     try {
@@ -44,12 +92,23 @@ export default function ProfilePage() {
   };
 
   const handleLogout = () => {
+    // Remove user data from localStorage
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    router.push("/user-login");
+    
+    // Force a client-side state update before navigation
+    setUser(null);
+    setOrders([]);
+    
+    // Dispatch a custom event to notify other components (like Navbar) about the auth change
+    window.dispatchEvent(new Event("authChange"));
+    
+    // Use router.replace instead of push for a clean navigation
+    router.replace("/user-login");
   };
 
   return (
+
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#fdf6f1] to-[#d7e9ff] font-['Arimo']">
   <main className="flex-grow px-6 py-12">
     <h1 className="text-4xl md:text-5xl font-extrabold mb-8 text-center text-gray-800 drop-shadow-sm">
@@ -222,10 +281,12 @@ export default function ProfilePage() {
             ))}
           </div>
         )}
+
       </div>
     )}
   </main>
 </div>
+
 
   );
 }

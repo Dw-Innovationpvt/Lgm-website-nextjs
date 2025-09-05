@@ -6,8 +6,13 @@ import Image from "next/image";
 
 // Local images mapping
 const productImages = {
+  A0230: ["/assets/comming-soon.png"],
   A0231: ["/assets/109 - Foam Knee Pad/AARMS Photography-14.jpg"],
-  A0232: ["/assets/108 - Guard Set/_MG_2059.jpg", "/assets/108 - Guard Set/1000211146.png"],
+  A0232: [
+    "/assets/108 - Guard Set/_MG_2059.jpg",
+    "/assets/108 - Guard Set/1000211146.png",
+  ],
+  A0233: ["/assets/comming-soon.png"],
   A0234: ["/assets/107 - HQ Guard Set ( No Fear)/AARMS Photography-148.jpg"],
   A0235: ["/assets/155- Ezeefit/1000211135.png"],
 };
@@ -23,7 +28,6 @@ const productImages = {
 
 // import ezeefit from "/public/assets/155- Ezeefit/1000211135.png";
 
-
 export default function GuardSet() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
@@ -35,37 +39,45 @@ export default function GuardSet() {
   const [selections, setSelections] = useState({});
 
   useEffect(() => {
-      const fetchProducts = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/api/products");
-          let data = await res.json();
-  
-          // Filter only Guard Set codes
-          data = data.filter((p) => ["A0231", "A0232", "A0234", "A0235"].includes(p.code) || ["A0231", "A0232", "A0234", "A0235" ].includes(p.code));
-  
-          // Attach images from local mapping
-          data = data.map((p) => ({
-            ...p,
-            image: productImages[p.code]?.[0] || "/placeholder.png",
-            images: productImages[p.code] || ["/placeholder.png"],
-            specs: {
-              usage: "Skating",
-              wheels: "4 Wheel",
-              material: "Stainless Steel",
-            },
-            colors: ["red", "blue", "green", "pink"],
-            sizes: ["Small", "Medium", "Large"],
-            countInStock: p.stockQuantity ?? 0,
-          }));
-  
-          setProducts(data);
-        } catch (err) {
-          console.error("Error fetching products:", err);
-        }
-      };
-  
-      fetchProducts();
-    }, []);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/products");
+        let data = await res.json();
+
+        // Filter only Guard Set codes
+        data = data.filter(
+          (p) =>
+            ["A0230", "A0231", "A0232", "A0233", "A0234", "A0235"].includes(
+              p.code
+            ) ||
+            ["A0230", "A0231", "A0232", "A0233", "A0234", "A0235"].includes(
+              p.code
+            )
+        );
+
+        // Attach images from local mapping
+        data = data.map((p) => ({
+          ...p,
+          image: productImages[p.code]?.[0] || "/placeholder.png",
+          images: productImages[p.code] || ["/placeholder.png"],
+          specs: {
+            usage: "Skating",
+            wheels: "4 Wheel",
+            material: "Stainless Steel",
+          },
+          colors: ["red", "blue", "green", "pink"],
+          sizes: ["Small", "Medium", "Large"],
+          countInStock: p.stockQuantity ?? 0,
+        }));
+
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -116,61 +128,61 @@ export default function GuardSet() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-//   const products = [
-//     {
-//   id: "guard-set",
-//   name: "Guard Set",
-//   image: guardSet1,
-//   images: [guardSet1, guardSet2],
-//   price: 420,
-//   countInStock: 12,
-//   description:
-//     "Essential protective guard set offering reliable safety for knees, elbows, and wrists during skating.",
-//   specs: { usage: "Recreational & Beginner Skating", protection: "Full set", material: "Impact-Resistant Plastic + Foam Padding" },
-//   colors: ["Silver", "Black"],
-//   sizes: ["Medium", "Large"],
-// },
-// {
-//   id: "foam-knee-pad",
-//   name: "Foam Knee Pad",
-//   image: foamKneePad,
-//   images: [foamKneePad],
-//   price: 400,
-//   countInStock: 20,
-//   description:
-//     "Comfortable foam knee pads providing shock absorption and protection from scrapes and falls.",
-//   specs: { usage: "Skating, Training, Outdoor Sports", protection: "Knee Only", material: "Foam Cushion + Elastic Strap" },
-//   colors: ["Black", "Red", "Blue"],
-//   sizes: ["Small", "Medium", "Large"],
-// },
-// {
-//   id: "hq-guard-set",
-//   name: "HQ Guard Set (No Fear)",
-//   image: hqGuardSet1,
-//   images: [hqGuardSet1],
-//   price: 1200,
-//   countInStock: 20,
-//   description:
-//     "High-quality ‘No Fear’ guard set with extra padding and ergonomic design for professional-level protection.",
-//   specs: { usage: "Professional Skating & Sports", protection: "Full set", material: "Reinforced Plastic + EVA Foam" },
-//   colors: ["Black", "Red", "Blue"],
-//   sizes: ["Small", "Medium", "Large"],
-// },
-// {
-//   id: "ezeefit",
-//   name: "Ezeefit",
-//   image: ezeefit,
-//   images: [ezeefit],
-//   price: 2500,
-//   countInStock: 20,
-//   description:
-//     "Premium Ezeefit ankle booties designed to prevent blisters and provide maximum comfort inside skates or shoes.",
-//   specs: { usage: "Skating, Running, Cycling", protection: "Ankle & Heel", material: "Lycra + Neoprene" },
-//   colors: ["Black", "Red", "Blue"],
-//   sizes: ["Small", "Medium", "Large"],
-// }
+  //   const products = [
+  //     {
+  //   id: "guard-set",
+  //   name: "Guard Set",
+  //   image: guardSet1,
+  //   images: [guardSet1, guardSet2],
+  //   price: 420,
+  //   countInStock: 12,
+  //   description:
+  //     "Essential protective guard set offering reliable safety for knees, elbows, and wrists during skating.",
+  //   specs: { usage: "Recreational & Beginner Skating", protection: "Full set", material: "Impact-Resistant Plastic + Foam Padding" },
+  //   colors: ["Silver", "Black"],
+  //   sizes: ["Medium", "Large"],
+  // },
+  // {
+  //   id: "foam-knee-pad",
+  //   name: "Foam Knee Pad",
+  //   image: foamKneePad,
+  //   images: [foamKneePad],
+  //   price: 400,
+  //   countInStock: 20,
+  //   description:
+  //     "Comfortable foam knee pads providing shock absorption and protection from scrapes and falls.",
+  //   specs: { usage: "Skating, Training, Outdoor Sports", protection: "Knee Only", material: "Foam Cushion + Elastic Strap" },
+  //   colors: ["Black", "Red", "Blue"],
+  //   sizes: ["Small", "Medium", "Large"],
+  // },
+  // {
+  //   id: "hq-guard-set",
+  //   name: "HQ Guard Set (No Fear)",
+  //   image: hqGuardSet1,
+  //   images: [hqGuardSet1],
+  //   price: 1200,
+  //   countInStock: 20,
+  //   description:
+  //     "High-quality ‘No Fear’ guard set with extra padding and ergonomic design for professional-level protection.",
+  //   specs: { usage: "Professional Skating & Sports", protection: "Full set", material: "Reinforced Plastic + EVA Foam" },
+  //   colors: ["Black", "Red", "Blue"],
+  //   sizes: ["Small", "Medium", "Large"],
+  // },
+  // {
+  //   id: "ezeefit",
+  //   name: "Ezeefit",
+  //   image: ezeefit,
+  //   images: [ezeefit],
+  //   price: 2500,
+  //   countInStock: 20,
+  //   description:
+  //     "Premium Ezeefit ankle booties designed to prevent blisters and provide maximum comfort inside skates or shoes.",
+  //   specs: { usage: "Skating, Running, Cycling", protection: "Ankle & Heel", material: "Lycra + Neoprene" },
+  //   colors: ["Black", "Red", "Blue"],
+  //   sizes: ["Small", "Medium", "Large"],
+  // }
 
-//   ];
+  //   ];
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -188,19 +200,31 @@ export default function GuardSet() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setView("grid")}
-                className={`p-2 ${view === "grid" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "grid" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* grid icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
                 </svg>
               </button>
               <button
                 onClick={() => setView("list")}
-                className={`p-2 ${view === "list" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "list" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* list icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
                 </svg>
               </button>
@@ -242,10 +266,12 @@ export default function GuardSet() {
                     />
                   </div>
 
-                   {/* ✅ Stock Badge */}
+                  {/* ✅ Stock Badge */}
                   <span
                     className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
-                      product.countInStock > 0 ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                      product.countInStock > 0
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
                     }`}
                   >
                     {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
@@ -260,18 +286,34 @@ export default function GuardSet() {
                     aria-label="View images"
                   >
                     {/* eye icon */}
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <svg
+                      className="w-6 h-6 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
                     </svg>
                   </button>
                 </div>
 
                 {/* Details */}
-                <div className={`flex flex-col ${view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"}`}>
+                <div
+                  className={`flex flex-col ${
+                    view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
+                  }`}
+                >
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                  </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
                   <div className="space-y-4">
@@ -322,47 +364,73 @@ export default function GuardSet() {
 
                     {/* Specifications (with Color & Size dropdowns on the right) */}
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">Specifications:</h4>
+                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
+                        Specifications:
+                      </h4>
                       <ul className="space-y-1.5 text-sm text-gray-600">
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Usage:</span>
-                          <span className="text-gray-600">{product.specs.usage}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Usage:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.usage}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Wheels:</span>
-                          <span className="text-gray-600">{product.specs.wheels || "—"}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Wheels:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.wheels || "—"}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Color:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Color:
+                          </span>
                           <select
                             value={sel.color}
-                            onChange={(e) => setSelection(product.id, "color", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "color", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Color</option>
                             {product.colors?.map((c) => (
-                              <option key={c} value={c}>{c}</option>
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
                             ))}
                           </select>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Material:</span>
-                          <span className="text-gray-600">{product.specs.material || "—"}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Material:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.material || "—"}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Size:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Size:
+                          </span>
                           <select
                             value={sel.size}
-                            onChange={(e) => setSelection(product.id, "size", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "size", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Size</option>
                             {product.sizes?.map((s) => (
-                              <option key={s} value={s}>{s}</option>
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
                             ))}
                           </select>
                         </li>
@@ -382,37 +450,76 @@ export default function GuardSet() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
           onClick={closeImageModal}
         >
-          <div className="relative max-w-4xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative max-w-4xl w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={closeImageModal}
               className="absolute -top-12 right-0 text-white hover:text-gray-300"
               aria-label="Close"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Previous image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
             )}
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Next image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             )}

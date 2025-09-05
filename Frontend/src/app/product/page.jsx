@@ -4,62 +4,86 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
+// Local images mapping
 const productImages = {
-  A0085: [
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg",
+  A0300: [
+    "/assets/comming-soon.png"
   ],
-  A0086: [
-    "/assets/36-Quad Naylon Hanger 8mm/1000211173.png",
-    "/assets/36-Quad Naylon Hanger 8mm/1000211174.png",
-    "/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg",
+  A0301: [
+    "/assets/comming-soon.png"
   ],
-  A0087: [
-    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg",
-    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg",
+  A0302: [
+    "/assets/comming-soon.png"
   ],
-  A0088: ["/assets/38-Quad Metal Hanger 8mm/1000211064.png"],
+  A0303: [
+    "/assets/comming-soon.png"
+  ],
+  A0304: [
+    "/assets/comming-soon.png"
+  ],
+  A0305: [
+    "/assets/comming-soon.png"
+  ],
+  A0306: [
+    "/assets/comming-soon.png"
+  ],
+  A0307: [
+    "/assets/comming-soon.png"
+  ],
+  A0308: [
+    "/assets/comming-soon.png"
+  ],
+  A0309: [
+    "/assets/comming-soon.png"
+  ],
+  A0310: [
+    "/assets/comming-soon.png"
+  ],
+  A0311: [
+    "/assets/comming-soon.png"
+  ],
+  A0312: [
+    "/assets/comming-soon.png"
+  ],
+  A0313: [
+    "/assets/comming-soon.png"
+  ]
 };
 
-// Images
-// import quadNaylonHanger7mm1 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg";
-// import quadNaylonHanger7mm2 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg";
-// import quadNaylonHanger7mm3 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg";
-// import quadNaylonHanger7mm4 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg";
-
-// import quadMetalHanger7mm1 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg";
-// import quadMetalHanger7mm2 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg";
-
-// import quadMetalHanger8mm1 from "/public/assets/38-Quad Metal Hanger 8mm/1000211064.png";
-
-// import quadNaylonHanger8mm1 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211173.png";
-// import quadNaylonHanger8mm2 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211174.png";
-// import quadNaylonHanger8mm3 from "/public/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg";
-
-export default function Hangers() {
+export default function ShoesFramePage() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selections, setSelections] = useState({}); // { [id]: { color, size } }
 
-  // selections shape: { [productId]: { color: string, size: string } }
-  const [selections, setSelections] = useState({});
-
+  // Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/products");
         let data = await res.json();
 
-        // Filter only Guard Set codes
-        data = data.filter(
-          (p) =>
-            ["A0085", "A0086", "A0087", "A0088"].includes(p.code) ||
-            ["A0085", "A0086", "A0087", "A0088"].includes(p.code)
+        // Filter only Baby + Tenacity codes
+        data = data.filter((p) =>
+          [
+            "A0300",
+            "A0301",
+            "A0302",
+            "A0303",
+            "A0304",
+            "A0305",
+            "A0306",
+            "A0307",
+            "A0308",
+            "A0309",
+            "A0310",
+            "A0311",
+            "A0312",
+            "A0313"
+          ].includes(p.code)
         );
 
         // Attach images from local mapping
@@ -96,6 +120,7 @@ export default function Hangers() {
   const handleAddToCart = (product) => {
     const { color = "", size = "" } = selections[product.id] || {};
     addToCart({ ...product, selectedColor: color, selectedSize: size });
+    router.push("/cart");
   };
 
   const handleBuyNow = (product) => {
@@ -110,19 +135,21 @@ export default function Hangers() {
   };
   const closeImageModal = () => setSelectedProduct(null);
 
-  const nextImage = () => {
-    if (!selectedProduct) return;
+  const nextImage = () =>
     setCurrentImageIndex((prev) =>
-      prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      selectedProduct && prev === selectedProduct.images.length - 1
+        ? 0
+        : prev + 1
     );
-  };
-  const prevImage = () => {
-    if (!selectedProduct) return;
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? selectedProduct.images.length - 1 : prev - 1
-    );
-  };
 
+  const prevImage = () =>
+    setCurrentImageIndex((prev) =>
+      selectedProduct && prev === 0
+        ? selectedProduct.images.length - 1
+        : prev - 1
+    );
+
+  // Key navigation for modal
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!selectedProduct) return;
@@ -134,96 +161,16 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  // const products = [
-  //   {
-  //     id: "quad-naylon-hanger-7mm",
-  //     name: "Quad Nylon Hanger 7mm",
-  //     image: quadNaylonHanger7mm1,
-  //     images: [
-  //       quadNaylonHanger7mm1,
-  //       quadNaylonHanger7mm2,
-  //       quadNaylonHanger7mm3,
-  //       quadNaylonHanger7mm4,
-  //     ],
-  //     price: 300,
-  //     countInStock: 20,
-  //     description:
-  //       "Lightweight 7mm nylon quad hanger, ideal for beginner and recreational skaters seeking smooth performance at an affordable price.",
-  //     specs: {
-  //       usage: "Recreational Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Durable Nylon",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-naylon-hanger-8mm",
-  //     name: "Metal Quad Hanger 8mm",
-  //     image: quadNaylonHanger8mm1,
-  //     images: [
-  //       quadNaylonHanger8mm1,
-  //       quadNaylonHanger8mm2,
-  //       quadNaylonHanger8mm3,
-  //     ],
-  //     price: 400,
-  //     countInStock: 12,
-  //     description:
-  //       "Strong 8mm metal quad hanger built for durability and stability, perfect for intermediate to professional skaters.",
-  //     specs: {
-  //       usage: "Professional Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Silver", "Black"],
-  //     sizes: ["Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-metal-hanger-7mm",
-  //     name: "Quad Metal Hanger 7mm",
-  //     image: quadMetalHanger7mm1,
-  //     images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
-  //     price: 700,
-  //     countInStock: 20,
-  //     description:
-  //       "Durable 7mm metal quad hanger that offers improved strength over nylon, suited for skaters wanting more control and longevity.",
-  //     specs: {
-  //       usage: "Recreational & Training Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-metal-hanger-8mm",
-  //     name: "Quad Metal Hanger 8mm",
-  //     image: quadMetalHanger8mm1,
-  //     images: [quadMetalHanger8mm1],
-  //     price: 800,
-  //     countInStock: 20,
-  //     description:
-  //       "Heavy-duty 8mm quad metal hanger designed for advanced skaters who need maximum durability and stability under pressure.",
-  //     specs: {
-  //       usage: "Professional & Speed Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  // ];
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-blue-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Hangers
+            Product
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional quad hangers for optimal skating performance
+            Our products are designed with a perfect balance of performance, comfort, and durability to meet the needs of skaters at every level.
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -295,6 +242,7 @@ export default function Hangers() {
                       priority
                     />
                   </div>
+
                   {/* ✅ Stock Badge */}
                   <span
                     className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
@@ -305,6 +253,7 @@ export default function Hangers() {
                   >
                     {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
                   </span>
+
                   <button
                     onClick={() => openImageModal(product)}
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 
@@ -342,7 +291,9 @@ export default function Hangers() {
                   <p className="text-sm text-gray-500 font-mono mb-1">
                     Code: {product.code}
                   </p>
-                  <p className="text-gray-600 mb-4">{product.description}</p>
+                  <p className="text-gray-600 mb-4">
+                    {product.description || "Premium quality skating gear."}
+                  </p>
 
                   <div className="space-y-4">
                     {/* Price + CTAs */}
@@ -355,115 +306,71 @@ export default function Hangers() {
                           onClick={() => handleAddToCart(product)}
                           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
                         >
-                          {/* cart icon */}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                          </svg>
                           Add to Cart
                         </button>
                         <button
                           onClick={() => handleBuyNow(product)}
                           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
                         >
-                          {/* check icon */}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
                           Buy Now
                         </button>
                       </div>
                     </div>
 
-                    {/* Specifications (with Color & Size dropdowns on the right) */}
-                    <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
+                    {/* Specifications */}
+                    {/* <div className="border-t border-gray-100 pt-4"> */}
+                      {/* <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
                         Specifications:
                       </h4>
                       <ul className="space-y-1.5 text-sm text-gray-600">
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Usage:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.usage}
-                          </span>
+                        <li className="flex justify-between">
+                          <span className="font-medium">Usage:</span>
+                          <span>{product.specs.usage}</span>
                         </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Wheels:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.wheels || "—"}
-                          </span>
+                        <li className="flex justify-between">
+                          <span className="font-medium">Wheels:</span>
+                          <span>{product.specs.wheels}</span>
                         </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Color:
-                          </span>
+                        <li className="flex justify-between">
+                          <span className="font-medium">Material:</span>
+                          <span>{product.specs.material}</span>
+                        </li>
+                        <li className="flex justify-between">
+                          <span className="font-medium">Color:</span>
                           <select
-                            value={sel.color}
+                            value={selections[product.id]?.color || ""}
                             onChange={(e) =>
                               setSelection(product.id, "color", e.target.value)
                             }
-                            className="border rounded-md py-1.5 px-3 text-gray-700"
+                            className="border rounded-md py-1 px-2"
                           >
                             <option value="">Select Color</option>
-                            {product.colors?.map((c) => (
+                            {product.colors.map((c) => (
                               <option key={c} value={c}>
                                 {c}
                               </option>
                             ))}
                           </select>
                         </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Material:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.material || "—"}
-                          </span>
-                        </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Size:
-                          </span>
+                        <li className="flex justify-between">
+                          <span className="font-medium">Size:</span>
                           <select
-                            value={sel.size}
+                            value={selections[product.id]?.size || ""}
                             onChange={(e) =>
                               setSelection(product.id, "size", e.target.value)
                             }
-                            className="border rounded-md py-1.5 px-3 text-gray-700"
+                            className="border rounded-md py-1 px-2"
                           >
                             <option value="">Select Size</option>
-                            {product.sizes?.map((s) => (
+                            {product.sizes.map((s) => (
                               <option key={s} value={s}>
                                 {s}
                               </option>
                             ))}
                           </select>
                         </li>
-                      </ul>
-                    </div>
+                      </ul> */}
+                    {/* </div> */}
                   </div>
                 </div>
               </div>
@@ -484,82 +391,38 @@ export default function Hangers() {
           >
             <button
               onClick={closeImageModal}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300"
-              aria-label="Close"
+              className="absolute -top-12 right-0 text-white"
             >
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              ✖
             </button>
-
             {selectedProduct.images.length > 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  prevImage();
-                }}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 p-2 text-white hover:text-blue-400"
-                aria-label="Previous image"
-              >
-                <svg
-                  className="w-10 h-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevImage();
+                  }}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 text-white"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-            )}
-
-            {selectedProduct.images.length > 1 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  nextImage();
-                }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 p-2 text-white hover:text-blue-400"
-                aria-label="Next image"
-              >
-                <svg
-                  className="w-10 h-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                  ◀
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextImage();
+                  }}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 text-white"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
+                  ▶
+                </button>
+              </>
             )}
-
             <div className="relative w-full h-[80vh]">
               <Image
                 src={selectedProduct.images[currentImageIndex]}
                 alt={selectedProduct.name}
                 fill
                 className="object-contain rounded-lg"
-                sizes="100vw"
-                priority
               />
             </div>
           </div>

@@ -10,6 +10,7 @@ import { Truck, GraduationCap } from "lucide-react";
 import { FaUserShield, FaUserCircle } from "react-icons/fa";
 import { useCart } from "../context/CartContext"; // adjust path
 
+
 export default function Navbar() {
   const pathname = usePathname();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -19,15 +20,51 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const loginDropdownRef = useRef(null);
   const router = useRouter();
+
   const { cart } = useCart(); // ✅ get cart from context
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0); // ✅ total quantity
 
-  useEffect(() => {
+
+  // Check login status on component mount and when localStorage changes
+  const checkLoginStatus = () => {
     const admin = localStorage.getItem("admin");
     const user = localStorage.getItem("user");
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!admin || !!token || !!user);
     setIsAdmin(!!admin);
+  };
+  
+  useEffect(() => {
+    // Initial check
+    checkLoginStatus();
+    
+    // Listen for storage events (when localStorage changes in other tabs/components)
+    const handleStorageChange = () => {
+      checkLoginStatus();
+    };
+    
+    window.addEventListener("storage", handleStorageChange);
+    
+    // Custom event for same-tab localStorage changes
+    const handleAuthChange = () => {
+      checkLoginStatus();
+    };
+    
+    // Listen for cart changes
+    const handleCartChange = () => {
+      // Force cart refresh by triggering a re-render
+      // The cart state will be updated through the CartContext
+    };
+    
+    // Listen for both auth and cart changes
+    window.addEventListener("authChange", handleAuthChange);
+    window.addEventListener("cartChange", handleCartChange);
+    
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("authChange", handleAuthChange);
+      window.removeEventListener("cartChange", handleCartChange);
+    };
   }, []);
 
 
@@ -90,6 +127,21 @@ export default function Navbar() {
           }
           .animate-blinkSlow {
             animation: blinkSlow 2.5s ease-in-out infinite;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.2s ease-out forwards;
+          }
+          @keyframes pulse-subtle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+          }
+          .animate-pulse-subtle {
+            animation: pulse-subtle 2s ease-in-out infinite;
           }
         `}</style>
       </div>
@@ -189,6 +241,7 @@ export default function Navbar() {
             <FiSearch className="absolute top-2.5 right-4 text-gray-500 text-lg" />
           </div>
 
+
           <Link href="/cart" className="relative">
             <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
               <FiShoppingCart
@@ -199,6 +252,7 @@ export default function Navbar() {
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
+
               )}
             </button>
           </Link>
@@ -209,6 +263,7 @@ export default function Navbar() {
               <FiBell className="text-gray-800 text-xl" strokeWidth={2.5} />
             </button>
           )} */}
+
 
       <div className="relative" ref={loginDropdownRef}>
   {/* Profile button */}
@@ -250,6 +305,7 @@ export default function Navbar() {
     </div>
   )}
 </div>
+
 
         </div>
       </nav>

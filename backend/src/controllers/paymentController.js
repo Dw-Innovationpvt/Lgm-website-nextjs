@@ -223,12 +223,12 @@ const razorpay = new Razorpay({
 
 // Create Razorpay order
 export const createOrder = async (req, res) => {
-  const { amount, orderId } = req.body;
+  const { amount } = req.body;
   try {
     const order = await razorpay.orders.create({
       amount: amount * 100, // paise
       currency: "INR",
-      receipt: `order_${orderId}`,
+      receipt: `order_${Date.now()}`,
     });
     res.json(order);
   } catch (error) {
@@ -239,36 +239,80 @@ export const createOrder = async (req, res) => {
 
 // Verify Razorpay payment
 export const verifyPayment = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, dbOrderId } = req.body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cart, totalAmount, discountApplied, discountAmount, couponData } = req.body;
 
   try {
+    // Verify the payment signature
     const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSign = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(sign)
       .digest("hex");
 
-    if (expectedSign === razorpay_signature) {
-      await prisma.order.update({
-        where: { id: dbOrderId },
+    if (expectedSign !== razorpay_signature) {
+      return res.status(400).json({ success: false, message: "Invalid payment signature" });
+    }
+
+    // Extract user email from the form data
+    const userEmail = formData.email;
+    if (!userEmail) {
+      return res.status(400).json({ success: false, message: "User email is required" });
+    }
+
+    // Create the order in the database
+    const order = await prisma.$transaction(async (tx) => {
+      // Create the order
+      const newOrder = await tx.order.create({
         data: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: userEmail, // Explicitly set the email field
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode,
+          paymentMethod: "razorpay",
+          totalAmount: totalAmount * 100, // Convert to paise
+          paymentStatus: "success",
           razorpayOrderId: razorpay_order_id,
           razorpayPaymentId: razorpay_payment_id,
           razorpaySignature: razorpay_signature,
-          paymentStatus: "success",
+          items: {
+            create: cart.map((item) => ({
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price * 100, // Convert to paise
+            })),
+          },
         },
       });
-      res.status(200).json({ success: true, message: "Payment verified & stored" });
-    } else {
-      await prisma.order.update({
-        where: { id: dbOrderId },
-        data: { paymentStatus: "failed" },
-      });
-      res.status(400).json({ success: false, message: "Invalid signature" });
-    }
+
+      // Update stock for each product (if product exists)
+      for (const item of cart) {
+        const productExists = await tx.product.findUnique({
+          where: { id: item.id },
+        });
+        
+        if (productExists) {
+          await tx.product.update({
+            where: { id: item.id },
+            data: {
+              stockQuantity: {
+                decrement: item.quantity,
+              },
+            },
+          });
+        }
+      }
+
+      return newOrder;
+    });
+
+    res.status(200).json({ success: true, message: "Payment verified & order created successfully" });
   } catch (error) {
     console.error("Error verifying payment:", error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
