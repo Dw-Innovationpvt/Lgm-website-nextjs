@@ -166,7 +166,7 @@ export default function Navbar() {
               Professional Inline Skates
             </Link>
             <Link
-              href="twister-inline-skates"
+              href=" adjustable-inline-skates"
               className={navLinkClass("#")}
             >
               Adjustable Inline Skates

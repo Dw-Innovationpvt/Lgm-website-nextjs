@@ -20,7 +20,7 @@ const productImages = {
   ]
 };
 
-export default function ShoesFramePage() {
+export default function  AdjustableInlineSkates() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
@@ -127,10 +127,10 @@ export default function ShoesFramePage() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Twister Inline Skates
+            Adjustable Inline Skates
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Engineered for urban adventure and high-performance skating, Twister Inline Skates combine comfort, durability, and precision.
+            Engineered for urban adventure and high-performance skating, Adjustable Inline Skates combine comfort, durability, and precision.
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>

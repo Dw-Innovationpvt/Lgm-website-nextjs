@@ -123,14 +123,14 @@ const inlineCategories = [
   { name: "Rapid Wrap Package", link: "/rapid-wrap-package" },
   { name: "Inline Frames", link: "/inline-frames" },
   { name: "Inline Shoes", link: "/inline-shoes" },
-  { name: "Professional Inline Wheels", link: "/professional-inline-wheels" },
-  { name: "Inline Practice Wheels", link: "/inline-practice-wheels" },
+  { name: "Professional Inline Wheels", link: "/inline-wheels" },
+  { name: "Inline Practice Wheels", link: "/inline-practice-wheel" },
   { name: "Bearings", link: "/bearings" },
   { name: "Bags", link: "/bags" },
   { name: "GuardSet & Ezeefit", link: "/guardset-ezeefit" },
   { name: "Helmets", link: "/helmets" },
-  { name: "Skin Suits", link: "/skin-suits" },
-  { name: "Spacer-Axle-Adapter", link: "/spacer-axle-adapter" },
+  { name: "Skin Suits", link: "/skinsuits" },
+  { name: "Spacer-Axle-Adapter", link: "/spacers-axle-adapter" },
   { name: "Sunglasses", link: "/sunglasses" },
 ];
 

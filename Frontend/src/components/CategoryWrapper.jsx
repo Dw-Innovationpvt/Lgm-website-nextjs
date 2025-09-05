@@ -13,14 +13,14 @@ export default function CategoryWrapper() {
     "/rapid-wrap-package",
     "/inline-frames",
     "/inline-shoes",
-    "/professional-inline-wheels",
-    "/inline-practice-wheels",
+    "/inline-wheels",
+    "/inline-practice-wheel",
     "/bearings",
     "/bags",
     "/guardset-ezeefit",
     "/helmets",
-    "/skin-suits",
-    "/spacer-axle-adapter",
+    "/skinsuits",
+    "/spacers-axle-adapter",
     "/sunglasses",
   ];
 
