@@ -139,22 +139,22 @@ export default function ProfilePage() {
       </button>
     </div>
 
-    {/* Profile Tab */}
+{/* Profile Tab */}
 {activeTab === "profile" && (
   <div className="bg-gradient-to-tr from-white via-gray-100 to-white p-8 rounded-3xl shadow-xl max-w-3xl mx-auto transition-all duration-300">
     {/* Header */}
     <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
       {/* Avatar with pulse animation */}
       <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-yellow-400 flex items-center justify-center text-3xl font-extrabold text-white shadow-lg animate-pulse-slow">
-        {user.name?.charAt(0)}
+        {user?.name?.charAt(0) || "U"}
       </div>
       {/* User Info */}
       <div className="text-center md:text-left">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 transition-transform duration-300 hover:scale-105">
-          {user.name}
+          {user?.name || "Unknown User"}
         </h2>
-        <p className="text-gray-600 mt-1">{user.email}</p>
-        {user.phone && (
+        <p className="text-gray-600 mt-1">{user?.email || "No email provided"}</p>
+        {user?.phone && (
           <p className="text-gray-500 mt-1 text-sm">Phone: {user.phone}</p>
         )}
       </div>
@@ -175,10 +175,10 @@ export default function ProfilePage() {
           <input
             value={
               label === "Full Name"
-                ? user.name
+                ? user?.name || "Not Provided"
                 : label === "Email Address"
-                ? user.email
-                : user.phone || "Not Provided"
+                ? user?.email || "Not Provided"
+                : user?.phone || "Not Provided"
             }
             readOnly
             className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 font-medium focus:ring-2 focus:ring-blue-300 transition-all duration-200"
@@ -198,6 +198,8 @@ export default function ProfilePage() {
     </div>
   </div>
 )}
+
+
 
 
     {/* Orders Tab */}
