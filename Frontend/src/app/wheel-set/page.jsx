@@ -585,7 +585,7 @@ const productImages = {
   A0070: ["/assets/comming-soon.png"  ],
 };
 
-export default function BabyTenacityPage() {
+export default function WheelSet() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
@@ -694,7 +694,7 @@ export default function BabyTenacityPage() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Quad Wheel Set
+            Wheel Set
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
             Explore our Quad Wheels from the LGM lineup.

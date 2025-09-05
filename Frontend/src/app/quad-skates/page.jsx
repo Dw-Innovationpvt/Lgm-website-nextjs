@@ -41,7 +41,7 @@ const QuadSkates = () => {
   {
     id: "Quad Frame",
     name: "Quad Frame",
-    slug: "quad-frames",
+    slug: "quad-frame",
     description: "Durable frame built for speed and balance.",
     price: 1600,
     image: "/assets/20-PP Yelow Frame/AARMS Photography-56.jpg",
