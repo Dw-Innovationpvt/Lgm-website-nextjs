@@ -24,14 +24,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const admin = localStorage.getItem("admin");
+    const user = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!admin || !!token);
+    setIsLoggedIn(!!admin || !!token || !!user);
     setIsAdmin(!!admin);
-  }, []);
-
-  useEffect(() => {
-    const user = localStorage.getItem("user"); // or "admin" if checking admin login
-    setIsLoggedIn(!!user);
   }, []);
 
 
