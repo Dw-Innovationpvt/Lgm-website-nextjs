@@ -166,13 +166,13 @@ export default function Navbar() {
               Professional Inline Skates
             </Link>
             <Link
-              href="adjustable-inline-skates"
+              href="twister-inline-skates"
               className={navLinkClass("#")}
             >
               Adjustable Inline Skates
             </Link>
             <Link
-              href="roller-quad-hockey-skates"
+              href="hockey-skates"
               className={navLinkClass("#")}
             >
               Roller/ Quad Hockey Skates
@@ -194,7 +194,7 @@ export default function Navbar() {
                     Accessories
                   </Link>
                   <Link
-                    href="/products"
+                    href="/product"
                     className="block px-4 py-2 !text-black"
                   >
                     Products
