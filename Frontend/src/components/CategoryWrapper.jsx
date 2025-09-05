@@ -5,29 +5,49 @@ import CategoryBar from "./CategoryBar";
 export default function CategoryWrapper() {
   const pathname = usePathname();
 
-  const categoryRoutes = [
+  // ✅ Inline routes
+  const inlineRoutes = [
     "/inline-skates",
-    "/workout-gear",
-    "/hockey-skates",
-    "/roller-quad-skates",
-    "/twister-inline-skates",
-    "/wheels",
+    "/fleet-altra-package",
+    "/raptor-flash-package",
+    "/rapid-wrap-package",
+    "/inline-frames",
+    "/inline-shoes",
+    "/professional-inline-wheels",
+    "/inline-practice-wheels",
     "/bearings",
-    "/skinsuits",
     "/bags",
     "/guardset-ezeefit",
     "/helmets",
-    "/accessories",
-    "/shoes-frame",
-    "/baby-tenacity",
-    "/hangers",
-    "/spacers-axle-adapter",
-    "/quad-skates",
+    "/skin-suits",
+    "/spacer-axle-adapter",
+    "/sunglasses",
   ];
 
-  const showCategoryBar = categoryRoutes.some(route =>
-    pathname?.startsWith(route)
-  );
+  // ✅ Quad routes
+  const quadRoutes = [
+    "/quad-skates",
+    "/basic-full-set-package",
+    "/hq-quad-package",
+    "/shoes",
+    "/quad-frame",
+    "/shoes-frame",
+    "/wheel-set",
+    "/quad-rink-wheel",
+    "/hangers",
+  ];
 
-  return showCategoryBar ? <CategoryBar /> : null;
+  // Check which category bar to show
+  const showInline = inlineRoutes.some((route) => pathname?.startsWith(route));
+  const showQuad = quadRoutes.some((route) => pathname?.startsWith(route));
+
+  if (showInline) {
+    return <CategoryBar type="inline" />;
+  }
+
+  if (showQuad) {
+    return <CategoryBar type="quad" />;
+  }
+
+  return null;
 }

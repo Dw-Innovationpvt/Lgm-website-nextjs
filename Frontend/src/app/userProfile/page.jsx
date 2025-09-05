@@ -264,7 +264,7 @@ export default function ProfilePage() {
                       <span>
                         {item.name} × {item.quantity}
                       </span>
-                      <span>₹{item.price * item.quantity}</span>
+                      <span>₹{item.price * (item.quantity / 100)}</span>
                     </div>
                   ))}
                 </div>
@@ -274,7 +274,7 @@ export default function ProfilePage() {
                     Total:
                   </span>
                   <span className="text-xl font-bold text-gray-900">
-                    ₹{order.totalAmount}
+                    ₹{order.totalAmount/100}
                   </span>
                 </div>
               </div>

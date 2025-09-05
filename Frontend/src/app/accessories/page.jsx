@@ -250,9 +250,10 @@ export default function Accessories() {
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
             Accessories
+            Accessories
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional Accessories for optimal skating performance
+            Professional accessories for optimal skating performance
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
