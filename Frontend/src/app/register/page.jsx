@@ -59,7 +59,7 @@ export default function RegisterPage() {
         );
         localStorage.setItem("token", data.token);
 
-        router.push("/userProfile");
+        router.push("/userProfile")
       } else {
         setMessage(data.message || "Signup failed");
       }
