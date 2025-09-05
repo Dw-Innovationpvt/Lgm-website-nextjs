@@ -113,19 +113,18 @@ export default function Navbar() {
             >
               Professional Inline Skates
             </Link>
-            <Link href="/quad-skates" className={navLinkClass("/quad-skates")}>
-              Roller/Quad Skates
+            <Link
+              href="adjustable-inline-skates"
+              className={navLinkClass("#")}
+            >
+              Adjustable Inline Skates
             </Link>
-
-            {isAdmin && (
-              <Link
-                href="/admin-dashboard"
-                className={navLinkClass("/admin-dashboard")}
-              >
-                Admin Dashboard
-              </Link>
-            )}
-
+            <Link
+              href="roller-quad-hockey-skates"
+              className={navLinkClass("#")}
+            >
+              Roller/ Quad Hockey Skates
+            </Link>
             <div
               className="relative"
               onMouseEnter={() => setShowDropdown(true)}
@@ -137,30 +136,44 @@ export default function Navbar() {
               {showDropdown && (
                 <div className="absolute top-8 left-0 bg-white w-48 shadow-lg border rounded z-50">
                   <Link
-                    href="/workout-gear"
+                    href="/accessories"
                     className="block px-4 py-2 !text-black"
                   >
-                    Workout Gear
+                    Accessories
                   </Link>
                   <Link
-                    href="/sunglasses"
+                    href="/products"
                     className="block px-4 py-2 !text-black"
                   >
-                    Sunglasses
+                    Products
                   </Link>
                 </div>
               )}
             </div>
 
-            {/* <Link href="/hockey-skates" className={navLinkClass("/hockey-skates")}>Hockey Skates</Link> */}
+            {isAdmin && (
+              <Link
+                href="/admin-dashboard"
+                className={navLinkClass("/admin-dashboard")}
+              >
+                Admin Dashboard
+              </Link>
+            )}
+
             <Link
               href="/workout-gear"
               className={navLinkClass("/workout-gear")}
             >
               Workout Gear
             </Link>
-            <Link href="/Contact" className={navLinkClass("/Contact")}>
-              Contact
+            <Link href="/quad-skates" className={navLinkClass("/quad-skates")}>
+              Quad Skates
+            </Link>
+            <Link href="/baby-tenacity" className={navLinkClass("/baby-tenacity")}>
+              Tenacity & Baby Skates
+            </Link>
+            <Link href="/cycling" className={navLinkClass("#")}>
+              Cycling
             </Link>
           </div>
         </div>

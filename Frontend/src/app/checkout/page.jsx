@@ -428,6 +428,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { User, GraduationCap, MapPin, X } from "lucide-react"
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -453,7 +454,7 @@ export default function CheckoutPage() {
   const [showCouponForm, setShowCouponForm] = useState(false);
   const [couponData, setCouponData] = useState({
     studentName: "",
-    academicYear: "",
+    academyAddress: "",
     studentId: "",
   });
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -466,10 +467,10 @@ export default function CheckoutPage() {
   const discountAmount = discountApplied ? Math.round(cartTotal * 0.1) : 0; // 10%
   const finalTotal = cartTotal - discountAmount;
 
-  const deliveryMessage =
-    cartTotal > 10000
-      ? "Free Delivery on every orders! | Extra 10% discount for Academic Students"
-      : "Fixed ₹400 Delivery + 12% GST on other orders";
+  const deliveryMessage = "Free delivery on every order";
+  const policy = "Extra 10% discount for Academic Students";
+  const returnPolicy = "If you have to return it should be done within 1 week of purchase or else it won't be accepted";
+  const condition = "The returned goods should be returned in same condition with all accessories as they were purchased or else it won't be accepted";
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -903,9 +904,34 @@ export default function CheckoutPage() {
                   </svg>
                   {deliveryMessage}
                 </div>
-                <div className="flex items-center text-sm text-green-600">
+                <div className="flex items-center justify-between text-sm text-green-600 mb-2">
+                  <div className="flex items-center">
+                    <svg
+                      className="w-4 h-4 mr-2 mb-4 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span>{policy}</span>
+                  </div>
+
+                  <button
+                    onClick={() => setShowCouponForm(true)}
+                    className="px-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 text-xs font-medium transition"
+                  >
+                    Click Here
+                  </button>
+                </div>
+                <div className="flex items-center text-sm text-green-600 mb-1">
                   <svg
-                    className="w-4 h-4 mr-1"
+                    className="w-7 h-8 mr-2 mb-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -917,7 +943,24 @@ export default function CheckoutPage() {
                       d="M5 13l4 4L19 7"
                     />
                   </svg>
-                  Secure checkout
+                  {returnPolicy}
+                </div>
+
+                <div className="flex items-center text-sm text-green-600">
+                  <svg
+                    className="w-9 h-8 mr-2 mb-9"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                  {condition}
                 </div>
               </div>
             </div>
@@ -927,57 +970,86 @@ export default function CheckoutPage() {
 
       {/* Coupon Modal */}
       {showCouponForm && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
-          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
-            <h3 className="text-lg font-semibold mb-4 text-black">
-              Apply Academic Discount
-            </h3>
-            <form onSubmit={applyCoupon} className="space-y-3 text-black">
-              <input
-                type="text"
-                name="studentName"
-                value={couponData.studentName}
-                onChange={handleCouponChange}
-                placeholder="Your Name"
-                className="w-full border px-3 py-2 rounded-lg"
-                required
-              />
-              <input
-                type="text"
-                name="academicYear"
-                value={couponData.academicYear}
-                onChange={handleCouponChange}
-                placeholder="Academic Year (e.g., 2024–25)"
-                className="w-full border px-3 py-2 rounded-lg"
-                required
-              />
-              <input
-                type="text"
-                name="studentId"
-                value={couponData.studentId}
-                onChange={handleCouponChange}
-                placeholder="Student's Address"
-                className="w-full border px-3 py-2 rounded-lg"
-                required
-              />
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCouponForm(false)}
-                  className="px-4 py-2 bg-gray-300 rounded-lg"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-500 text-white rounded-lg"
-                >
-                  Apply
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+
+<div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+  <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border border-gray-200">
+    {/* Header */}
+    <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center gap-2">
+        <GraduationCap className="w-6 h-6 text-green-600" />
+        <h3 className="text-lg font-semibold text-gray-800">
+          Apply Academic Discount
+        </h3>
+      </div>
+      <button onClick={() => setShowCouponForm(false)}>
+        <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
+      </button>
+    </div>
+
+    {/* Form */}
+    <form onSubmit={applyCoupon} className="space-y-4 text-black">
+      {/* Student Name */}
+      <div className="relative">
+        <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          name="studentName"
+          value={couponData.studentName}
+          onChange={handleCouponChange}
+          placeholder="Your Name"
+          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+          required
+        />
+      </div>
+
+      {/* Academy Name */}
+      <div className="relative">
+        <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          name="academicYear"
+          value={couponData.academyAddress}
+          onChange={handleCouponChange}
+          placeholder="Academy Name"
+          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+          required
+        />
+      </div>
+
+      {/* Student Address */}
+      <div className="relative">
+        <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          name="studentId"
+          value={couponData.studentId}
+          onChange={handleCouponChange}
+          placeholder="Student's Address"
+          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+          required
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex justify-end gap-2 pt-2">
+        <button
+          type="button"
+          onClick={() => setShowCouponForm(false)}
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md"
+        >
+          Apply
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
       )}
     </div>
   );

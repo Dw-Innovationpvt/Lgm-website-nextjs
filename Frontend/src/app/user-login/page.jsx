@@ -122,6 +122,15 @@ export default function LoginPage() {
               Sign up
             </Link>
           </p>
+          <p className="text-center text-sm mt-4 text-gray-900">
+            Go to home page?{" "}
+            <Link
+              href="/"
+              className="!text-blue-600 hover:underline font-semibold"
+            >
+              Click here
+            </Link>
+          </p>
         </div>
 
         {/* Right Side - Image/Text Section */}
