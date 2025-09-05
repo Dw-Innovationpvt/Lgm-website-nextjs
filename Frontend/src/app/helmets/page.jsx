@@ -4,36 +4,99 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
-// Images
-import lgmHelmet1 from "/public/assets/114 -LGM Helmet/AARMS Photography-131.jpg";
-import lgmHelmet2 from "/public/assets/114 -LGM Helmet/AARMS Photography-132.jpg";
-import lgmHelmet3 from "/public/assets/114 -LGM Helmet/AARMS Photography-133.jpg";
-import lgmHelmet4 from "/public/assets/114 -LGM Helmet/AARMS Photography-134.jpg";
-import lgmHelmet5 from "/public/assets/114 -LGM Helmet/AARMS Photography-135.jpg";
-import lgmHelmet6 from "/public/assets/114 -LGM Helmet/AARMS Photography-136.jpg";
-import lgmHelmet7 from "/public/assets/114 -LGM Helmet/AARMS Photography-137.jpg";
-import lgmHelmet8 from "/public/assets/114 -LGM Helmet/AARMS Photography-138.jpg";
-import lgmHelmet9 from "/public/assets/114 -LGM Helmet/AARMS Photography-139.jpg";
-import lgmHelmet10 from "/public/assets/114 -LGM Helmet/AARMS Photography-140.jpg";
-import lgmHelmet11 from "/public/assets/114 -LGM Helmet/AARMS Photography-142.jpg";
-import lgmHelmet12 from "/public/assets/114 -LGM Helmet/AARMS Photography-143.jpg";
-import lgmHelmet13 from "/public/assets/114 -LGM Helmet/AARMS Photography-144.jpg";
-import lgmHelmet14 from "/public/assets/114 -LGM Helmet/AARMS Photography-145.jpg";
+const productImages = {
+  A0245: [
+    "/assets/114 -LGM Helmet/AARMS Photography-131.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-132.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-133.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-134.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-135.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-136.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-137.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-138.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-139.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-140.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-142.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-143.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-144.jpg",
+    "/assets/114 -LGM Helmet/AARMS Photography-145.jpg",
+  ],
+  A0246: [
+    "/assets/113 - Fluoescent Helmet/1000211220.png",
+    "/assets/113 - Fluoescent Helmet/1000211222.png",
+    "/assets/113 - Fluoescent Helmet/1000211229.png",
+  ],
+  A0247: ["/assets/comming-soon.png"],
+  A0248: ["/assets/comming-soon.png"],
+  A0249: ["/assets/comming-soon.png"],
+};
 
-import fluoescentHelmet1 from "/public/assets/113 - Fluoescent Helmet/1000211220.png";
-import fluoescentHelmet2 from "/public/assets/113 - Fluoescent Helmet/1000211222.png";
-import fluoescentHelmet3 from "/public/assets/113 - Fluoescent Helmet/1000211229.png";
+// // Images
+// import lgmHelmet1 from "/public/assets/114 -LGM Helmet/AARMS Photography-131.jpg";
+// import lgmHelmet2 from "/public/assets/114 -LGM Helmet/AARMS Photography-132.jpg";
+// import lgmHelmet3 from "/public/assets/114 -LGM Helmet/AARMS Photography-133.jpg";
+// import lgmHelmet4 from "/public/assets/114 -LGM Helmet/AARMS Photography-134.jpg";
+// import lgmHelmet5 from "/public/assets/114 -LGM Helmet/AARMS Photography-135.jpg";
+// import lgmHelmet6 from "/public/assets/114 -LGM Helmet/AARMS Photography-136.jpg";
+// import lgmHelmet7 from "/public/assets/114 -LGM Helmet/AARMS Photography-137.jpg";
+// import lgmHelmet8 from "/public/assets/114 -LGM Helmet/AARMS Photography-138.jpg";
+// import lgmHelmet9 from "/public/assets/114 -LGM Helmet/AARMS Photography-139.jpg";
+// import lgmHelmet10 from "/public/assets/114 -LGM Helmet/AARMS Photography-140.jpg";
+// import lgmHelmet11 from "/public/assets/114 -LGM Helmet/AARMS Photography-142.jpg";
+// import lgmHelmet12 from "/public/assets/114 -LGM Helmet/AARMS Photography-143.jpg";
+// import lgmHelmet13 from "/public/assets/114 -LGM Helmet/AARMS Photography-144.jpg";
+// import lgmHelmet14 from "/public/assets/114 -LGM Helmet/AARMS Photography-145.jpg";
 
+// import fluoescentHelmet1 from "/public/assets/113 - Fluoescent Helmet/1000211220.png";
+// import fluoescentHelmet2 from "/public/assets/113 - Fluoescent Helmet/1000211222.png";
+// import fluoescentHelmet3 from "/public/assets/113 - Fluoescent Helmet/1000211229.png";
 
-export default function Hangers() {
+export default function Helmet() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   // selections shape: { [productId]: { color: string, size: string } }
   const [selections, setSelections] = useState({});
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/products");
+        let data = await res.json();
+
+        // Filter only Helmet
+        data = data.filter(
+          (p) =>
+            ["A0245", "A0246", "A0247", "A0248", "A0249"].includes(p.code) ||
+            ["A0245", "A0246", "A0247", "A0248", "A0249"].includes(p.code)
+        );
+
+        // Attach images from local mapping
+        data = data.map((p) => ({
+          ...p,
+          image: productImages[p.code]?.[0] || "/placeholder.png",
+          images: productImages[p.code] || ["/placeholder.png"],
+          specs: {
+            usage: "Skating",
+            wheels: "4 Wheel",
+            material: "Stainless Steel",
+          },
+          colors: ["red", "blue", "green", "pink"],
+          sizes: ["Small", "Medium", "Large"],
+          countInStock: p.stockQuantity ?? 0,
+        }));
+
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -84,39 +147,38 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  const products = [
-  {
-    id: "lgm-helmets",
-    name: "LGM Helmets",
-    image: lgmHelmet1,
-    images: [
-      lgmHelmet1, lgmHelmet2, lgmHelmet3, lgmHelmet4, lgmHelmet5,
-      lgmHelmet6, lgmHelmet7, lgmHelmet8, lgmHelmet9, lgmHelmet10,
-      lgmHelmet11, lgmHelmet12, lgmHelmet13
-    ],
-    price: 200,
-    countInStock: 20,
-    description:
-      "Lightweight, durable helmet offering reliable protection for everyday skating.",
-    specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "fluoescent helmet",
-    name: "Fluoescent Helmet",
-    image: fluoescentHelmet1,
-    images: [fluoescentHelmet1, fluoescentHelmet2, fluoescentHelmet3],
-    price: 250,
-    countInStock: 12,
-    description:
-      "Bright fluorescent helmet designed for visibility, comfort, and extra safety.",
-    specs: { usage: "Professional Skating", material: "Stainless Steel" },
-    colors: ["Silver", "Black"],
-    sizes: ["Medium", "Large"],
-  }
-];
-
+  //   const products = [
+  //   {
+  //     id: "lgm-helmets",
+  //     name: "LGM Helmets",
+  //     image: lgmHelmet1,
+  //     images: [
+  //       lgmHelmet1, lgmHelmet2, lgmHelmet3, lgmHelmet4, lgmHelmet5,
+  //       lgmHelmet6, lgmHelmet7, lgmHelmet8, lgmHelmet9, lgmHelmet10,
+  //       lgmHelmet11, lgmHelmet12, lgmHelmet13
+  //     ],
+  //     price: 200,
+  //     countInStock: 20,
+  //     description:
+  //       "Lightweight, durable helmet offering reliable protection for everyday skating.",
+  //     specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "fluoescent helmet",
+  //     name: "Fluoescent Helmet",
+  //     image: fluoescentHelmet1,
+  //     images: [fluoescentHelmet1, fluoescentHelmet2, fluoescentHelmet3],
+  //     price: 250,
+  //     countInStock: 12,
+  //     description:
+  //       "Bright fluorescent helmet designed for visibility, comfort, and extra safety.",
+  //     specs: { usage: "Professional Skating", material: "Stainless Steel" },
+  //     colors: ["Silver", "Black"],
+  //     sizes: ["Medium", "Large"],
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -124,29 +186,41 @@ export default function Hangers() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Quad & Inline Bearings
+            Helmets
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional-grade bearings for optimal performance.
+            Professional helmets for optimal skating performance
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setView("grid")}
-                className={`p-2 ${view === "grid" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "grid" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* grid icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
                 </svg>
               </button>
               <button
                 onClick={() => setView("list")}
-                className={`p-2 ${view === "list" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "list" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* list icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
                 </svg>
               </button>
@@ -187,7 +261,16 @@ export default function Hangers() {
                       priority
                     />
                   </div>
-
+                  {/* ✅ Stock Badge */}
+                  <span
+                    className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
+                      product.countInStock > 0
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }`}
+                  >
+                    {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                  </span>
                   <button
                     onClick={() => openImageModal(product)}
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 
@@ -197,18 +280,34 @@ export default function Hangers() {
                     aria-label="View images"
                   >
                     {/* eye icon */}
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <svg
+                      className="w-6 h-6 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
                     </svg>
                   </button>
                 </div>
 
                 {/* Details */}
-                <div className={`flex flex-col ${view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"}`}>
+                <div
+                  className={`flex flex-col ${
+                    view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
+                  }`}
+                >
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                  </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
                   <div className="space-y-4">
@@ -259,11 +358,17 @@ export default function Hangers() {
 
                     {/* Specifications (with Color & Size dropdowns on the right) */}
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">Specifications:</h4>
+                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
+                        Specifications:
+                      </h4>
                       <ul className="space-y-1.5 text-sm text-gray-600">
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Usage:</span>
-                          <span className="text-gray-600">{product.specs.usage}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Usage:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.usage}
+                          </span>
                         </li>
 
                         {/* <li className="flex justify-between items-center">
@@ -272,34 +377,50 @@ export default function Hangers() {
                         </li> */}
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Color:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Color:
+                          </span>
                           <select
                             value={sel.color}
-                            onChange={(e) => setSelection(product.id, "color", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "color", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Color</option>
                             {product.colors?.map((c) => (
-                              <option key={c} value={c}>{c}</option>
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
                             ))}
                           </select>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Material:</span>
-                          <span className="text-gray-600">{product.specs.material || "—"}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Material:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.material || "—"}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Size:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Size:
+                          </span>
                           <select
                             value={sel.size}
-                            onChange={(e) => setSelection(product.id, "size", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "size", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Size</option>
                             {product.sizes?.map((s) => (
-                              <option key={s} value={s}>{s}</option>
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
                             ))}
                           </select>
                         </li>
@@ -319,37 +440,76 @@ export default function Hangers() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
           onClick={closeImageModal}
         >
-          <div className="relative max-w-4xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative max-w-4xl w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={closeImageModal}
               className="absolute -top-12 right-0 text-white hover:text-gray-300"
               aria-label="Close"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Previous image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
             )}
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Next image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             )}
@@ -370,16 +530,3 @@ export default function Hangers() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,27 +4,124 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
-// Images
-import quadShoeNuts1 from "public/assets/140 - Quad Shoe Nuts/1000211297.png";
-import quadShoeNuts2 from "public/assets/140 - Quad Shoe Nuts/1000211299.png";
+// Local images mapping
+const productImages = {
+  A0330: ["/assets/comming-soon.png"],
+  A0331: ["/assets/comming-soon.png"],
+  A0332: ["/assets/comming-soon.png"],
+  A0333: ["/assets/comming-soon.png"],
+  A0334: ["/assets/comming-soon.png"],
+  A0335: ["/assets/comming-soon.png"],
+  A0336: ["/assets/comming-soon.png"],
+  A0337: ["/assets/comming-soon.png"],
+  A0338: ["/assets/comming-soon.png"],
+  A0339: ["/assets/comming-soon.png"],
+  A0340: ["/assets/comming-soon.png"],
+  A0341: ["/assets/comming-soon.png"],
+  A0342: ["/assets/comming-soon.png"],
+  A0343: ["/assets/comming-soon.png"],
+  A0344: ["/assets/comming-soon.png"],
+  A0345: ["/assets/comming-soon.png"],
+  A0346: ["/assets/comming-soon.png"],
+  A0347: ["/assets/comming-soon.png"],
+};
 
-import washers1 from "public/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg";
+// // Images
+// import quadShoeNuts1 from "public/assets/140 - Quad Shoe Nuts/1000211297.png";
+// import quadShoeNuts2 from "public/assets/140 - Quad Shoe Nuts/1000211299.png";
 
-import quadLace1 from "/public/assets/151- Quad Lace/1000211293.png";
-import quadLace2 from "/public/assets/151- Quad Lace/1000211294.png";
-import quadLace3 from "/public/assets/151- Quad Lace/1000211295.png";
+// import washers1 from "public/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg";
 
-import allenKay1 from "/public/assets/153- Allen Kay/AARMS Photography-217.jpg";
+// import quadLace1 from "/public/assets/151- Quad Lace/1000211293.png";
+// import quadLace2 from "/public/assets/151- Quad Lace/1000211294.png";
+// import quadLace3 from "/public/assets/151- Quad Lace/1000211295.png";
 
-export default function Hangers() {
+// import allenKay1 from "/public/assets/153- Allen Kay/AARMS Photography-217.jpg";
+
+export default function Accessories() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   // selections shape: { [productId]: { color: string, size: string } }
   const [selections, setSelections] = useState({});
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/products");
+        let data = await res.json();
+
+        // Filter only Guard Set codes
+        data = data.filter(
+          (p) =>
+            [
+              "A0330",
+              "A0331",
+              "A0332",
+              "A0333",
+              "A0334",
+              "A0335",
+              "A0336",
+              "A0337",
+              "A0338",
+              "A0339",
+              "A0340",
+              "A0341",
+              "A0342",
+              "A0343",
+              "A0344",
+              "A0345",
+              "A0346",
+              "A0347",
+            ].includes(p.code) ||
+            [
+              "A0330",
+              "A0331",
+              "A0332",
+              "A0333",
+              "A0334",
+              "A0335",
+              "A0336",
+              "A0337",
+              "A0338",
+              "A0339",
+              "A0340",
+              "A0341",
+              "A0342",
+              "A0343",
+              "A0344",
+              "A0345",
+              "A0346",
+              "A0347",
+            ].includes(p.code)
+        );
+
+        // Attach images from local mapping
+        data = data.map((p) => ({
+          ...p,
+          image: productImages[p.code]?.[0] || "/placeholder.png",
+          images: productImages[p.code] || ["/placeholder.png"],
+          specs: {
+            usage: "Skating",
+            wheels: "4 Wheel",
+            material: "Stainless Steel",
+          },
+          colors: ["red", "blue", "green", "pink"],
+          sizes: ["Small", "Medium", "Large"],
+          countInStock: p.stockQuantity ?? 0,
+        }));
+
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -36,7 +133,7 @@ export default function Hangers() {
   const handleAddToCart = (product) => {
     const { color = "", size = "" } = selections[product.id] || {};
     addToCart({ ...product, selectedColor: color, selectedSize: size });
-    router.push("/cart")
+    router.push("/cart");
   };
 
   const handleBuyNow = (product) => {
@@ -75,77 +172,76 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  const products = [
-  {
-    id: "quad-shoe-nuts-1",
-    name: "Quad Shoe Nuts",
-    image: quadShoeNuts1,
-    images: [quadShoeNuts1, quadShoeNuts2],
-    price: 100,
-    countInStock: 20,
-    description:
-      "Sturdy nuts that keep your skate wheels securely in place for smooth and safe rides.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Stainless Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "washers-(7mm-8mm)",
-    name: "Washers (7mm-8mm)",
-    image: washers1,
-    images: [washers1],
-    price: 400,
-    countInStock: 20,
-    description:
-      "Durable washers for 7mm–8mm axles, reducing friction and keeping wheels aligned.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Stainless Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "quad-lace",
-    name: "Quad Lace",
-    image: quadLace1,
-    images: [quadLace1, quadLace2, quadLace3],
-    price: 100,
-    countInStock: 20,
-    description:
-      "Strong, stylish laces that provide a secure fit and add flair to your skates.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Polyester Blend",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "allen-kay",
-    name: "Allen Kay",
-    image: allenKay1,
-    images: [allenKay1],
-    price: 300,
-    countInStock: 20,
-    description:
-      "Compact Allen key tool for quick and easy skate adjustments on the go.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Hardened Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  }
-];
-
+  // const products = [
+  //   {
+  //     id: "quad-shoe-nuts-1",
+  //     name: "Quad Shoe Nuts",
+  //     image: quadShoeNuts1,
+  //     images: [quadShoeNuts1, quadShoeNuts2],
+  //     price: 100,
+  //     countInStock: 20,
+  //     description:
+  //       "Sturdy nuts that keep your skate wheels securely in place for smooth and safe rides.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "washers-(7mm-8mm)",
+  //     name: "Washers (7mm-8mm)",
+  //     image: washers1,
+  //     images: [washers1],
+  //     price: 400,
+  //     countInStock: 20,
+  //     description:
+  //       "Durable washers for 7mm–8mm axles, reducing friction and keeping wheels aligned.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "quad-lace",
+  //     name: "Quad Lace",
+  //     image: quadLace1,
+  //     images: [quadLace1, quadLace2, quadLace3],
+  //     price: 100,
+  //     countInStock: 20,
+  //     description:
+  //       "Strong, stylish laces that provide a secure fit and add flair to your skates.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Polyester Blend",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "allen-kay",
+  //     name: "Allen Kay",
+  //     image: allenKay1,
+  //     images: [allenKay1],
+  //     price: 300,
+  //     countInStock: 20,
+  //     description:
+  //       "Compact Allen key tool for quick and easy skate adjustments on the go.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Hardened Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -153,10 +249,10 @@ export default function Hangers() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Skating Hangers
+            Accessories
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional quad hangers for optimal skating performance
+            Professional Accessories for optimal skating performance
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -274,6 +370,9 @@ export default function Hangers() {
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                  </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
                   <div className="space-y-4">

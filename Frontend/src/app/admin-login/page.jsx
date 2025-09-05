@@ -2,76 +2,79 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import { toast, Toaster } from "react-hot-toast";
 import { Lock, ShieldCheck, User } from "lucide-react";
 
-
-export default function AdminSignup() {
+export default function AdminLoginPage() {
   const router = useRouter();
   const [adminId, setAdminId] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ adminId, password }),
+    const loginPromise = fetch("http://localhost:5000/api/auth/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ adminId, password }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Login failed");
+
+        localStorage.setItem(
+          "admin",
+          JSON.stringify({
+            name: data.name || adminId,
+            email: data.email || "admin@example.com",
+          })
+        );
+
+        return data;
+      })
+      .then(() => {
+        router.push("/admin-dashboard");
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Signup failed");
-        return;
-      }
-
-      // ✅ Store admin in localStorage
-      localStorage.setItem(
-        "admin",
-        JSON.stringify({
-          name: data.name || adminId,
-          email: data.email || "admin@example.com", // fallback if backend doesn't send email
-        })
-      );
-
-      toast.success("Successfully signed up!");
-
-      setTimeout(() => {
-        //Redirect to adminProfile
-        router.push("/admin-dashboard");
-      }, 1500);
-    } catch (error) {
-      console.error("Signup Error:", error);
-      toast.error("Something went wrong. Please try again.");
-    }
+    toast.promise(loginPromise, {
+      loading: "Logging in...",
+      success: "Admin login successful!",
+      error: (err) => err.message || "Login failed",
+    });
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-gray-100 to-gray-300">
-      {/* Toastify */}
-      <ToastContainer />
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      {/* Card Container */}
+      <div className="flex flex-col md:flex-row w-full max-w-3xl bg-white rounded-xl shadow-xl overflow-hidden">
+        {/* Left Side - Admin Login Form */}
+        <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: "#fef3c7",
+                color: "#1f2937",
+                fontSize: "15px",
+                borderRadius: "10px",
+                padding: "10px 16px",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              },
+            }}
+          />
 
-      {/* Centered Card */}
-      <div className="flex-grow flex items-center justify-center px-4 py-10 ">
-        <div className="w-full max-w-sm bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 hover:shadow-[0_4px_40px_rgba(0,0,0,0.1)] transition-all duration-300">
-          <div className="flex justify-center mb-3">
+          <div className="flex justify-center mb-4">
             <ShieldCheck className="w-12 h-12 text-orange-500" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-[#0f172a] drop-shadow-sm">
-            Admin Signin
+
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-4">
+            Admin Sign In
           </h2>
-          <p className="text-center text-md text-gray-500 mb-6">
-            Create your admin account
+          <p className="text-center text-sm text-gray-500 mb-6">
+            Access your admin dashboard
           </p>
 
-          <form className="space-y-5" onSubmit={handleSignup}>
+          <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -98,25 +101,73 @@ export default function AdminSignup() {
 
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold text-lg shadow-md transition-all duration-300 hover:scale-[1.01] active:scale-95"
+              className="w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:opacity-90 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all"
             >
               Sign In as Admin
             </button>
-
-            <p className="text-center text-[15px] text-gray-600 mt-2">
-              Not an admin?{" "}
-              <a
-                href="/"
-                className="!text-blue-600 hover:underline font-medium"
-              >
-                Return to store
-              </a>
-            </p>
           </form>
+
+          <p className="text-center text-sm mt-4 text-gray-900">
+            Not an admin?{" "}
+            <a
+              href="/"
+              className="!text-blue-600 hover:underline font-semibold"
+            >
+              Return to store
+            </a>
+          </p>
+        </div>
+
+        {/* Right Side - Background Image with Logo & Text */}
+        <div
+          className="w-full md:w-1/2 flex flex-col items-center justify-start bg-blend-overlay bg-orange-200 relative bg-cover bg-center"
+          style={{ backgroundImage: "url('/banner/banner1.jpg')" }}
+        >
+          {/* Logo */}
+          <div className="absolute top-4 flex justify-center w-full z-20 mt-4">
+            <img
+              src="/logo/lo.jpg"
+              alt="LGM Sports Logo"
+              className="w-28 md:w-36 object-contain drop-shadow-2xl animate-pop"
+            />
+          </div>
+
+          {/* Text content */}
+          <div className="mt-40 relative z-10 px-4 w-5/6 text-center border border-white/60 bg-white/40 backdrop-blur-md rounded-lg shadow-md p-4">
+            <h2 className="text-xl md:text-2xl font-extrabold mb-3">
+              <span className="bg-gradient-to-r from-orange-700 via-red-500 to-blue-700 bg-clip-text text-transparent drop-shadow-md">
+                Welcome Admin
+              </span>
+            </h2>
+            <p className="text-sm md:text-base font-medium text-gray-900 leading-relaxed">
+              Sign in to manage the{" "}
+              <span className="font-semibold text-orange-600">store</span> and
+              <span className="font-semibold text-blue-600"> dashboard</span> —
+              stay on top of operations.
+              <br className="hidden md:block" />
+              <span className="italic text-gray-700 block mt-2 text-xs">
+                Security and control first.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
 
-      
+      {/* Animation Style */}
+      <style jsx>{`
+        @keyframes pop {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.15);
+          }
+        }
+        .animate-pop {
+          animation: pop 3s infinite ease-in-out;
+        }
+      `}</style>
     </div>
   );
 }

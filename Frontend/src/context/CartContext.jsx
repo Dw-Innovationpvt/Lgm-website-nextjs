@@ -118,9 +118,12 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // Save to localStorage on change
+  // Save to localStorage on change and dispatch event
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
+    
+    // Dispatch custom event to notify other components about cart changes
+    window.dispatchEvent(new Event("cartChange"));
   }, [cartItems]);
 
   const addToCart = (product) => {
