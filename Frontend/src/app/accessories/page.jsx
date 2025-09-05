@@ -6,14 +6,24 @@ import Image from "next/image";
 
 // Local images mapping
 const productImages = {
-  A0338: ["/assets/140 - Quad Shoe Nuts/1000211297.png", "/assets/140 - Quad Shoe Nuts/1000211299.png"],
-  A0339: [
-    "/assets/151- Quad Lace/1000211293.png",
-    "/assets/151- Quad Lace/1000211294.png",
-    "/assets/151- Quad Lace/1000211295.png",
-  ],
-  A0340: ["/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg"],
-  A0346: ["/assets/153- Allen Kay/AARMS Photography-217.jpg"],
+  A0330: ["/assets/comming-soon.png"],
+  A0331: ["/assets/comming-soon.png"],
+  A0332: ["/assets/comming-soon.png"],
+  A0333: ["/assets/comming-soon.png"],
+  A0334: ["/assets/comming-soon.png"],
+  A0335: ["/assets/comming-soon.png"],
+  A0336: ["/assets/comming-soon.png"],
+  A0337: ["/assets/comming-soon.png"],
+  A0338: ["/assets/comming-soon.png"],
+  A0339: ["/assets/comming-soon.png"],
+  A0340: ["/assets/comming-soon.png"],
+  A0341: ["/assets/comming-soon.png"],
+  A0342: ["/assets/comming-soon.png"],
+  A0343: ["/assets/comming-soon.png"],
+  A0344: ["/assets/comming-soon.png"],
+  A0345: ["/assets/comming-soon.png"],
+  A0346: ["/assets/comming-soon.png"],
+  A0347: ["/assets/comming-soon.png"],
 };
 
 // // Images
@@ -28,7 +38,7 @@ const productImages = {
 
 // import allenKay1 from "/public/assets/153- Allen Kay/AARMS Photography-217.jpg";
 
-export default function Hangers() {
+export default function Accessories() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
@@ -39,38 +49,79 @@ export default function Hangers() {
   const [selections, setSelections] = useState({});
 
   useEffect(() => {
-        const fetchProducts = async () => {
-          try {
-            const res = await fetch("http://localhost:5000/api/products");
-            let data = await res.json();
-    
-            // Filter only Guard Set codes
-            data = data.filter((p) => ["A0338", "A0339", "A0340", "A0346"].includes(p.code) || ["A0338", "A0339", "A0340", "A0346" ].includes(p.code));
-    
-            // Attach images from local mapping
-            data = data.map((p) => ({
-              ...p,
-              image: productImages[p.code]?.[0] || "/placeholder.png",
-              images: productImages[p.code] || ["/placeholder.png"],
-              specs: {
-                usage: "Skating",
-                wheels: "4 Wheel",
-                material: "Stainless Steel",
-              },
-              colors: ["red", "blue", "green", "pink"],
-              sizes: ["Small", "Medium", "Large"],
-              countInStock: p.stockQuantity ?? 0,
-            }));
-    
-            setProducts(data);
-          } catch (err) {
-            console.error("Error fetching products:", err);
-          }
-        };
-    
-        fetchProducts();
-      }, []);
-  
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/products");
+        let data = await res.json();
+
+        // Filter only Guard Set codes
+        data = data.filter(
+          (p) =>
+            [
+              "A0330",
+              "A0331",
+              "A0332",
+              "A0333",
+              "A0334",
+              "A0335",
+              "A0336",
+              "A0337",
+              "A0338",
+              "A0339",
+              "A0340",
+              "A0341",
+              "A0342",
+              "A0343",
+              "A0344",
+              "A0345",
+              "A0346",
+              "A0347",
+            ].includes(p.code) ||
+            [
+              "A0330",
+              "A0331",
+              "A0332",
+              "A0333",
+              "A0334",
+              "A0335",
+              "A0336",
+              "A0337",
+              "A0338",
+              "A0339",
+              "A0340",
+              "A0341",
+              "A0342",
+              "A0343",
+              "A0344",
+              "A0345",
+              "A0346",
+              "A0347",
+            ].includes(p.code)
+        );
+
+        // Attach images from local mapping
+        data = data.map((p) => ({
+          ...p,
+          image: productImages[p.code]?.[0] || "/placeholder.png",
+          images: productImages[p.code] || ["/placeholder.png"],
+          specs: {
+            usage: "Skating",
+            wheels: "4 Wheel",
+            material: "Stainless Steel",
+          },
+          colors: ["red", "blue", "green", "pink"],
+          sizes: ["Small", "Medium", "Large"],
+          countInStock: p.stockQuantity ?? 0,
+        }));
+
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -198,10 +249,10 @@ export default function Hangers() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Skating Hangers
+            Accessories
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional quad hangers for optimal skating performance
+            Professional Accessories for optimal skating performance
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -319,6 +370,9 @@ export default function Hangers() {
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                  </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
                   <div className="space-y-4">

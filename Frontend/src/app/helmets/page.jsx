@@ -26,6 +26,9 @@ const productImages = {
     "/assets/113 - Fluoescent Helmet/1000211222.png",
     "/assets/113 - Fluoescent Helmet/1000211229.png",
   ],
+  A0247: ["/assets/comming-soon.png"],
+  A0248: ["/assets/comming-soon.png"],
+  A0249: ["/assets/comming-soon.png"],
 };
 
 // // Images
@@ -67,8 +70,8 @@ export default function Helmet() {
         // Filter only Helmet
         data = data.filter(
           (p) =>
-            ["A0245", "A0246"].includes(p.code) ||
-            ["A0245", "A0246"].includes(p.code)
+            ["A0245", "A0246", "A0247", "A0248", "A0249"].includes(p.code) ||
+            ["A0245", "A0246", "A0247", "A0248", "A0249"].includes(p.code)
         );
 
         // Attach images from local mapping
@@ -258,10 +261,12 @@ export default function Helmet() {
                       priority
                     />
                   </div>
-                    {/* ✅ Stock Badge */}
+                  {/* ✅ Stock Badge */}
                   <span
                     className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
-                      product.countInStock > 0 ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                      product.countInStock > 0
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
                     }`}
                   >
                     {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
@@ -300,6 +305,9 @@ export default function Helmet() {
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                  </p>
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
                   <div className="space-y-4">

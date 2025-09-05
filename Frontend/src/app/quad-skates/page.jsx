@@ -50,7 +50,7 @@ const QuadSkates = () => {
   {
     id: "Shoes & Frame",
     name: "Shoes & Frame",
-    slug: "shoes-and-frames",
+    slug: "shoes-frame",
     description: "Complete combo of shoes and sturdy frame.",
     price: 3100,
     image: "/assets/24-PP Yelow Frame & Quad Shoes/AARMS Photography-61.jpg",
