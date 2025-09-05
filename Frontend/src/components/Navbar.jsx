@@ -10,7 +10,6 @@ import { Truck, GraduationCap } from "lucide-react";
 import { FaUserShield, FaUserCircle } from "react-icons/fa";
 import { useCart } from "../context/CartContext"; // adjust path
 
-
 export default function Navbar() {
   const pathname = usePathname();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -24,7 +23,6 @@ export default function Navbar() {
   const { cart } = useCart(); // ✅ get cart from context
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0); // ✅ total quantity
 
-
   // Check login status on component mount and when localStorage changes
   const checkLoginStatus = () => {
     const admin = localStorage.getItem("admin");
@@ -33,40 +31,39 @@ export default function Navbar() {
     setIsLoggedIn(!!admin || !!token || !!user);
     setIsAdmin(!!admin);
   };
-  
+
   useEffect(() => {
     // Initial check
     checkLoginStatus();
-    
+
     // Listen for storage events (when localStorage changes in other tabs/components)
     const handleStorageChange = () => {
       checkLoginStatus();
     };
-    
+
     window.addEventListener("storage", handleStorageChange);
-    
+
     // Custom event for same-tab localStorage changes
     const handleAuthChange = () => {
       checkLoginStatus();
     };
-    
+
     // Listen for cart changes
     const handleCartChange = () => {
       // Force cart refresh by triggering a re-render
       // The cart state will be updated through the CartContext
     };
-    
+
     // Listen for both auth and cart changes
     window.addEventListener("authChange", handleAuthChange);
     window.addEventListener("cartChange", handleCartChange);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("authChange", handleAuthChange);
       window.removeEventListener("cartChange", handleCartChange);
     };
   }, []);
-
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -129,16 +126,28 @@ export default function Navbar() {
             animation: blinkSlow 2.5s ease-in-out infinite;
           }
           @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
           .animate-fadeIn {
             animation: fadeIn 0.2s ease-out forwards;
           }
           @keyframes pulse-subtle {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+              transform: scale(1);
+            }
+            50% {
+              transform: scale(1.1);
+            }
+            100% {
+              transform: scale(1);
+            }
           }
           .animate-pulse-subtle {
             animation: pulse-subtle 2s ease-in-out infinite;
@@ -147,55 +156,71 @@ export default function Navbar() {
       </div>
 
       {/* Navbar */}
-      <nav className="bg-white shadow-sm font-semibold px-4 md:px-12 py-3 flex justify-between items-center">
+      <nav className="bg-white shadow-sm font-semibold px-4 md:px-12 flex justify-between items-center p-2">
         {/* Left Nav */}
         <div className="flex items-center gap-6">
+          {/* Mobile Menu Button */}
           <HiMenu
-            className="text-2xl text-gray-700 md:hidden"
+            className="text-3xl text-gray-800 md:hidden cursor-pointer hover:scale-110 transition-transform duration-200"
             onClick={() => setMobileMenu(!mobileMenu)}
           />
 
-          <div className="hidden md:flex items-center gap-2 text-[15px] font-medium">
-            <Link href="/" className={navLinkClass("/")}>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex flex-wrap items-center gap-x-3  text-[16px] md:text-[17px] font-semibold max-w-5xl">
+            <Link
+              href="/"
+              className={`${navLinkClass(
+                "/"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+            >
               Home
             </Link>
             <Link
               href="/inline-skates"
-              className={navLinkClass("/inline-skates")}
+              className={`${navLinkClass(
+                "/inline-skates"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
             >
               Professional Inline Skates
             </Link>
             <Link
-              href=" adjustable-inline-skates"
-              className={navLinkClass("#")}
+              href="/adjustable-inline-skates"
+              className={`${navLinkClass(
+                "/adjustable-inline-skates"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
             >
               Adjustable Inline Skates
             </Link>
             <Link
-              href="hockey-skates"
-              className={navLinkClass("#")}
+              href="/hockey-skates"
+              className={`${navLinkClass(
+                "/hockey-skates"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
             >
-              Roller/ Quad Hockey Skates
+              Roller / Quad Hockey Skates
             </Link>
+
+            {/* Dropdown */}
             <div
-              className="relative"
+              className="relative group"
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <button className="flex items-center gap-1 text-gray-700 hover:text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-full">
-                Products <MdKeyboardArrowDown className="text-lg" />
+              <button className="flex items-center text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-blue-600 hover:bg-blue-50">
+                Products
+                <MdKeyboardArrowDown className="text-lg transition-transform group-hover:rotate-180" />
               </button>
               {showDropdown && (
-                <div className="absolute top-8 left-0 bg-white w-48 shadow-lg border rounded z-50">
+                <div className="absolute top-10 left-0 bg-white w-56 shadow-lg border rounded-xl overflow-hidden z-50">
                   <Link
                     href="/accessories"
-                    className="block px-4 py-2 !text-black"
+                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:text-blue-600 transition"
                   >
                     Accessories
                   </Link>
                   <Link
                     href="/product"
-                    className="block px-4 py-2 !text-black"
+                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:text-blue-600 transition"
                   >
                     Products
                   </Link>
@@ -203,30 +228,49 @@ export default function Navbar() {
               )}
             </div>
 
+            <Link
+              href="/workout-gear"
+              className={`${navLinkClass(
+                "/workout-gear"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+            >
+              Workout Gear
+            </Link>
+            <Link
+              href="/quad-skates"
+              className={`${navLinkClass(
+                "/quad-skates"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+            >
+              Quad Skates
+            </Link>
+            <Link
+              href="/baby-tenacity"
+              className={`${navLinkClass(
+                "/baby-tenacity"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+            >
+              Tenacity & Baby Skates
+            </Link>
+            <Link
+              href="/cycling"
+              className={`${navLinkClass(
+                "/cycling"
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+            >
+              Cycling
+            </Link>
+
             {isAdmin && (
               <Link
                 href="/admin-dashboard"
-                className={navLinkClass("/admin-dashboard")}
+                className={`${navLinkClass(
+                  "/admin-dashboard"
+                )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
               >
                 Admin Dashboard
               </Link>
             )}
-
-            <Link
-              href="/workout-gear"
-              className={navLinkClass("/workout-gear")}
-            >
-              Workout Gear
-            </Link>
-            <Link href="/quad-skates" className={navLinkClass("/quad-skates")}>
-              Quad Skates
-            </Link>
-            <Link href="/baby-tenacity" className={navLinkClass("/baby-tenacity")}>
-              Tenacity & Baby Skates
-            </Link>
-            <Link href="/cycling" className={navLinkClass("#")}>
-              Cycling
-            </Link>
           </div>
         </div>
 
@@ -236,11 +280,10 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search products..."
-              className="rounded-full border border-gray-300 py-2 px-4 pr-10 text-sm w-64 outline-none text-gray-800"
+              className="rounded-full border border-gray-300 py-2 px-4 pr-10 text-sm w-80 outline-none text-gray-800"
             />
             <FiSearch className="absolute top-2.5 right-4 text-gray-500 text-lg" />
           </div>
-
 
           <Link href="/cart" className="relative">
             <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
@@ -252,7 +295,6 @@ export default function Navbar() {
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
-
               )}
             </button>
           </Link>
@@ -264,49 +306,46 @@ export default function Navbar() {
             </button>
           )} */}
 
+          <div className="relative" ref={loginDropdownRef}>
+            {/* Profile button */}
+            <button
+              onClick={handleProfileClick}
+              className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative transition duration-300 shadow-sm"
+            >
+              <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
+              {isLoggedIn && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 rounded-full border border-white shadow-sm" />
+              )}
+            </button>
 
-      <div className="relative" ref={loginDropdownRef}>
-  {/* Profile button */}
-  <button
-    onClick={handleProfileClick}
-    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative transition duration-300 shadow-sm"
-  >
-    <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
-    {isLoggedIn && (
-      <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 rounded-full border border-white shadow-sm" />
-    )}
-  </button>
-
-  {/* Dropdown */}
-  {!isLoggedIn && showLoginDropdown && (
-    <div className="dropdown-menu absolute right-0 mt-3 w-56 rounded-2xl shadow-2xl z-50 overflow-hidden animate-dropdown">
-      <Link
-        href="/admin-login"
-        className="dropdown-item !text-orange-600 hover:bg-orange-50"
-      >
-        <FaUserShield className="text-lg text-orange-500" />
-        <span className="text-orange-500">Admin Access</span>
-      </Link>
-      <hr className="border-gray-200" />
-      <Link
-        href="/user-login"
-        className="dropdown-item text-blue-600 hover:bg-blue-50"
-      >
-        <FaUserCircle className="text-lg text-black" />
-        <span className="text-black">User Login</span>
-      </Link>
-      <Link
-        href="/register"
-        className="dropdown-item text-green-600 hover:bg-green-50"
-      >
-        <FaUserCircle className="text-lg text-black" />
-        <span className="text-black">User Sign Up</span>
-      </Link>
-    </div>
-  )}
-</div>
-
-
+            {/* Dropdown */}
+            {!isLoggedIn && showLoginDropdown && (
+              <div className="dropdown-menu absolute right-0 mt-3 w-56 rounded-2xl shadow-2xl z-50 overflow-hidden animate-dropdown">
+                <Link
+                  href="/admin-login"
+                  className="dropdown-item !text-orange-600 hover:bg-orange-50"
+                >
+                  <FaUserShield className="text-lg text-orange-500" />
+                  <span className="text-orange-500">Admin Access</span>
+                </Link>
+                <hr className="border-gray-200" />
+                <Link
+                  href="/user-login"
+                  className="dropdown-item text-blue-600 hover:bg-blue-50"
+                >
+                  <FaUserCircle className="text-lg text-black" />
+                  <span className="text-black">User Login</span>
+                </Link>
+                <Link
+                  href="/register"
+                  className="dropdown-item text-green-600 hover:bg-green-50"
+                >
+                  <FaUserCircle className="text-lg text-black" />
+                  <span className="text-black">User Sign Up</span>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
