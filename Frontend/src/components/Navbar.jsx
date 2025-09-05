@@ -8,6 +8,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { HiMenu } from "react-icons/hi";
 import { Truck, GraduationCap } from "lucide-react";
 import { FaUserShield, FaUserCircle } from "react-icons/fa";
+import { useCart } from "../context/CartContext"; // adjust path
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -18,6 +19,8 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const loginDropdownRef = useRef(null);
   const router = useRouter();
+  const { cart } = useCart(); // ✅ get cart from context
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0); // ✅ total quantity
 
   useEffect(() => {
     const admin = localStorage.getItem("admin");
@@ -27,8 +30,17 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const user = localStorage.getItem("user"); // or "admin" if checking admin login
+    setIsLoggedIn(!!user);
+  }, []);
+
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
-      if (loginDropdownRef.current && !loginDropdownRef.current.contains(e.target)) {
+      if (
+        loginDropdownRef.current &&
+        !loginDropdownRef.current.contains(e.target)
+      ) {
         setShowLoginDropdown(false);
       }
     };
@@ -72,8 +84,13 @@ export default function Navbar() {
         </div>
         <style jsx>{`
           @keyframes blinkSlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%,
+            100% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.3;
+            }
           }
           .animate-blinkSlow {
             animation: blinkSlow 2.5s ease-in-out infinite;
@@ -91,12 +108,24 @@ export default function Navbar() {
           />
 
           <div className="hidden md:flex items-center gap-2 text-[15px] font-medium">
-            <Link href="/" className={navLinkClass("/")}>Home</Link>
-            <Link href="/inline-skates" className={navLinkClass("/inline-skates")}>Professional Inline Skates</Link>
-            <Link href="/quad-skates" className={navLinkClass("/quad-skates")}>Roller/Quad Skates</Link>
+            <Link href="/" className={navLinkClass("/")}>
+              Home
+            </Link>
+            <Link
+              href="/inline-skates"
+              className={navLinkClass("/inline-skates")}
+            >
+              Professional Inline Skates
+            </Link>
+            <Link href="/quad-skates" className={navLinkClass("/quad-skates")}>
+              Roller/Quad Skates
+            </Link>
 
             {isAdmin && (
-              <Link href="/admin-dashboard" className={navLinkClass("/admin-dashboard")}>
+              <Link
+                href="/admin-dashboard"
+                className={navLinkClass("/admin-dashboard")}
+              >
                 Admin Dashboard
               </Link>
             )}
@@ -111,15 +140,32 @@ export default function Navbar() {
               </button>
               {showDropdown && (
                 <div className="absolute top-8 left-0 bg-white w-48 shadow-lg border rounded z-50">
-                  <Link href="/workout-gear" className="block px-4 py-2 !text-black">Workout Gear</Link>
-                  <Link href="/sunglasses" className="block px-4 py-2 !text-black">Sunglasses</Link>
+                  <Link
+                    href="/workout-gear"
+                    className="block px-4 py-2 !text-black"
+                  >
+                    Workout Gear
+                  </Link>
+                  <Link
+                    href="/sunglasses"
+                    className="block px-4 py-2 !text-black"
+                  >
+                    Sunglasses
+                  </Link>
                 </div>
               )}
             </div>
 
             {/* <Link href="/hockey-skates" className={navLinkClass("/hockey-skates")}>Hockey Skates</Link> */}
-            <Link href="/workout-gear" className={navLinkClass("/workout-gear")}>Workout Gear</Link>
-            <Link href="/Contact" className={navLinkClass("/Contact")}>Contact</Link>
+            <Link
+              href="/workout-gear"
+              className={navLinkClass("/workout-gear")}
+            >
+              Workout Gear
+            </Link>
+            <Link href="/Contact" className={navLinkClass("/Contact")}>
+              Contact
+            </Link>
           </div>
         </div>
 
@@ -134,46 +180,68 @@ export default function Navbar() {
             <FiSearch className="absolute top-2.5 right-4 text-gray-500 text-lg" />
           </div>
 
-          <Link href="/cart">
-            <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
-              <FiShoppingCart className="text-gray-800 text-xl" strokeWidth={2.5} />
+          <Link href="/cart" className="relative">
+            <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
+              <FiShoppingCart
+                className="text-gray-800 text-xl"
+                strokeWidth={2.5}
+              />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </Link>
 
           {/* Notification Icon - only when logged in */}
-          {isLoggedIn && (
+          {/* {isLoggedIn && (
             <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
               <FiBell className="text-gray-800 text-xl" strokeWidth={2.5} />
-              {/* dot will be used when notification count is implemented */}
             </button>
-          )}
+          )} */}
 
-          <div className="relative" ref={loginDropdownRef}>
-            <button
-              onClick={handleProfileClick}
-              className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative"
-            >
-              <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
-            </button>
+      <div className="relative" ref={loginDropdownRef}>
+  {/* Profile button */}
+  <button
+    onClick={handleProfileClick}
+    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative transition duration-300 shadow-sm"
+  >
+    <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
+    {isLoggedIn && (
+      <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 rounded-full border border-white shadow-sm" />
+    )}
+  </button>
 
-            {!isLoggedIn && showLoginDropdown && (
-              <div className="absolute right-0 mt-2 w-44 bg-white border rounded shadow-lg z-50 text-black">
-                <Link href="/admin-login" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserShield className="text-gray-600" />
-                  Admin Access
-                </Link>
-                <hr className="my-1" />
-                <Link href="/user-login" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserCircle className="text-gray-600" />
-                  User Login
-                </Link>
-                <Link href="/register" className="flex items-center gap-2 px-4 py-2 text-black font-semibold hover:bg-gray-100">
-                  <FaUserCircle className="text-gray-600" />
-                  User Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
+  {/* Dropdown */}
+  {!isLoggedIn && showLoginDropdown && (
+    <div className="dropdown-menu absolute right-0 mt-3 w-56 rounded-2xl shadow-2xl z-50 overflow-hidden animate-dropdown">
+      <Link
+        href="/admin-login"
+        className="dropdown-item !text-orange-600 hover:bg-orange-50"
+      >
+        <FaUserShield className="text-lg text-orange-500" />
+        <span className="text-orange-500">Admin Access</span>
+      </Link>
+      <hr className="border-gray-200" />
+      <Link
+        href="/user-login"
+        className="dropdown-item text-blue-600 hover:bg-blue-50"
+      >
+        <FaUserCircle className="text-lg text-black" />
+        <span className="text-black">User Login</span>
+      </Link>
+      <Link
+        href="/register"
+        className="dropdown-item text-green-600 hover:bg-green-50"
+      >
+        <FaUserCircle className="text-lg text-black" />
+        <span className="text-black">User Sign Up</span>
+      </Link>
+    </div>
+  )}
+</div>
+
         </div>
       </nav>
 
@@ -187,7 +255,9 @@ export default function Navbar() {
             // { href: "/hockey-skates", label: "Hockey Skates" },
             { href: "/workout-gear", label: "Workout Gear" },
             { href: "/Contact", label: "Contact" },
-            ...(isAdmin ? [{ href: "/admin-dashboard", label: "Admin Dashboard" }] : [])
+            ...(isAdmin
+              ? [{ href: "/admin-dashboard", label: "Admin Dashboard" }]
+              : []),
           ].map(({ href, label }) => (
             <Link
               key={href}
@@ -206,6 +276,3 @@ export default function Navbar() {
     </>
   );
 }
-
-
-

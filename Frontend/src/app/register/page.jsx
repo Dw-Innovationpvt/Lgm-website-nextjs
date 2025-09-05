@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Footer from "@/components/Footer";
 import { UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -50,7 +49,6 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Save data to localStorage (including phone)
         localStorage.setItem(
           "user",
           JSON.stringify({
@@ -59,9 +57,8 @@ export default function RegisterPage() {
             phone: formData.phone,
           })
         );
-        localStorage.setItem("token", data.token); 
+        localStorage.setItem("token", data.token);
 
-        // Redirect to profile page
         router.push("/userProfile");
       } else {
         setMessage(data.message || "Signup failed");
@@ -72,24 +69,19 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen justify-between bg-gradient-to-br from-orange-100 to-blue-100 text-black">
-      <div className="flex-grow flex justify-center items-center px-4 py-16 sm:py-24">
-        <div className="w-full max-w-md bg-white/70 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.1)] rounded-2xl px-8 py-10 transition-all duration-300 hover:shadow-2xl border border-gray-200">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f172a] drop-shadow-sm flex items-center justify-center gap-2 mb-6">
-            <UserPlus className="w-8 h-8 text-orange-500" />
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      {/* Card Container */}
+      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-xl shadow-xl overflow-hidden">
+        {/* Left Side - Form */}
+        <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2 mb-4">
+            <UserPlus className="w-6 h-6 text-orange-500" />
             Create an Account
           </h2>
 
-          {/* <div className="text-center mb-6">
-            <UserPlus className="mx-auto w-12 h-12 text-orange-500 mb-2" />
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f172a] drop-shadow-sm">
-              Create an Account
-            </h2>
-          </div> */}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1 text-[18px] font-medium">
+              <label className="block mb-1 text-xs font-semibold text-gray-900">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -98,13 +90,13 @@ export default function RegisterPage() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="John Doe"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all duration-200 hover:border-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400 outline-none transition-all text-sm text-black"
                 required
               />
             </div>
 
             <div>
-              <label className="block mb-1 text-[18px] font-medium">
+              <label className="block mb-1 text-xs font-semibold text-gray-900">
                 Email Address <span className="text-red-500">*</span>
               </label>
               <input
@@ -113,16 +105,17 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all duration-200 hover:border-gray-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400 outline-none transition-all text-sm text-black"
                 required
               />
             </div>
+
             <div>
-              <label className="block mb-1 text-[18px] font-medium">
+              <label className="block mb-1 text-xs font-semibold text-gray-900">
                 Phone Number <span className="text-red-500">*</span>
               </label>
-              <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-400 transition-all duration-200">
-                <span className="px-3 bg-gray-100 text-gray-700 text-sm">
+              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden focus-within:ring-2 focus-within:ring-orange-400">
+                <span className="px-2 bg-gray-100 text-gray-700 text-xs">
                   +91
                 </span>
                 <input
@@ -131,13 +124,14 @@ export default function RegisterPage() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="9876543210"
-                  className="w-full px-2 py-3 outline-none"
+                  className="w-full px-2 py-2 outline-none text-sm text-black"
+                  required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block mb-1 text-[18px] font-medium">
+              <label className="block mb-1 text-xs font-semibold text-gray-900">
                 Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -145,17 +139,15 @@ export default function RegisterPage() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all duration-200 hover:border-gray-400"
+                placeholder="••••••"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400 outline-none transition-all text-sm text-black"
                 required
               />
-              <p className="text-sm text-gray-500 mt-1 ml-1">
-                Must be at least 6 characters
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
             </div>
 
             <div>
-              <label className="block mb-1 text-[18px] font-medium">
+              <label className="block mb-1 text-xs font-semibold text-gray-900">
                 Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -163,36 +155,90 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none transition-all duration-200 hover:border-gray-400"
+                placeholder="••••••"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-400 outline-none transition-all text-sm text-black"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold text-lg shadow-md transition-all duration-300 hover:scale-[1.01] active:scale-95 mt-5"
+              className="w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:opacity-90 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all"
             >
               Create Account
             </button>
 
             {message && (
-              <p className="text-center mt-4 text-sm text-red-600">{message}</p>
+              <p className="text-center mt-2 text-xs text-red-600">{message}</p>
             )}
           </form>
 
-          <p className="text-center text-base mt-5">
+          <p className="text-center text-sm mt-4 text-gray-900">
             Already have an account?{" "}
             <Link
               href="/user-login"
-              className="!text-blue-600 hover:underline font-semibold"
+              className="text-orange-600 hover:underline font-semibold"
             >
-              Login
+              <span className="text-blue-600">Login</span>
             </Link>
           </p>
         </div>
+
+        {/* Right Side - Image/Text Section */}
+        <div
+          className="w-full md:w-1/2 flex items-center justify-center bg-blend-overlay bg-orange-300 relative bg-cover bg-center"
+          style={{ backgroundImage: "url('/inline.jpg')" }}
+        >
+          {/* Logo */}
+          <div className="absolute top-4 mt-14 flex justify-center w-full z-20">
+            <img
+              src="/logo/lo.jpg"
+              alt="LGM Sports Logo"
+              className="w-28 md:w-36 object-contain drop-shadow-2xl animate-pop"
+            />
+          </div>
+
+          {/* Text content */}
+          <div className="relative z-10 px-4 max-w-sm text-center border border-white/60 bg-white/40 backdrop-blur-md rounded-lg shadow-md p-4">
+            <h2 className="text-xl md:text-2xl font-extrabold mb-3">
+              <span className="bg-gradient-to-r from-orange-700 via-red-500 to-blue-700 bg-clip-text text-transparent drop-shadow-md">
+                Gear Up for Greatness
+              </span>
+            </h2>
+            <p className="text-sm md:text-base font-medium text-gray-900 leading-relaxed">
+              Discover{" "}
+              <span className="font-semibold text-orange-600">Skates</span>,
+              <span className="font-semibold text-blue-600"> Cycling Gear</span>
+              , and
+              <span className="font-semibold text-red-600">
+                {" "}
+                Workout Essentials
+              </span>{" "}
+              — designed to push your limits.
+              <br className="hidden md:block" />
+              <span className="italic text-gray-700 block mt-2 text-xs">
+                Every champion starts with the right gear.
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
+
+      {/* Animation Style */}
+      <style jsx>{`
+        @keyframes pop {
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.15);
+          }
+        }
+        .animate-pop {
+          animation: pop 3s infinite ease-in-out;
+        }
+      `}</style>
     </div>
   );
-  
 }

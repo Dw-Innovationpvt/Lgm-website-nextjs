@@ -4,35 +4,83 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
+const productImages = {
+  A0085: [
+    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg",
+    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg",
+    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
+    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg",
+  ],
+  A0086: [
+    "/assets/36-Quad Naylon Hanger 8mm/1000211173.png",
+    "/assets/36-Quad Naylon Hanger 8mm/1000211174.png",
+    "/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg",
+  ],
+  A0087: [
+    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg",
+    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg",
+  ],
+  A0088: ["/assets/38-Quad Metal Hanger 8mm/1000211064.png"],
+};
+
 // Images
-import quadNaylonHanger7mm1 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg";
-import quadNaylonHanger7mm2 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg";
-import quadNaylonHanger7mm3 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg";
-import quadNaylonHanger7mm4 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg";
+// import quadNaylonHanger7mm1 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg";
+// import quadNaylonHanger7mm2 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg";
+// import quadNaylonHanger7mm3 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg";
+// import quadNaylonHanger7mm4 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg";
 
-import quadMetalHanger7mm1 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg";
-import quadMetalHanger7mm2 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg";
+// import quadMetalHanger7mm1 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg";
+// import quadMetalHanger7mm2 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg";
 
+// import quadMetalHanger8mm1 from "/public/assets/38-Quad Metal Hanger 8mm/1000211064.png";
 
-import quadMetalHanger8mm1 from "/public/assets/38-Quad Metal Hanger 8mm/1000211064.png";
-
-import quadNaylonHanger8mm1 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211173.png";
-import quadNaylonHanger8mm2 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211174.png";
-import quadNaylonHanger8mm3 from "/public/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg";
-
-
-
-
+// import quadNaylonHanger8mm1 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211173.png";
+// import quadNaylonHanger8mm2 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211174.png";
+// import quadNaylonHanger8mm3 from "/public/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg";
 
 export default function Hangers() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // selections shape: { [productId]: { color: string, size: string } }
   const [selections, setSelections] = useState({});
+
+  useEffect(() => {
+        const fetchProducts = async () => {
+          try {
+            const res = await fetch("http://localhost:5000/api/products");
+            let data = await res.json();
+    
+            // Filter only Guard Set codes
+            data = data.filter((p) => ["A0085", "A0086", "A0087", "A0088"].includes(p.code) || ["A0085", "A0086", "A0087", "A0088" ].includes(p.code));
+    
+            // Attach images from local mapping
+            data = data.map((p) => ({
+              ...p,
+              image: productImages[p.code]?.[0] || "/placeholder.png",
+              images: productImages[p.code] || ["/placeholder.png"],
+              specs: {
+                usage: "Skating",
+                wheels: "4 Wheel",
+                material: "Stainless Steel",
+              },
+              colors: ["red", "blue", "green", "pink"],
+              sizes: ["Small", "Medium", "Large"],
+              countInStock: p.stockQuantity ?? 0,
+            }));
+    
+            setProducts(data);
+          } catch (err) {
+            console.error("Error fetching products:", err);
+          }
+        };
+    
+        fetchProducts();
+      }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -82,60 +130,85 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  const products = [
-  {
-    id: "quad-naylon-hanger-7mm",
-    name: "Quad Nylon Hanger 7mm",
-    image: quadNaylonHanger7mm1,
-    images: [quadNaylonHanger7mm1, quadNaylonHanger7mm2, quadNaylonHanger7mm3, quadNaylonHanger7mm4],
-    price: 300,
-    countInStock: 20,
-    description:
-      "Lightweight 7mm nylon quad hanger, ideal for beginner and recreational skaters seeking smooth performance at an affordable price.",
-    specs: { usage: "Recreational Skating", wheels: "4 Wheel", material: "Durable Nylon" },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "quad-naylon-hanger-8mm",
-    name: "Metal Quad Hanger 8mm",
-    image: quadNaylonHanger8mm1,
-    images: [quadNaylonHanger8mm1, quadNaylonHanger8mm2, quadNaylonHanger8mm3],
-    price: 400,
-    countInStock: 12,
-    description:
-      "Strong 8mm metal quad hanger built for durability and stability, perfect for intermediate to professional skaters.",
-    specs: { usage: "Professional Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-    colors: ["Silver", "Black"],
-    sizes: ["Medium", "Large"],
-  },
-  {
-    id: "quad-metal-hanger-7mm",
-    name: "Quad Metal Hanger 7mm",
-    image: quadMetalHanger7mm1,
-    images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
-    price: 700,
-    countInStock: 20,
-    description:
-      "Durable 7mm metal quad hanger that offers improved strength over nylon, suited for skaters wanting more control and longevity.",
-    specs: { usage: "Recreational & Training Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "quad-metal-hanger-8mm",
-    name: "Quad Metal Hanger 8mm",
-    image: quadMetalHanger8mm1,
-    images: [quadMetalHanger8mm1],
-    price: 800,
-    countInStock: 20,
-    description:
-      "Heavy-duty 8mm quad metal hanger designed for advanced skaters who need maximum durability and stability under pressure.",
-    specs: { usage: "Professional & Speed Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-];
+  // const products = [
+  //   {
+  //     id: "quad-naylon-hanger-7mm",
+  //     name: "Quad Nylon Hanger 7mm",
+  //     image: quadNaylonHanger7mm1,
+  //     images: [
+  //       quadNaylonHanger7mm1,
+  //       quadNaylonHanger7mm2,
+  //       quadNaylonHanger7mm3,
+  //       quadNaylonHanger7mm4,
+  //     ],
+  //     price: 300,
+  //     countInStock: 20,
+  //     description:
+  //       "Lightweight 7mm nylon quad hanger, ideal for beginner and recreational skaters seeking smooth performance at an affordable price.",
+  //     specs: {
+  //       usage: "Recreational Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Durable Nylon",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "quad-naylon-hanger-8mm",
+  //     name: "Metal Quad Hanger 8mm",
+  //     image: quadNaylonHanger8mm1,
+  //     images: [
+  //       quadNaylonHanger8mm1,
+  //       quadNaylonHanger8mm2,
+  //       quadNaylonHanger8mm3,
+  //     ],
+  //     price: 400,
+  //     countInStock: 12,
+  //     description:
+  //       "Strong 8mm metal quad hanger built for durability and stability, perfect for intermediate to professional skaters.",
+  //     specs: {
+  //       usage: "Professional Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Silver", "Black"],
+  //     sizes: ["Medium", "Large"],
+  //   },
+  //   {
+  //     id: "quad-metal-hanger-7mm",
+  //     name: "Quad Metal Hanger 7mm",
+  //     image: quadMetalHanger7mm1,
+  //     images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
+  //     price: 700,
+  //     countInStock: 20,
+  //     description:
+  //       "Durable 7mm metal quad hanger that offers improved strength over nylon, suited for skaters wanting more control and longevity.",
+  //     specs: {
+  //       usage: "Recreational & Training Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "quad-metal-hanger-8mm",
+  //     name: "Quad Metal Hanger 8mm",
+  //     image: quadMetalHanger8mm1,
+  //     images: [quadMetalHanger8mm1],
+  //     price: 800,
+  //     countInStock: 20,
+  //     description:
+  //       "Heavy-duty 8mm quad metal hanger designed for advanced skaters who need maximum durability and stability under pressure.",
+  //     specs: {
+  //       usage: "Professional & Speed Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -153,19 +226,31 @@ export default function Hangers() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setView("grid")}
-                className={`p-2 ${view === "grid" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "grid" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* grid icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zm-12 6h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
                 </svg>
               </button>
               <button
                 onClick={() => setView("list")}
-                className={`p-2 ${view === "list" ? "text-gray-900" : "text-gray-400"}`}
+                className={`p-2 ${
+                  view === "list" ? "text-gray-900" : "text-gray-400"
+                }`}
               >
                 {/* list icon */}
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
                 </svg>
               </button>
@@ -206,7 +291,14 @@ export default function Hangers() {
                       priority
                     />
                   </div>
-
+                    {/* ✅ Stock Badge */}
+                  <span
+                    className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
+                      product.countInStock > 0 ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                    }`}
+                  >
+                    {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                  </span>
                   <button
                     onClick={() => openImageModal(product)}
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 
@@ -216,15 +308,28 @@ export default function Hangers() {
                     aria-label="View images"
                   >
                     {/* eye icon */}
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <svg
+                      className="w-6 h-6 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                      />
                     </svg>
                   </button>
                 </div>
 
                 {/* Details */}
-                <div className={`flex flex-col ${view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"}`}>
+                <div
+                  className={`flex flex-col ${
+                    view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
+                  }`}
+                >
                   <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     {product.name}
                   </h3>
@@ -278,47 +383,73 @@ export default function Hangers() {
 
                     {/* Specifications (with Color & Size dropdowns on the right) */}
                     <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">Specifications:</h4>
+                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
+                        Specifications:
+                      </h4>
                       <ul className="space-y-1.5 text-sm text-gray-600">
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Usage:</span>
-                          <span className="text-gray-600">{product.specs.usage}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Usage:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.usage}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Wheels:</span>
-                          <span className="text-gray-600">{product.specs.wheels || "—"}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Wheels:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.wheels || "—"}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Color:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Color:
+                          </span>
                           <select
                             value={sel.color}
-                            onChange={(e) => setSelection(product.id, "color", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "color", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Color</option>
                             {product.colors?.map((c) => (
-                              <option key={c} value={c}>{c}</option>
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
                             ))}
                           </select>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Material:</span>
-                          <span className="text-gray-600">{product.specs.material || "—"}</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Material:
+                          </span>
+                          <span className="text-gray-600">
+                            {product.specs.material || "—"}
+                          </span>
                         </li>
 
                         <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">Size:</span>
+                          <span className="capitalize font-medium text-gray-700">
+                            Size:
+                          </span>
                           <select
                             value={sel.size}
-                            onChange={(e) => setSelection(product.id, "size", e.target.value)}
+                            onChange={(e) =>
+                              setSelection(product.id, "size", e.target.value)
+                            }
                             className="border rounded-md py-1.5 px-3 text-gray-700"
                           >
                             <option value="">Select Size</option>
                             {product.sizes?.map((s) => (
-                              <option key={s} value={s}>{s}</option>
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
                             ))}
                           </select>
                         </li>
@@ -338,37 +469,76 @@ export default function Hangers() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
           onClick={closeImageModal}
         >
-          <div className="relative max-w-4xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative max-w-4xl w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={closeImageModal}
               className="absolute -top-12 right-0 text-white hover:text-gray-300"
               aria-label="Close"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Previous image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
             )}
 
             {selectedProduct.images.length > 1 && (
               <button
-                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
                 className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 p-2 text-white hover:text-blue-400"
                 aria-label="Next image"
               >
-                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             )}

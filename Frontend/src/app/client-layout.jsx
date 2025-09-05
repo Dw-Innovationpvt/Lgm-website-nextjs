@@ -1,0 +1,49 @@
+"use client";
+
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import CategoryWrapper from "../components/CategoryWrapper";
+import { Toaster } from "react-hot-toast";
+import { FaWhatsapp } from "react-icons/fa";
+import { usePathname } from "next/navigation";
+
+export default function ClientLayout({ children }) {
+  const pathname = usePathname();
+
+  // Pages where Navbar/Footer should be hidden
+  const noNavFooter = ["/register", "/user-login", "/forgot-password", "/reset-password", "/admin-login"];
+  const hideNavFooter = noNavFooter.includes(pathname);
+
+  return (
+    <>
+      {!hideNavFooter && <Navbar />}
+      {!hideNavFooter && <CategoryWrapper />}
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+
+      {children}
+
+      {!hideNavFooter && (
+        <footer className="pb-6">
+          <Footer />
+        </footer>
+      )}
+
+      {!hideNavFooter && (
+        <>
+          <div className="fixed bottom-6 right-16 bg-white text-gray-600 text-sm p-2 rounded-lg shadow-lg animate-bounce z-50">
+            Any queries? Contact us!
+          </div>
+          <a
+            href={`https://wa.me/7744042929`}
+            className="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 animate-bounce z-50"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ filter: "drop-shadow(0 0 10px rgba(0,0,0,0.1))" }}
+          >
+            <FaWhatsapp size={24} />
+          </a>
+        </>
+      )}
+    </>
+  );
+}

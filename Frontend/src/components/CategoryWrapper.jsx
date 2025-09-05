@@ -22,6 +22,7 @@ export default function CategoryWrapper() {
     "/baby-tenacity",
     "/hangers",
     "/spacers-axle-adapter",
+    "/quad-skates",
   ];
 
   const showCategoryBar = categoryRoutes.some(route =>

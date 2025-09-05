@@ -88,14 +88,12 @@ const adminLogin = async (req, res) => {
     const { adminId, password } = req.body;
 
     const admin = await prisma.admin.findUnique({ where: { adminId } });
-
     if (!admin) {
       return res.status(400).json({ message: "Invalid admin ID or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, admin.password);
-
-    if (!isMatch) {
+    // If you stored hashed password for admin, use bcrypt.compare instead
+    if (admin.password !== password) {
       return res.status(400).json({ message: "Invalid admin ID or password" });
     }
 

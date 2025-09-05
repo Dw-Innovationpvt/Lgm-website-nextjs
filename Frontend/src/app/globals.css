@@ -64,3 +64,41 @@ a {
 
 
 
+/* Dropdown Animation */
+@keyframes dropdown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown {
+  animation: dropdown 0.25s ease-out;
+}
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200, 200, 200, 0.4);
+}
+
+/* Dropdown Items */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  transform: translateX(4px);
+  background: rgba(240, 240, 240, 0.6);
+}

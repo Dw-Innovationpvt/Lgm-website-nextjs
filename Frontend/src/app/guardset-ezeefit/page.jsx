@@ -4,27 +4,68 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
+// Local images mapping
+const productImages = {
+  A0231: ["/assets/109 - Foam Knee Pad/AARMS Photography-14.jpg"],
+  A0232: ["/assets/108 - Guard Set/_MG_2059.jpg", "/assets/108 - Guard Set/1000211146.png"],
+  A0234: ["/assets/107 - HQ Guard Set ( No Fear)/AARMS Photography-148.jpg"],
+  A0235: ["/assets/155- Ezeefit/1000211135.png"],
+};
+
 // Images
 
-import hqGuardSet1 from "/public/assets/107 - HQ Guard Set ( No Fear)/AARMS Photography-148.jpg";
+// import hqGuardSet1 from "/public/assets/107 - HQ Guard Set ( No Fear)/AARMS Photography-148.jpg";
 
-import guardSet1 from "/public/assets/108 - Guard Set/_MG_2059.jpg";
-import guardSet2 from "/public/assets/108 - Guard Set/1000211146.png";
+// import guardSet1 from "/public/assets/108 - Guard Set/_MG_2059.jpg";
+// import guardSet2 from "/public/assets/108 - Guard Set/1000211146.png";
 
-import foamKneePad from "/public/assets/109 - Foam Knee Pad/AARMS Photography-14.jpg";
+// import foamKneePad from "/public/assets/109 - Foam Knee Pad/AARMS Photography-14.jpg";
 
-import ezeefit from "/public/assets/155- Ezeefit/1000211135.png";
+// import ezeefit from "/public/assets/155- Ezeefit/1000211135.png";
 
 
-export default function Hangers() {
+export default function GuardSet() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   // selections shape: { [productId]: { color: string, size: string } }
   const [selections, setSelections] = useState({});
+
+  useEffect(() => {
+      const fetchProducts = async () => {
+        try {
+          const res = await fetch("http://localhost:5000/api/products");
+          let data = await res.json();
+  
+          // Filter only Guard Set codes
+          data = data.filter((p) => ["A0231", "A0232", "A0234", "A0235"].includes(p.code) || ["A0231", "A0232", "A0234", "A0235" ].includes(p.code));
+  
+          // Attach images from local mapping
+          data = data.map((p) => ({
+            ...p,
+            image: productImages[p.code]?.[0] || "/placeholder.png",
+            images: productImages[p.code] || ["/placeholder.png"],
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: ["red", "blue", "green", "pink"],
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          }));
+  
+          setProducts(data);
+        } catch (err) {
+          console.error("Error fetching products:", err);
+        }
+      };
+  
+      fetchProducts();
+    }, []);
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -75,62 +116,61 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  const products = [
-    
-    {
-  id: "guard-set",
-  name: "Guard Set",
-  image: guardSet1,
-  images: [guardSet1, guardSet2],
-  price: 420,
-  countInStock: 12,
-  description:
-    "Essential protective guard set offering reliable safety for knees, elbows, and wrists during skating.",
-  specs: { usage: "Recreational & Beginner Skating", protection: "Full set", material: "Impact-Resistant Plastic + Foam Padding" },
-  colors: ["Silver", "Black"],
-  sizes: ["Medium", "Large"],
-},
-{
-  id: "foam-knee-pad",
-  name: "Foam Knee Pad",
-  image: foamKneePad,
-  images: [foamKneePad],
-  price: 400,
-  countInStock: 20,
-  description:
-    "Comfortable foam knee pads providing shock absorption and protection from scrapes and falls.",
-  specs: { usage: "Skating, Training, Outdoor Sports", protection: "Knee Only", material: "Foam Cushion + Elastic Strap" },
-  colors: ["Black", "Red", "Blue"],
-  sizes: ["Small", "Medium", "Large"],
-},
-{
-  id: "hq-guard-set",
-  name: "HQ Guard Set (No Fear)",
-  image: hqGuardSet1,
-  images: [hqGuardSet1],
-  price: 1200,
-  countInStock: 20,
-  description:
-    "High-quality ‘No Fear’ guard set with extra padding and ergonomic design for professional-level protection.",
-  specs: { usage: "Professional Skating & Sports", protection: "Full set", material: "Reinforced Plastic + EVA Foam" },
-  colors: ["Black", "Red", "Blue"],
-  sizes: ["Small", "Medium", "Large"],
-},
-{
-  id: "ezeefit",
-  name: "Ezeefit",
-  image: ezeefit,
-  images: [ezeefit],
-  price: 2500,
-  countInStock: 20,
-  description:
-    "Premium Ezeefit ankle booties designed to prevent blisters and provide maximum comfort inside skates or shoes.",
-  specs: { usage: "Skating, Running, Cycling", protection: "Ankle & Heel", material: "Lycra + Neoprene" },
-  colors: ["Black", "Red", "Blue"],
-  sizes: ["Small", "Medium", "Large"],
-}
+//   const products = [
+//     {
+//   id: "guard-set",
+//   name: "Guard Set",
+//   image: guardSet1,
+//   images: [guardSet1, guardSet2],
+//   price: 420,
+//   countInStock: 12,
+//   description:
+//     "Essential protective guard set offering reliable safety for knees, elbows, and wrists during skating.",
+//   specs: { usage: "Recreational & Beginner Skating", protection: "Full set", material: "Impact-Resistant Plastic + Foam Padding" },
+//   colors: ["Silver", "Black"],
+//   sizes: ["Medium", "Large"],
+// },
+// {
+//   id: "foam-knee-pad",
+//   name: "Foam Knee Pad",
+//   image: foamKneePad,
+//   images: [foamKneePad],
+//   price: 400,
+//   countInStock: 20,
+//   description:
+//     "Comfortable foam knee pads providing shock absorption and protection from scrapes and falls.",
+//   specs: { usage: "Skating, Training, Outdoor Sports", protection: "Knee Only", material: "Foam Cushion + Elastic Strap" },
+//   colors: ["Black", "Red", "Blue"],
+//   sizes: ["Small", "Medium", "Large"],
+// },
+// {
+//   id: "hq-guard-set",
+//   name: "HQ Guard Set (No Fear)",
+//   image: hqGuardSet1,
+//   images: [hqGuardSet1],
+//   price: 1200,
+//   countInStock: 20,
+//   description:
+//     "High-quality ‘No Fear’ guard set with extra padding and ergonomic design for professional-level protection.",
+//   specs: { usage: "Professional Skating & Sports", protection: "Full set", material: "Reinforced Plastic + EVA Foam" },
+//   colors: ["Black", "Red", "Blue"],
+//   sizes: ["Small", "Medium", "Large"],
+// },
+// {
+//   id: "ezeefit",
+//   name: "Ezeefit",
+//   image: ezeefit,
+//   images: [ezeefit],
+//   price: 2500,
+//   countInStock: 20,
+//   description:
+//     "Premium Ezeefit ankle booties designed to prevent blisters and provide maximum comfort inside skates or shoes.",
+//   specs: { usage: "Skating, Running, Cycling", protection: "Ankle & Heel", material: "Lycra + Neoprene" },
+//   colors: ["Black", "Red", "Blue"],
+//   sizes: ["Small", "Medium", "Large"],
+// }
 
-  ];
+//   ];
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -138,10 +178,10 @@ export default function Hangers() {
         {/* Header */}
         <div className="border-b border-gray-200 mb-8">
           <h1 className="text-4xl font-bold font-['Arimo'] text-gray-900 mb-2">
-            Quad & Inline Bearings
+            Guard Set and Ezeefit
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            Professional-grade bearings for optimal performance.
+            Professional storage solutions for your skating equipment.
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -201,6 +241,15 @@ export default function Hangers() {
                       priority
                     />
                   </div>
+
+                   {/* ✅ Stock Badge */}
+                  <span
+                    className={`absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full shadow-md ${
+                      product.countInStock > 0 ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                    }`}
+                  >
+                    {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                  </span>
 
                   <button
                     onClick={() => openImageModal(product)}

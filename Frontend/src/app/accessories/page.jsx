@@ -4,27 +4,73 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
-// Images
-import quadShoeNuts1 from "public/assets/140 - Quad Shoe Nuts/1000211297.png";
-import quadShoeNuts2 from "public/assets/140 - Quad Shoe Nuts/1000211299.png";
+// Local images mapping
+const productImages = {
+  A0338: ["/assets/140 - Quad Shoe Nuts/1000211297.png", "/assets/140 - Quad Shoe Nuts/1000211299.png"],
+  A0339: [
+    "/assets/151- Quad Lace/1000211293.png",
+    "/assets/151- Quad Lace/1000211294.png",
+    "/assets/151- Quad Lace/1000211295.png",
+  ],
+  A0340: ["/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg"],
+  A0346: ["/assets/153- Allen Kay/AARMS Photography-217.jpg"],
+};
 
-import washers1 from "public/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg";
+// // Images
+// import quadShoeNuts1 from "public/assets/140 - Quad Shoe Nuts/1000211297.png";
+// import quadShoeNuts2 from "public/assets/140 - Quad Shoe Nuts/1000211299.png";
 
-import quadLace1 from "/public/assets/151- Quad Lace/1000211293.png";
-import quadLace2 from "/public/assets/151- Quad Lace/1000211294.png";
-import quadLace3 from "/public/assets/151- Quad Lace/1000211295.png";
+// import washers1 from "public/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg";
 
-import allenKay1 from "/public/assets/153- Allen Kay/AARMS Photography-217.jpg";
+// import quadLace1 from "/public/assets/151- Quad Lace/1000211293.png";
+// import quadLace2 from "/public/assets/151- Quad Lace/1000211294.png";
+// import quadLace3 from "/public/assets/151- Quad Lace/1000211295.png";
+
+// import allenKay1 from "/public/assets/153- Allen Kay/AARMS Photography-217.jpg";
 
 export default function Hangers() {
   const [view, setView] = useState("grid");
   const { addToCart } = useCart();
   const router = useRouter();
+  const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   // selections shape: { [productId]: { color: string, size: string } }
   const [selections, setSelections] = useState({});
+
+  useEffect(() => {
+        const fetchProducts = async () => {
+          try {
+            const res = await fetch("http://localhost:5000/api/products");
+            let data = await res.json();
+    
+            // Filter only Guard Set codes
+            data = data.filter((p) => ["A0338", "A0339", "A0340", "A0346"].includes(p.code) || ["A0338", "A0339", "A0340", "A0346" ].includes(p.code));
+    
+            // Attach images from local mapping
+            data = data.map((p) => ({
+              ...p,
+              image: productImages[p.code]?.[0] || "/placeholder.png",
+              images: productImages[p.code] || ["/placeholder.png"],
+              specs: {
+                usage: "Skating",
+                wheels: "4 Wheel",
+                material: "Stainless Steel",
+              },
+              colors: ["red", "blue", "green", "pink"],
+              sizes: ["Small", "Medium", "Large"],
+              countInStock: p.stockQuantity ?? 0,
+            }));
+    
+            setProducts(data);
+          } catch (err) {
+            console.error("Error fetching products:", err);
+          }
+        };
+    
+        fetchProducts();
+      }, []);
+  
 
   const setSelection = (productId, field, value) => {
     setSelections((prev) => ({
@@ -36,7 +82,7 @@ export default function Hangers() {
   const handleAddToCart = (product) => {
     const { color = "", size = "" } = selections[product.id] || {};
     addToCart({ ...product, selectedColor: color, selectedSize: size });
-    router.push("/cart")
+    router.push("/cart");
   };
 
   const handleBuyNow = (product) => {
@@ -75,77 +121,76 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  const products = [
-  {
-    id: "quad-shoe-nuts-1",
-    name: "Quad Shoe Nuts",
-    image: quadShoeNuts1,
-    images: [quadShoeNuts1, quadShoeNuts2],
-    price: 100,
-    countInStock: 20,
-    description:
-      "Sturdy nuts that keep your skate wheels securely in place for smooth and safe rides.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Stainless Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "washers-(7mm-8mm)",
-    name: "Washers (7mm-8mm)",
-    image: washers1,
-    images: [washers1],
-    price: 400,
-    countInStock: 20,
-    description:
-      "Durable washers for 7mm–8mm axles, reducing friction and keeping wheels aligned.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Stainless Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "quad-lace",
-    name: "Quad Lace",
-    image: quadLace1,
-    images: [quadLace1, quadLace2, quadLace3],
-    price: 100,
-    countInStock: 20,
-    description:
-      "Strong, stylish laces that provide a secure fit and add flair to your skates.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Polyester Blend",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  },
-  {
-    id: "allen-kay",
-    name: "Allen Kay",
-    image: allenKay1,
-    images: [allenKay1],
-    price: 300,
-    countInStock: 20,
-    description:
-      "Compact Allen key tool for quick and easy skate adjustments on the go.",
-    specs: {
-      usage: "Skating",
-      wheels: "4 Wheel",
-      material: "Hardened Steel",
-    },
-    colors: ["Black", "Red", "Blue"],
-    sizes: ["Small", "Medium", "Large"],
-  }
-];
-
+  // const products = [
+  //   {
+  //     id: "quad-shoe-nuts-1",
+  //     name: "Quad Shoe Nuts",
+  //     image: quadShoeNuts1,
+  //     images: [quadShoeNuts1, quadShoeNuts2],
+  //     price: 100,
+  //     countInStock: 20,
+  //     description:
+  //       "Sturdy nuts that keep your skate wheels securely in place for smooth and safe rides.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "washers-(7mm-8mm)",
+  //     name: "Washers (7mm-8mm)",
+  //     image: washers1,
+  //     images: [washers1],
+  //     price: 400,
+  //     countInStock: 20,
+  //     description:
+  //       "Durable washers for 7mm–8mm axles, reducing friction and keeping wheels aligned.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Stainless Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "quad-lace",
+  //     name: "Quad Lace",
+  //     image: quadLace1,
+  //     images: [quadLace1, quadLace2, quadLace3],
+  //     price: 100,
+  //     countInStock: 20,
+  //     description:
+  //       "Strong, stylish laces that provide a secure fit and add flair to your skates.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Polyester Blend",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  //   {
+  //     id: "allen-kay",
+  //     name: "Allen Kay",
+  //     image: allenKay1,
+  //     images: [allenKay1],
+  //     price: 300,
+  //     countInStock: 20,
+  //     description:
+  //       "Compact Allen key tool for quick and easy skate adjustments on the go.",
+  //     specs: {
+  //       usage: "Skating",
+  //       wheels: "4 Wheel",
+  //       material: "Hardened Steel",
+  //     },
+  //     colors: ["Black", "Red", "Blue"],
+  //     sizes: ["Small", "Medium", "Large"],
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-blue-50">

@@ -75,13 +75,13 @@ const CartPage = () => {
                   key={`${item.id}-${item.type}`}
                   className="bg-white rounded-xl p-4 md:p-6 shadow-lg flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6"
                 >
-                  <div className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 mx-auto sm:mx-0">
+                  {/* <div className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 mx-auto sm:mx-0">
                     <img
                       src={item.image}
                       alt={item.name}
                       className="w-full h-full object-contain"
                     />
-                  </div>
+                  </div> */}
 
                   <div className="flex-grow text-center sm:text-left">
                     <h3 className="text-base md:text-lg font-semibold text-gray-900">
