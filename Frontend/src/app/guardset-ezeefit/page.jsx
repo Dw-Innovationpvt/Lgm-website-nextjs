@@ -302,66 +302,77 @@ export default function GuardSet() {
                   </button>
                 </div>
 
-                {/* Details */}
+                 {/* Details */}
                 <div
                   className={`flex flex-col ${
                     view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
                   }`}
                 >
-                  <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 font-mono mb-1">
-                    Code: {product.code}
+                  {/* Title and Code in flex */}
+                  <div className="flex flex-col mb-2">
+                    <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 hover:text-blue-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-mono">
+                      Code: {product.code}
+                    </p>
+                  </div>
+                  
+                  {/* Description */}
+                  <p className="text-gray-600 mb-4">
+                    {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
                   </p>
-                  <p className="text-gray-600 mb-4">{product.description}</p>
 
-                  <div className="space-y-4">
-                    {/* Price + CTAs */}
-                    <div className="flex justify-between items-center gap-2">
-                      <span className="text-2xl font-bold text-blue-600">
-                        ₹{product.price.toLocaleString()}
-                      </span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleAddToCart(product)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                  <div className="space-y-4 mt-auto">
+                    {/* Buttons in flex */}
+                    <div className="flex gap-2 justify-end">
+                      <button
+                        onClick={() => handleAddToCart(product)}
+                        disabled={product.countInStock <= 0}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
+                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
+                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                      >
+                        {/* cart icon */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
                         >
-                          {/* cart icon */}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                          </svg>
-                          Add to Cart
-                        </button>
-                        <button
-                          onClick={() => handleBuyNow(product)}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                          <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                        </svg>
+                        {product.countInStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                      </button>
+                      <button
+                        onClick={() => handleBuyNow(product)}
+                        disabled={product.countInStock <= 0}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
+                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
+                          : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                      >
+                        {/* check icon */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          {/* check icon */}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          Buy Now
-                        </button>
-                      </div>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
+                      </button>
                     </div>
 
+
+                    
+                  </div>
                     {/* Specifications (with Color & Size dropdowns on the right) */}
                     <div className="border-t border-gray-100 pt-4">
                       <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
@@ -438,7 +449,7 @@ export default function GuardSet() {
                     </div>
                   </div>
                 </div>
-              </div>
+              
             );
           })}
         </div>

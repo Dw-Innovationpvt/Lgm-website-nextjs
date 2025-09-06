@@ -1,12 +1,13 @@
 import "./globals.css";
-import { Arimo } from "next/font/google";
+import { Raleway } from "next/font/google";
 import { CartProvider } from "../context/CartContext";
 import ClientLayout from "./client-layout"; // 👈 client wrapper
 
-const arimo = Arimo({
+const raleway = Raleway({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
+  variable: '--font-raleway',
 });
 
 export const metadata = {
@@ -17,7 +18,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${arimo.className} bg-white`}>
+      <body className={`${raleway.variable} bg-white`}>
         <CartProvider>
           <ClientLayout>{children}</ClientLayout>
         </CartProvider>

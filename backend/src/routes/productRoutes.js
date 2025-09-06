@@ -64,6 +64,7 @@
 // routes/productRoutes.js
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { updateStock } from "../controllers/productController.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -98,6 +99,29 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("Error creating product:", error);
     res.status(500).json({ error: "Failed to create product" });
+  }
+});
+
+// UPDATE stock quantity for a product (for admin)
+router.put("/:id/stock", async (req, res) => {
+  try {
+    const { id } = req.params; // Product ID is a string in the schema
+    const { stockQuantity } = req.body;
+    
+    if (stockQuantity === undefined || isNaN(parseInt(stockQuantity))) {
+      return res.status(400).json({ success: false, message: "Valid stock quantity is required" });
+    }
+    
+    // Update the product stock
+    const updatedProduct = await prisma.product.update({
+      where: { id: id }, // Use the ID as a string
+      data: { stockQuantity: parseInt(stockQuantity) },
+    });
+    
+    res.json({ success: true, product: updatedProduct });
+  } catch (error) {
+    console.error("Error updating product stock:", error);
+    res.status(500).json({ success: false, message: "Failed to update product stock" });
   }
 });
 
