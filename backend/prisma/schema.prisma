@@ -39,6 +39,9 @@ model Order {
   razorpayPaymentId String?
   razorpaySignature String?
   items             OrderItem[]
+  discountApplied   Boolean     @default(false)
+  discountAmount    Int         @default(0)
+  academicDetails   AcademicDetails?
 }
 
 model OrderItem {
@@ -66,4 +69,14 @@ model PasswordResetToken {
   otp       String
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+model AcademicDetails {
+  id            Int      @id @default(autoincrement())
+  studentName   String
+  academyName   String
+  studentAddress String
+  orderId       Int      @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
 }

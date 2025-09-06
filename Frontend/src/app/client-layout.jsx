@@ -23,7 +23,7 @@ export default function ClientLayout({ children }) {
       {children}
 
       {!hideNavFooter && (
-        <footer className="pb-6">
+        <footer className="">
           <Footer />
         </footer>
       )}

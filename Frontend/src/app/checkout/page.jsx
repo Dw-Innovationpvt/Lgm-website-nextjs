@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { User, GraduationCap, MapPin, X } from "lucide-react"
 import { useCart } from "@/context/CartContext";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -79,14 +80,14 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (
       couponData.studentName &&
-      couponData.academicYear &&
+      couponData.academyAddress &&
       couponData.studentId
     ) {
       setDiscountApplied(true);
       setShowCouponForm(false);
-      toast.success("10% academic discount applied!");
+      alert("10% academic discount applied!");
     } else {
-      toast.error("Please fill all coupon details.");
+      alert("Please fill all coupon details.");
     }
   };
 
@@ -112,7 +113,7 @@ export default function CheckoutPage() {
     if (formData.paymentMethod === "razorpay") {
       const loaded = await loadRazorpayScript();
       if (!loaded) {
-        toast.error("Failed to load Razorpay SDK.");
+        alert("Failed to load Razorpay SDK.");
         setIsSubmitting(false);
         return;
       }
@@ -165,14 +166,14 @@ export default function CheckoutPage() {
                 // Clear cart using CartContext function
                 clearCart();
                 
-                toast.success("Payment successful! Order placed.");
+                alert("Payment successful! Order placed.");
                 router.replace("/userProfile?tab=orders");
               } else {
-                toast.error("Payment verification failed.");
+                alert("Payment verification failed.");
               }
             } catch (err) {
               console.error("Payment verification error", err);
-              toast.error("Payment verification error.");
+              alert("Payment verification error.");
             }
           },
           prefill: {
@@ -187,7 +188,7 @@ export default function CheckoutPage() {
         rzp.open();
       } catch (error) {
         console.error("Payment initiation error", error);
-        toast.error("Error initiating Razorpay.");
+        alert("Error initiating Razorpay.");
       } finally {
         setIsSubmitting(false);
       }
@@ -225,16 +226,16 @@ export default function CheckoutPage() {
         // Clear cart using CartContext function
         clearCart();
         
-        toast.success("Order placed successfully!");
+        alert("Order placed successfully!");
         
         // Use router.replace for a clean navigation without history stacking
         router.replace("/userProfile?tab=orders");
       } else {
-        toast.error("Failed to place order. Try again.");
+        alert("Failed to place order. Try again.");
       }
     } catch (err) {
       console.error("Order Error:", err);
-      toast.error("Something went wrong. Please try again.");
+      alert("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -266,6 +267,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 py-2 font-['Arimo'] pb-12">
+      <Toaster position="top-center" />
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent inline-block">Checkout</h1>
 
@@ -550,9 +552,9 @@ export default function CheckoutPage() {
 
                   <button
                     onClick={() => setShowCouponForm(true)}
-                    className="px-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 text-xs font-medium transition"
+                    className="px-2 py-2 flex bg-orange-500 text-white rounded-md hover:bg-orange-600 text-[10px] font-medium transition"
                   >
-                    Click Here
+                    Click <span className="ml-1">Here</span>
                   </button>
                 </div>
                 <div className="flex items-center text-sm text-green-600 mb-1">
@@ -633,7 +635,7 @@ export default function CheckoutPage() {
         <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
           type="text"
-          name="academicYear"
+          name="academyAddress"
           value={couponData.academyAddress}
           onChange={handleCouponChange}
           placeholder="Academy Name"

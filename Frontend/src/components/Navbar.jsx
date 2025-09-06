@@ -3,12 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiSearch, FiShoppingCart, FiUser, FiBell } from "react-icons/fi"; // added FiBell
+import { FiSearch, FiShoppingCart, FiUser, FiBell } from "react-icons/fi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { HiMenu } from "react-icons/hi";
-import { Truck, GraduationCap } from "lucide-react";
-import { FaUserShield, FaUserCircle } from "react-icons/fa";
+import { Truck, GraduationCap, ChevronDown, ShoppingBag } from "lucide-react";
+import { FaUserShield, FaUserCircle, FaRegHeart } from "react-icons/fa";
 import { useCart } from "../context/CartContext"; // adjust path
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -92,39 +93,45 @@ export default function Navbar() {
   };
 
   const navLinkClass = (path) =>
-    `px-4 py-1.5 rounded-sm font-semibold transition-all duration-200 relative
+    `px-4 py-2 rounded-md font-semibold transition-all duration-300 relative tracking-wide
      ${
        pathname === path
-         ? "bg-[#e6f0ff] !text-[#2563eb] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-[#2563eb]"
-         : "!text-gray-800 hover:bg-[#e6f0ff] hover:text-[#2563eb]"
+         ? "bg-gradient-to-r from-blue-50 to-blue-100 !text-blue-600 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[3px] after:bg-blue-600 after:rounded-full font-bold"
+         : "!text-gray-800 hover:bg-blue-50/70 hover:text-blue-600"
      }`;
 
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-orange-400 text-white text-md text-center py-2 font-bold font-[Arimo] flex justify-center items-center gap-4">
-        <div className="flex items-center gap-1 animate-blinkSlow">
-          <Truck size={18} className="text-white" />
+      <div className="bg-gradient-to-r from-orange-500 to-orange-400 text-white text-md text-center py-2.5 font-[var(--font-raleway)] flex justify-center items-center gap-4 shadow-sm">
+        <motion.div 
+          className="flex items-center gap-1.5"
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+        >
+          <Truck size={18} className="text-white" strokeWidth={2.5} />
           <span>Free Delivery on Every Order</span>
-        </div>
-        <span className="text-white">|</span>
-        <div className="flex items-center gap-1 animate-blinkSlow">
-          <GraduationCap size={18} className="text-white" />
+        </motion.div>
+        <span className="text-white/80">|</span>
+        <motion.div 
+          className="flex items-center gap-1.5"
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: 0.7 }}
+        >
+          <GraduationCap size={18} className="text-white" strokeWidth={2.5} />
           <span>Extra 10% Discount for Academic Students</span>
-        </div>
+        </motion.div>
         <style jsx>{`
-          @keyframes blinkSlow {
-            0%,
-            100% {
-              opacity: 1;
-            }
-            50% {
-              opacity: 0.3;
-            }
+          .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
           }
-          .animate-blinkSlow {
-            animation: blinkSlow 2.5s ease-in-out infinite;
-          }
+          
           @keyframes fadeIn {
             from {
               opacity: 0;
@@ -135,28 +142,15 @@ export default function Navbar() {
               transform: translateY(0);
             }
           }
-          .animate-fadeIn {
+          
+          .animate-dropdown {
             animation: fadeIn 0.2s ease-out forwards;
-          }
-          @keyframes pulse-subtle {
-            0% {
-              transform: scale(1);
-            }
-            50% {
-              transform: scale(1.1);
-            }
-            100% {
-              transform: scale(1);
-            }
-          }
-          .animate-pulse-subtle {
-            animation: pulse-subtle 2s ease-in-out infinite;
           }
         `}</style>
       </div>
 
       {/* Navbar */}
-      <nav className="bg-white shadow-sm font-semibold px-4 md:px-12 flex justify-between items-center p-2">
+      <nav className="bg-white shadow-md px-4 md:px-12 flex justify-between items-center py-3 sticky top-0 z-50 font-[var(--font-raleway)]">
         {/* Left Nav */}
         <div className="flex items-center gap-6">
           {/* Mobile Menu Button */}
@@ -166,7 +160,7 @@ export default function Navbar() {
           />
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex flex-wrap items-center gap-x-3  text-[16px] md:text-[17px] font-semibold max-w-5xl">
+          <div className="hidden md:flex flex-wrap items-center gap-x-4 text-[16px] md:text-[17px] max-w-5xl tracking-wide">
             <Link
               href="/"
               className={`${navLinkClass(
@@ -179,7 +173,7 @@ export default function Navbar() {
               href="/inline-skates"
               className={`${navLinkClass(
                 "/inline-skates"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4 `}
             >
               Professional Inline Skates
             </Link>
@@ -206,12 +200,16 @@ export default function Navbar() {
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <button className="flex items-center text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-blue-600 hover:bg-blue-50">
+              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-blue-600 hover:bg-blue-50 group font-medium">
                 Products
-                <MdKeyboardArrowDown className="text-lg transition-transform group-hover:rotate-180" />
+                <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
               </button>
               {showDropdown && (
-                <div className="absolute top-10 left-0 bg-white w-56 shadow-lg border rounded-xl overflow-hidden z-50">
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-10 left-0 bg-white w-60 shadow-xl border rounded-xl overflow-hidden z-50">
                   <Link
                     href="/accessories"
                     className="block px-5 py-2 !text-black hover:bg-blue-100 hover:text-blue-600 transition"
@@ -224,7 +222,7 @@ export default function Navbar() {
                   >
                     Products
                   </Link>
-                </div>
+                </motion.div>
               )}
             </div>
 
@@ -275,30 +273,41 @@ export default function Navbar() {
         </div>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-3 md:gap-4 relative font-semibold">
-          <div className="hidden md:block relative">
+        <div className="flex items-center gap-3 md:gap-5 pb-10 relative font-semibold">
+          <div className="hidden md:block relative group">
             <input
               type="text"
               placeholder="Search products..."
-              className="rounded-full border border-gray-300 py-2 px-4 pr-10 text-sm w-80 outline-none text-gray-800"
+              className="rounded-full border border-gray-300 py-2.5 px-5 pr-12 text-sm w-80 outline-none text-gray-800 transition-all duration-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 group-hover:border-blue-300"
             />
-            <FiSearch className="absolute top-2.5 right-4 text-gray-500 text-lg" />
+            <button className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500 text-lg bg-blue-100 hover:bg-blue-200 transition-colors duration-300 p-1.5 rounded-full">
+              <FiSearch className="h-4 w-4 text-blue-600" />
+            </button>
           </div>
 
           <Link href="/cart" className="relative">
-            <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
-              <FiShoppingCart
-                className="text-gray-800 text-xl"
-                strokeWidth={2.5}
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center hover:bg-blue-100 relative transition-all duration-300 shadow-sm"
+            >
+              <ShoppingBag
+                className="text-blue-600 h-5 w-5"
+                strokeWidth={2}
               />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <motion.span 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md"
+                >
                   {cartCount}
-                </span>
+                </motion.span>
               )}
-            </button>
+            </motion.button>
           </Link>
-
+          
+          
           {/* Notification Icon - only when logged in */}
           {/* {isLoggedIn && (
             <button className="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative">
@@ -308,42 +317,70 @@ export default function Navbar() {
 
           <div className="relative" ref={loginDropdownRef}>
             {/* Profile button */}
-            <button
+            <motion.button
               onClick={handleProfileClick}
-              className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 relative transition duration-300 shadow-sm"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 relative transition-all duration-300 shadow-sm"
             >
-              <FiUser className="text-gray-800 text-xl" strokeWidth={2.5} />
+              <FiUser className="text-gray-700 h-5 w-5" strokeWidth={2} />
               {isLoggedIn && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-green-600 rounded-full border border-white shadow-sm" />
+                <motion.span 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm" 
+                />
               )}
-            </button>
+            </motion.button>
 
             {/* Dropdown */}
             {!isLoggedIn && showLoginDropdown && (
-              <div className="dropdown-menu absolute right-0 mt-3 w-56 rounded-2xl shadow-2xl z-50 overflow-hidden animate-dropdown">
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="dropdown-menu absolute right-0 mt-3 w-60 rounded-2xl shadow-2xl z-50 overflow-hidden bg-white border border-gray-100">
+                <div className="px-3 py-3 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+                  <h3 className="text-sm font-bold text-gray-700 tracking-wider">Account Access</h3>
+                </div>
                 <Link
                   href="/admin-login"
-                  className="dropdown-item !text-orange-600 hover:bg-orange-50"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-colors duration-200 font-[var(--font-raleway)]"
                 >
-                  <FaUserShield className="text-lg text-orange-500" />
-                  <span className="text-orange-500">Admin Access</span>
+                  <div className="p-2 bg-orange-100 rounded-lg">
+                    <FaUserShield className="text-lg text-orange-600" />
+                  </div>
+                  <div>
+                    <span className="block font-semibold text-gray-800">Admin Access</span>
+                    <span className="text-xs text-gray-500">Login to admin dashboard</span>
+                  </div>
                 </Link>
-                <hr className="border-gray-200" />
+                <hr className="border-gray-100" />
                 <Link
                   href="/user-login"
-                  className="dropdown-item text-blue-600 hover:bg-blue-50"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200 font-[var(--font-raleway)]"
                 >
-                  <FaUserCircle className="text-lg text-black" />
-                  <span className="text-black">User Login</span>
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <FaUserCircle className="text-lg text-blue-600" />
+                  </div>
+                  <div>
+                    <span className="block font-semibold text-gray-800">User Login</span>
+                    <span className="text-xs text-gray-500">Access your account</span>
+                  </div>
                 </Link>
                 <Link
                   href="/register"
-                  className="dropdown-item text-green-600 hover:bg-green-50"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-green-50 transition-colors duration-200 font-[var(--font-raleway)]"
                 >
-                  <FaUserCircle className="text-lg text-black" />
-                  <span className="text-black">User Sign Up</span>
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <FaUserCircle className="text-lg text-green-600" />
+                  </div>
+                  <div>
+                    <span className="block font-semibold text-gray-800">Sign Up</span>
+                    <span className="text-xs text-gray-500">Create a new account</span>
+                  </div>
                 </Link>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
@@ -351,7 +388,12 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenu && (
-        <div className="md:hidden bg-white shadow-md px-6 py-4 space-y-2 text-sm font-medium text-gray-800">
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.3 }}
+          className="md:hidden bg-white shadow-lg px-6 py-4 space-y-2 text-sm font-medium text-gray-800 border-t border-gray-100">
           {[
             { href: "/", label: "Home" },
             { href: "/inline-skates", label: "Professional Inline Skates" },
@@ -366,16 +408,16 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
-              className={`block px-3 py-2 rounded-full ${
+              className={`px-4 py-2.5 rounded-lg flex items-center transition-all duration-300 ${
                 pathname === href
-                  ? "bg-blue-100 text-blue-600"
-                  : "hover:text-blue-600 hover:bg-blue-100"
+                  ? "bg-gradient-to-r from-blue-100 to-blue-50 text-blue-600 font-semibold"
+                  : "hover:text-blue-600 hover:bg-blue-50"
               }`}
             >
               {label}
             </Link>
           ))}
-        </div>
+        </motion.div>
       )}
     </>
   );

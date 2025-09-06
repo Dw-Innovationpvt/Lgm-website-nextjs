@@ -109,22 +109,66 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartUpdated, setCartUpdated] = useState(false);
+  const [userId, setUserId] = useState(null);
 
-  // Load from localStorage on mount
+  // Get user ID on mount and when auth changes
   useEffect(() => {
-    const stored = localStorage.getItem("cart");
-    if (stored) {
-      setCartItems(JSON.parse(stored)); // ✅ keep real price
+    const getUserId = () => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.id || userData.email || "guest";
+        } catch (e) {
+          return "guest";
+        }
+      }
+      return "guest";
+    };
+
+    const currentUserId = getUserId();
+    setUserId(currentUserId);
+
+    // Listen for auth changes
+    const handleAuthChange = () => {
+      const newUserId = getUserId();
+      if (newUserId !== userId) {
+        setUserId(newUserId);
+      }
+    };
+
+    window.addEventListener("authChange", handleAuthChange);
+    window.addEventListener("storage", handleAuthChange);
+
+    return () => {
+      window.removeEventListener("authChange", handleAuthChange);
+      window.removeEventListener("storage", handleAuthChange);
+    };
+  }, [userId]);
+
+  // Load from localStorage on mount and when userId changes
+  useEffect(() => {
+    if (userId) {
+      const cartKey = `cart_${userId}`;
+      const stored = localStorage.getItem(cartKey);
+      if (stored) {
+        setCartItems(JSON.parse(stored));
+      } else {
+        setCartItems([]);
+      }
     }
-  }, []);
+  }, [userId]);
 
   // Save to localStorage on change and dispatch event
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-    
-    // Dispatch custom event to notify other components about cart changes
-    window.dispatchEvent(new Event("cartChange"));
-  }, [cartItems]);
+    if (userId) {
+      const cartKey = `cart_${userId}`;
+      localStorage.setItem(cartKey, JSON.stringify(cartItems));
+      
+      // Dispatch custom event to notify other components about cart changes
+      window.dispatchEvent(new Event("cartChange"));
+    }
+  }, [cartItems, userId]);
 
   const addToCart = (product) => {
     setCartItems((prev) => {

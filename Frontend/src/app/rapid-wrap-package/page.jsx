@@ -718,61 +718,7 @@ export default function RapidWrapPackagePage() {
                       </div>
                     </div>
 
-                    {/* Specifications */}
-                    <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
-                        Specifications:
-                      </h4>
-                      <ul className="space-y-1.5 text-sm text-gray-600">
-                        <li className="flex justify-between">
-                          <span className="font-medium">Usage:</span>
-                          <span>{product.specs.usage}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="font-medium">Wheels:</span>
-                          <span>{product.specs.wheels}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="font-medium">Material:</span>
-                          <span>{product.specs.material}</span>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="font-medium">Color:</span>
-                          <select
-                            value={selections[product.id]?.color || ""}
-                            onChange={(e) =>
-                              setSelection(product.id, "color", e.target.value)
-                            }
-                            className="border rounded-md py-1 px-2"
-                          >
-                            <option value="">Select Color</option>
-                            {product.colors.map((c) => (
-                              <option key={c} value={c}>
-                                {c}
-                              </option>
-                            ))}
-                          </select>
-                        </li>
-                        <li className="flex justify-between">
-                          <span className="font-medium">Size:</span>
-                          <select
-                            value={selections[product.id]?.size || ""}
-                            onChange={(e) =>
-                              setSelection(product.id, "size", e.target.value)
-                            }
-                            className="border rounded-md py-1 px-2"
-                          >
-                            <option value="">Select Size</option>
-                            {product.sizes.map((s) => (
-                              <option key={s} value={s}>
-                                {s}
-                              </option>
-                            ))}
-                          </select>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+                                       </div>
                 </div>
               </div>
             );

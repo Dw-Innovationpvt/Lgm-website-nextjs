@@ -78,19 +78,18 @@ const CartPage = () => {
               <p className="text-sm text-gray-500">Popular categories you might like</p>
               <div className="flex flex-wrap gap-2 justify-center mt-3">
                 <Link href="/inline-skates" className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-full text-xs font-medium hover:bg-blue-100 transition-colors">
-                  Inline Skates
+                 <span className="text-blue-600"> Inline Skates</span>
                 </Link>
                 <Link href="/skateboards" className="px-3 py-1.5 bg-orange-50 text-orange-600 rounded-full text-xs font-medium hover:bg-orange-100 transition-colors">
-                  Skateboards
+                 <span className="text-orange-600"> Skateboards</span>
                 </Link>
                 <Link href="/accessories" className="px-3 py-1.5 bg-gray-50 text-gray-600 rounded-full text-xs font-medium hover:bg-gray-100 transition-colors">
-                  Accessories
+                 <span className="text-gray-600"> Accessories</span>
                 </Link>
               </div>
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -109,9 +108,9 @@ const CartPage = () => {
                 <p className="text-gray-500 mt-1">{cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart</p>
               </div>
               <div className="flex items-center gap-3">
-                <Link href="/inline-skates" className="text-orange-600 hover:text-orange-800 text-sm md:text-base font-medium flex items-center gap-1">
-                  <FiChevronLeft className="w-4 h-4" />
-                  Continue Shopping
+                <Link href="/inline-skates" className="text-black hover:text-orange-800 text-sm md:text-base font-medium flex items-center gap-1">
+                  <FiChevronLeft className="w-4 h-4 text-gray-800" />
+                  <span className="text-black">Continue Shopping</span>
                 </Link>
                 <button
                   onClick={clearCart}
