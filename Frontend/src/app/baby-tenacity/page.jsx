@@ -200,8 +200,7 @@ export default function BabyTenacityPage() {
             </div>
           </div>
         </div>
-
-        {/* Product Display */}
+{/* Product Display */}
         <div
           className={`grid ${
             view === "grid"
@@ -277,22 +276,25 @@ export default function BabyTenacityPage() {
                     view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
                   }`}
                 >
-                  {/* Title and Code in flex */}
-                  <div className="flex flex-col mb-2">
-                    <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 hover:text-blue-600 transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 font-mono">
-                      Code: {product.code}
-                    </p>
-                  </div>
-                  
-                  {/* Description */}
+                  <h3 className="text-2xl font-bold font-['Arimo'] text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 font-mono mb-1">
+                    Code: {product.code}
+                       
+                  </p>
                   <p className="text-gray-600 mb-4">
-                    {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
+                    {product.description || "Premium quality skating gear."}
                   </p>
 
                   <div className="space-y-4 mt-auto">
+                    {/* Price in flex */}
+                    <div className="flex items-center">
+                      <span className="text-2xl font-bold text-blue-600">
+                        ₹{product.price.toLocaleString()} <span className="text-sm font-normal text-gray-500">(incl. GST)</span>
+                      </span>
+                    </div>
+                    
                     {/* Buttons in flex */}
                     <div className="flex gap-2 justify-end">
                       <button
@@ -339,9 +341,9 @@ export default function BabyTenacityPage() {
                       </button>
                     </div>
 
+                    </div>
 
-                    
-                  </div>
+                                     
                 </div>
               </div>
             );

@@ -464,7 +464,7 @@ const extraProducts = [
     name: "Inline Shoes",
     slug: "inline-shoes",
     description: "Comfortable shoes designed for perfect skating fit.",
-    image: "/assets/comming-soon.png",
+    image: "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.13_66cf49a6.jpg",
     category: "Professional inline-skates",
     countInStock: 15,
   },
