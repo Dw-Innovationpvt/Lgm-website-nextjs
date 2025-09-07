@@ -9,7 +9,31 @@ import toast, { Toaster } from 'react-hot-toast';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { clearCart } = useCart();
+  const { clearCart: contextClearCart } = useCart();
+  
+  // Custom clearCart function that clears both context and localStorage
+  const clearCart = () => {
+    // Clear cart in context
+    contextClearCart();
+    
+    // Also clear cart in localStorage for the current user
+    const getUserId = () => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.id || userData.email || "guest";
+        } catch (e) {
+          return "guest";
+        }
+      }
+      return "guest";
+    };
+    
+    const userId = getUserId();
+    const cartKey = `cart_${userId}`;
+    localStorage.setItem(cartKey, JSON.stringify([]));
+  };
 
   // Shipping/checkout form
   const [formData, setFormData] = useState({
@@ -28,12 +52,12 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // --- Coupon / discount state ---
+  // --- Academic discount state ---
   const [showCouponForm, setShowCouponForm] = useState(false);
   const [couponData, setCouponData] = useState({
     studentName: "",
-    academyAddress: "",
-    studentId: "",
+    academyName: "",
+    studentAddress: "",
   });
   const [discountApplied, setDiscountApplied] = useState(false);
 
@@ -51,7 +75,23 @@ export default function CheckoutPage() {
   const condition = "The returned goods should be returned in same condition with all accessories as they were purchased or else it won't be accepted";
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    // Get user ID for cart key
+    const getUserId = () => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.id || userData.email || "guest";
+        } catch (e) {
+          return "guest";
+        }
+      }
+      return "guest";
+    };
+    
+    const userId = getUserId();
+    const cartKey = `cart_${userId}`;
+    const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
     setCart(storedCart);
     
     // Pre-fill email from logged in user if available
@@ -64,6 +104,18 @@ export default function CheckoutPage() {
         lastName: storedUser.name?.split(' ')[1] || ''
       }));
     }
+    
+    // Listen for cart changes
+    const handleCartChange = () => {
+      const updatedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      setCart(updatedCart);
+    };
+    
+    window.addEventListener("cartChange", handleCartChange);
+    
+    return () => {
+      window.removeEventListener("cartChange", handleCartChange);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -80,14 +132,14 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (
       couponData.studentName &&
-      couponData.academyAddress &&
-      couponData.studentId
+      couponData.academyName &&
+      couponData.studentAddress
     ) {
       setDiscountApplied(true);
       setShowCouponForm(false);
-      alert("10% academic discount applied!");
+      toast.success("10% academic discount applied!");
     } else {
-      alert("Please fill all coupon details.");
+      toast.error("Please fill all academic details.");
     }
   };
 
@@ -146,6 +198,14 @@ export default function CheckoutPage() {
                 email: userEmail
               };
               
+              // Transform coupon data to academicDetails format if discount is applied
+              const academicDetails = discountApplied ? {
+                studentName: couponData.studentName,
+                academyName: couponData.academyName,
+                studentAddress: couponData.studentAddress,
+                discountAmount: discountAmount * 100  // Convert to paise/cents for backend
+              } : null;
+              
               // Verify + save order
               const verify = await axios.post(
                 "http://localhost:5000/api/payment/verify",
@@ -156,20 +216,21 @@ export default function CheckoutPage() {
                   formData: updatedFormData,
                   cart,
                   totalAmount,
-                  discountApplied,
-                  discountAmount,
-                  couponData,
+                  academicDetails,
                 }
               );
 
               if (verify.data.success) {
-                // Clear cart using CartContext function
+                // Clear cart using our custom function
                 clearCart();
                 
-                alert("Payment successful! Order placed.");
+                // Dispatch event to notify other components
+                window.dispatchEvent(new Event("cartChange"));
+                
+                toast.success("Payment successful! Order placed.");
                 router.replace("/userProfile?tab=orders");
               } else {
-                alert("Payment verification failed.");
+                toast.error("Payment verification failed.");
               }
             } catch (err) {
               console.error("Payment verification error", err);
@@ -207,6 +268,14 @@ export default function CheckoutPage() {
         email: userEmail
       };
       
+      // Transform coupon data to academicDetails format if discount is applied
+      const academicDetails = discountApplied ? {
+        studentName: couponData.studentName,
+        academyName: couponData.academyName,
+        studentAddress: couponData.studentAddress,
+        discountAmount: discountAmount * 100  // Convert to paise/cents for backend
+      } : null;
+      
       const response = await fetch("http://localhost:5000/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -214,24 +283,25 @@ export default function CheckoutPage() {
           formData: updatedFormData,
           cart,
           totalAmount,
-          discountApplied,
-          discountAmount,
-          couponData,
+          academicDetails,
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        // Clear cart using CartContext function
+        // Clear cart using our custom function
         clearCart();
         
-        alert("Order placed successfully!");
+        // Dispatch event to notify other components
+        window.dispatchEvent(new Event("cartChange"));
+        
+        toast.success("Order placed successfully!");
         
         // Use router.replace for a clean navigation without history stacking
         router.replace("/userProfile?tab=orders");
       } else {
-        alert("Failed to place order. Try again.");
+        toast.error("Failed to place order. Try again.");
       }
     } catch (err) {
       console.error("Order Error:", err);
@@ -635,8 +705,8 @@ export default function CheckoutPage() {
         <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
           type="text"
-          name="academyAddress"
-          value={couponData.academyAddress}
+          name="academyName"
+          value={couponData.academyName}
           onChange={handleCouponChange}
           placeholder="Academy Name"
           className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
@@ -649,8 +719,8 @@ export default function CheckoutPage() {
         <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
           type="text"
-          name="studentId"
-          value={couponData.studentId}
+          name="studentAddress"
+          value={couponData.studentAddress}
           onChange={handleCouponChange}
           placeholder="Student's Address"
           className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
