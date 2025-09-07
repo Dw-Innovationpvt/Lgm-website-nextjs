@@ -539,24 +539,26 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0170: [
-    "/assets/comming-soon.png"
+    "/assets/comming-soon.png",
   ],
   A0171: [
-    "/assets/comming-soon.png"
+    "/assets/A0171 - 90mm Black Magic XXF/AARMS Photography-12.jpg"
   ],
   A0172: [
-    "/assets/comming-soon.png"
+    "/assets/A0172 - 100mm Black Magic XF/AARMS Photography-19.jpg",
   ],
   A0173: [
-    "/assets/comming-soon.png"
+    "/assets/A0173  - 110mm Black Magic XF/AARMS Photography-13.jpg",
   ],
   A0174: [
-    "/assets/comming-soon.png"
+    "/assets/comming-soon.png",
   ],
   A0175: [
-    "/assets/comming-soon.png"
+    "/assets/A0175 - 100mm Voodoo Pro M tech XF/AARMS Photography-22.jpg",
   ],
-  A0176: ["/assets/comming-soon.png"],
+  A0176: [
+    "/assets/A0176 - 110mm Voodoo Pro M Tech XF/AARMS Photography-20.jpg",
+  ]
 };
 
 export default function BabyTenacityPage() {

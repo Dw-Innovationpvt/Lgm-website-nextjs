@@ -17,8 +17,8 @@ const WorkoutGear = () => {
       id: "bearing-cleaning-bottle-1",
       name: "Bearing Cleaning Bottle",
       slug: "bearing-cleaning-bottle",
-      description: "Performance inline skate with 4-wheel setup",
-      price: 1200,
+      description:
+        "Keep your bearings smooth and rust-free with this easy-to-use cleaning bottle.",
       image: "/assets/122 - Bearing Cleaning Bottle/1000211187.png",
       category: "Professional workout-gear",
       countInStock: 15,
@@ -27,8 +27,8 @@ const WorkoutGear = () => {
       id: "bearing-puller-combo-2",
       name: "Bearing Puller Combo",
       slug: "bearing-puller-combo",
-      description: "Performance inline skate with 4-wheel setup",
-      price: 3000,
+      description:
+        "Quickly remove and replace bearings with this durable puller combo tool.",
       image: "/assets/124- Bearing Puller Combo/AARMS Photography-147.jpg",
       category: "Professional workout-gear",
       countInStock: 15,
@@ -37,18 +37,18 @@ const WorkoutGear = () => {
       id: "turing-stool-3",
       name: "Turing Stool",
       slug: "turing-stool",
-      description: "Performance inline skate with 4-wheel setup",
-      price: 65000,
+      description:
+        "Practice spins, balance, and turns with confidence using this sturdy stool.",
       image: "/assets/126- Turing Stool/AARMS Photography-162.jpg",
       category: "Professional workout-gear",
       countInStock: 15,
     },
     {
       id: "parchute-4",
-      name: "Parchute",
+      name: "Parachute",
       slug: "parchute",
-      description: "Performance inline skate with 4-wheel setup",
-      price: 650,
+      description:
+        "Boost your speed and endurance with resistance sprint training using this parachute.",
       image: "/assets/129 - Parchute/1000211301.png",
       category: "Professional workout-gear",
       countInStock: 15,
@@ -57,18 +57,17 @@ const WorkoutGear = () => {
       id: "harness-5",
       name: "Harness",
       slug: "harness",
-      description: "Performance inline skate with 4-wheel setup",
-      price: 500,
+      description:
+        "Strengthen your performance with this durable harness designed for resistance training.",
       image: "/assets/130 - Harness/1000211284.png",
       category: "Professional workout-gear",
       countInStock: 15,
     },
     // {
-    //   id: "parchute-with-harness-6",
-    //   name: "Parchute With Harness",
-    //   slug: "parchute-with-harness",
-    //   description: "Performance inline skate with 4-wheel setup",
-    //   price: 500,
+    //   id: "parachute-with-harness-6",
+    //   name: "Parachute With Harness",
+    //   slug: "parachute-with-harness",
+    //   description: "Maximize sprint power and stamina with a parachute and harness training combo.",
     //   image: "/assets/131 - Parchute With Harness/1000211284.png",
     //   category: "Professional workout-gear",
     //   countInStock: 15,
@@ -181,9 +180,9 @@ const WorkoutGear = () => {
                       {/* Image & Price */}
                       <div className="relative p-4">
                         {/* Price pill */}
-                        <div className="absolute top-3 right-3 bg-white shadow text-gray-800 text-sm font-semibold px-4 py-1 rounded-full">
+                        {/* <div className="absolute top-3 right-3 bg-white shadow text-gray-800 text-sm font-semibold px-4 py-1 rounded-full">
                           ₹{product.price}
-                        </div>
+                        </div> */}
 
                         {/* Out of stock badge */}
                         {!inStock && (

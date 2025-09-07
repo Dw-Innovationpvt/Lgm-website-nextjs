@@ -7,17 +7,23 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0045: [
-    "/assets/comming-soon.png"
+    "/assets/A0045-Classic Yelow Frame/AARMS Photography-56.jpg",
+    "/assets/A0045-Classic Yelow Frame/AARMS Photography-57.jpg",
   ],
   A0046: [
-    "/assets/comming-soon.png"
+    "/assets/A0046-Naylon Yelow  Black Frame HQ/AARMS Photography-53.jpg",
+    "/assets/A0046-Naylon Yelow  Black Frame HQ/AARMS Photography-58.jpg",
+    "/assets/A0046-Naylon Yelow  Black Frame HQ/AARMS Photography-61.jpg",
+    "/assets/A0046-Naylon Yelow  Black Frame HQ/AARMS Photography-62.jpg",
   ],
   A0047: [
-    "/assets/comming-soon.png"
+    "/assets/A0047 - Aluminium Quad Frame With Naylon Hanger/AARMS Photography-54.jpg",
   ],
   A0048: [
-    "/assets/comming-soon.png"
-  ]
+    "/assets/A0048 - Aluminium Quad Frame With Metal Hanger/AARMS Photography-55.jpg",
+    "/assets/A0048 - Aluminium Quad Frame With Metal Hanger/AARMS Photography-59.jpg",
+    "/assets/A0048 - Aluminium Quad Frame With Metal Hanger/AARMS Photography-60.jpg"
+  ],
 };
 
 export default function QuadFrame() {
@@ -38,12 +44,7 @@ export default function QuadFrame() {
 
         // Filter only Baby + Tenacity codes
         data = data.filter((p) =>
-          [
-            "A0045",
-            "A0046",
-            "A0047",
-            "A0048"
-          ].includes(p.code)
+          ["A0045", "A0046", "A0047", "A0048"].includes(p.code)
         );
 
         // Attach images from local mapping
@@ -130,7 +131,8 @@ export default function QuadFrame() {
             Quad Frame
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            A strong and reliable base for quad skates, the Quad Frame is designed to provide maximum stability, control, and durability.
+            A strong and reliable base for quad skates, the Quad Frame is
+            designed to provide maximum stability, control, and durability.
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -239,7 +241,7 @@ export default function QuadFrame() {
                   </button>
                 </div>
 
-                 {/* Details */}
+                {/* Details */}
                 <div
                   className={`flex flex-col ${
                     view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
@@ -254,28 +256,34 @@ export default function QuadFrame() {
                       Code: {product.code}
                     </p>
                   </div>
-                  
+
                   {/* Description */}
                   <p className="text-gray-600 mb-4">
-                    {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
+                    {product.description ||
+                      "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
                   </p>
 
                   <div className="space-y-4 mt-auto">
                     {/* Price in flex */}
                     <div className="flex items-center">
                       <span className="text-2xl font-bold text-blue-600">
-                        ₹{product.price.toLocaleString()} <span className="text-sm font-normal text-gray-500">(incl. GST)</span>
+                        ₹{product.price.toLocaleString()}{" "}
+                        <span className="text-sm font-normal text-gray-500">
+                          (incl. GST)
+                        </span>
                       </span>
                     </div>
-                    
+
                     {/* Buttons in flex */}
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleAddToCart(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* cart icon */}
                         <svg
@@ -286,14 +294,18 @@ export default function QuadFrame() {
                         >
                           <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        {product.countInStock <= 0
+                          ? "Out of Stock"
+                          : "Add to Cart"}
                       </button>
                       <button
                         onClick={() => handleBuyNow(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* check icon */}
                         <svg
@@ -310,12 +322,10 @@ export default function QuadFrame() {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
+                        {product.countInStock <= 0 ? "Out of Stock" : "Buy Now"}
                       </button>
                     </div>
-
-
-                                       </div>
+                  </div>
                 </div>
               </div>
             );

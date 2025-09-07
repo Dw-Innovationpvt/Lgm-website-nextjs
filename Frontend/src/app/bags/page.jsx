@@ -12,20 +12,31 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0221: [
-    "/assets/comming-soon.png"
+    "/assets/A0221 - Small Quad Bag/AARMS Photography-33.jpg",
+    "/assets/A0221 - Small Quad Bag/AARMS Photography-34.jpg",
+    "/assets/A0221 - Small Quad Bag/AARMS Photography-35.jpg",
+    "/assets/A0221 - Small Quad Bag/AARMS Photography-36.jpg",
   ],
 
   A0222: [
-    "/assets/comming-soon.png"
+    "/assets/A0222 - HQ Quad Bag/AARMS Photography-164.jpg",
+    "/assets/A0222 - HQ Quad Bag/AARMS Photography-165.jpg",
+    "/assets/A0222 - HQ Quad Bag/AARMS Photography-166.jpg"
   ],
   A0223: [
-    "/assets/comming-soon.png"
+    "/assets/A0223  - Inline Bag/AARMS Photography-3.jpg",
+    "/assets/A0223  - Inline Bag/AARMS Photography-4.jpg",
+    "/assets/A0223  - Inline Bag/AARMS Photography-5.jpg",
+    "/assets/A0223  - Inline Bag/AARMS Photography-5.jpg"
+
   ],
   A0224: [
     "/assets/comming-soon.png"
   ],
   A0225: [
-    "/assets/comming-soon.png"
+    "/assets/A0225 - Pro Inline Bag/AARMS Photography-6.jpg",
+    "/assets/A0225 - Pro Inline Bag/AARMS Photography-7.jpg",
+    "/assets/A0225 - Pro Inline Bag/AARMS Photography-8.jpg"
   ],
   A0226: [
     "/assets/comming-soon.png"

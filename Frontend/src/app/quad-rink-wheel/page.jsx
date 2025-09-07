@@ -7,13 +7,15 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0075: [
-    "/assets/comming-soon.png"
+    "/assets/comming-soon.png",
   ],
   A0076: [
-    "/assets/comming-soon.png"
+    "/assets/A0076 -Great Wheel Set/AARMS Photography-117.jpg", 
+    "/assets/A0076 -Great Wheel Set/AARMS Photography-118.jpg"
   ],
   A0077: [
-    "/assets/comming-soon.png"
+    "/assets/A0077 -Alloy Wheel Set/AARMS Photography-28.jpg", 
+    "/assets/A0077 -Alloy Wheel Set/AARMS Photography-119.jpg"
   ]
 };
 

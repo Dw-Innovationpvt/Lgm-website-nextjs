@@ -31,13 +31,29 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0156: [
-    "/assets/comming-soon.png"
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.16_693773c2 - Copy.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.16_d28ad902 - Copy.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_0d11a1d3.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_8db26341.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_ed919160.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_2b2e5855.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_6784b777.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_e7b3abe6 - Copy.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_e7b3abe6 - Copy.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.19_a2b01628.jpg",
+    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.19_eb84e256.jpg",
   ],
   A0157: [
-    "/assets/comming-soon.png"
+    "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.13_66cf49a6.jpg",
+    "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.13_75aa5246.jpg",
+    "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.14_8b94b83d.jpg",
+    "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.14_ba8c8e76.jpg",
+    "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.15_9c8ed61d.jpg",
   ],
   A0158: [
-    "/assets/comming-soon.png"
+    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
+    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
+    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
   ]
 };
 

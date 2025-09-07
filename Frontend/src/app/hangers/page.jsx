@@ -6,37 +6,22 @@ import Image from "next/image";
 
 const productImages = {
   A0085: [
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
-    "/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg",
+    "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-151.jpg",
+    "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-152.jpg",
+    "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
+    "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-154.jpg",
   ],
   A0086: [
-    "/assets/36-Quad Naylon Hanger 8mm/1000211173.png",
-    "/assets/36-Quad Naylon Hanger 8mm/1000211174.png",
-    "/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg",
+    "/assets/A0086 -Quad Naylon Hanger 8mm/1000211173.png",
+    "/assets/A0086 -Quad Naylon Hanger 8mm/1000211174.png",
+    "/assets/A0086 -Quad Naylon Hanger 8mm/AARMS Photography-151.jpg",
   ],
   A0087: [
-    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg",
-    "/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg",
+    "/assets/A0087 -Quad Metal Hanger 7mm/AARMS Photography-155.jpg",
+    "/assets/A0087 -Quad Metal Hanger 7mm/AARMS Photography-156.jpg",
   ],
-  A0088: ["/assets/38-Quad Metal Hanger 8mm/1000211064.png"],
+  A0088: ["/assets/A0088 -Quad Metal Hanger 8mm/1000211064.png"],
 };
-
-// Images
-// import quadNaylonHanger7mm1 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-151.jpg";
-// import quadNaylonHanger7mm2 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-152.jpg";
-// import quadNaylonHanger7mm3 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-153.jpg";
-// import quadNaylonHanger7mm4 from "/public/assets/35-Quad Naylon Hanger 7mm/AARMS Photography-154.jpg";
-
-// import quadMetalHanger7mm1 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-155.jpg";
-// import quadMetalHanger7mm2 from "/public/assets/37-Quad Metal Hanger 7mm/AARMS Photography-156.jpg";
-
-// import quadMetalHanger8mm1 from "/public/assets/38-Quad Metal Hanger 8mm/1000211064.png";
-
-// import quadNaylonHanger8mm1 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211173.png";
-// import quadNaylonHanger8mm2 from "/public/assets/36-Quad Naylon Hanger 8mm/1000211174.png";
-// import quadNaylonHanger8mm3 from "/public/assets/36-Quad Naylon Hanger 8mm/AARMS Photography-151.jpg";
 
 export default function Hangers() {
   const [view, setView] = useState("grid");
@@ -134,86 +119,7 @@ export default function Hangers() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
 
-  // const products = [
-  //   {
-  //     id: "quad-naylon-hanger-7mm",
-  //     name: "Quad Nylon Hanger 7mm",
-  //     image: quadNaylonHanger7mm1,
-  //     images: [
-  //       quadNaylonHanger7mm1,
-  //       quadNaylonHanger7mm2,
-  //       quadNaylonHanger7mm3,
-  //       quadNaylonHanger7mm4,
-  //     ],
-  //     price: 300,
-  //     countInStock: 20,
-  //     description:
-  //       "Lightweight 7mm nylon quad hanger, ideal for beginner and recreational skaters seeking smooth performance at an affordable price.",
-  //     specs: {
-  //       usage: "Recreational Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Durable Nylon",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-naylon-hanger-8mm",
-  //     name: "Metal Quad Hanger 8mm",
-  //     image: quadNaylonHanger8mm1,
-  //     images: [
-  //       quadNaylonHanger8mm1,
-  //       quadNaylonHanger8mm2,
-  //       quadNaylonHanger8mm3,
-  //     ],
-  //     price: 400,
-  //     countInStock: 12,
-  //     description:
-  //       "Strong 8mm metal quad hanger built for durability and stability, perfect for intermediate to professional skaters.",
-  //     specs: {
-  //       usage: "Professional Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Silver", "Black"],
-  //     sizes: ["Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-metal-hanger-7mm",
-  //     name: "Quad Metal Hanger 7mm",
-  //     image: quadMetalHanger7mm1,
-  //     images: [quadMetalHanger7mm1, quadMetalHanger7mm2],
-  //     price: 700,
-  //     countInStock: 20,
-  //     description:
-  //       "Durable 7mm metal quad hanger that offers improved strength over nylon, suited for skaters wanting more control and longevity.",
-  //     specs: {
-  //       usage: "Recreational & Training Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-metal-hanger-8mm",
-  //     name: "Quad Metal Hanger 8mm",
-  //     image: quadMetalHanger8mm1,
-  //     images: [quadMetalHanger8mm1],
-  //     price: 800,
-  //     countInStock: 20,
-  //     description:
-  //       "Heavy-duty 8mm quad metal hanger designed for advanced skaters who need maximum durability and stability under pressure.",
-  //     specs: {
-  //       usage: "Professional & Speed Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  // ];
-
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">

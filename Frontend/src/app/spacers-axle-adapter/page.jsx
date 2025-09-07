@@ -7,7 +7,8 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0275: [
-    "/assets/comming-soon.png"
+    "/assets/A0275  - Spacers ( 10.25 - 10.28 - 10.30 ) Set/1000211245.png",
+    "/assets/A0275  - Spacers ( 10.25 - 10.28 - 10.30 ) Set/AARMS Photography-198.jpg",
   ],
   A0276: [
     "/assets/comming-soon.png"
@@ -19,7 +20,7 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0279: [
-    "/assets/comming-soon.png"
+    "/assets/A0279 - HQ Axle Set/1000211240.png"
   ],
   A0280: [
     "/assets/comming-soon.png"

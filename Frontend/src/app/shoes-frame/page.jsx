@@ -7,16 +7,23 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0055: [
-    "/assets/comming-soon.png"
+    "/assets/A0055 -Classic Yelow Frame & Quad Shoes/AARMS Photography-61.jpg",
+    "/assets/A0055 -Classic Yelow Frame & Quad Shoes/AARMS Photography-62.jpg",
   ],
   A0056: [
-    "/assets/comming-soon.png"
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-58.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-59.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-60.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-63.jpg",
   ],
   A0057: [
     "/assets/comming-soon.png"
   ],
   A0058: [
-    "/assets/comming-soon.png"
+    "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-157.jpg",
+    "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-158.jpg",
+    "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-159.jpg",
+    "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-160.jpg",
   ],
   A0059: [
     "/assets/comming-soon.png"

@@ -11,52 +11,49 @@ const QuadSkates = () => {
   const bg = "/assets/img.png";
 
   const extraProducts = [
-  {
-    id: "Basic Full Set Package",
-    name: "Basic Full Set Package",
-    slug: "basic-full-set-package",
-    description: "Starter kit with durable wheels and all essentials.",
-    price: 4500,
-    image: "/assets/9-Rubber Wheel Package/AARMS Photography-9.jpg",
-    category: "quad-skates",
-  },
-  {
-  id: "HQ Quad Package",
-  name: "HQ Quad Package",
-  slug: "hq-quad-package",
-  description: "Premium quad package with smooth ride.",
-  price: 8500,
-  image: "/assets/12-Viper Package (With Bag)/AARMS Photography-3.jpg",
-  category: "HQ-quad-package",
-  },
-  {
-    id: "Shoes",
-    name: "Shoes",
-    slug: "shoes",
-    description: "Lightweight, comfortable shoes for skating.",
-    price: 900,
-    image: "/assets/16 -Baby tenacity Shoes/1000210415.png",
-    category: "shoes",
-  },
-  {
-    id: "Quad Frame",
-    name: "Quad Frame",
-    slug: "quad-frame",
-    description: "Durable frame built for speed and balance.",
-    price: 1600,
-    image: "/assets/20-PP Yelow Frame/AARMS Photography-56.jpg",
-    category: "quad-frames",
-  },
-  {
-    id: "Shoes & Frame",
-    name: "Shoes & Frame",
-    slug: "shoes-frame",
-    description: "Complete combo of shoes and sturdy frame.",
-    price: 3100,
-    image: "/assets/24-PP Yelow Frame & Quad Shoes/AARMS Photography-61.jpg",
-    category: "shoes-and-frames",
-  },
-];
+    {
+      id: "Basic Full Set Package",
+      name: "Basic Full Set Package",
+      slug: "basic-full-set-package",
+      description: "All-in-one beginner set with strong wheels and essentials.",
+      image: "/assets/A0015-Rubber Wheel Package/AARMS Photography-9.jpg",
+      category: "quad-skates",
+    },
+    {
+      id: "HQ Quad Package",
+      name: "HQ Quad Package",
+      slug: "hq-quad-package",
+      description:
+        "High-quality quad skates designed for smooth, stable rides.",
+      image: "/assets/A0025-Viper Package (With Bag)/AARMS Photography-3.jpg",
+      category: "HQ-quad-package",
+    },
+    {
+      id: "Shoes",
+      name: "Shoes",
+      slug: "shoes",
+      description: "Comfortable, lightweight shoes built for skating support.",
+      image: "/assets/A0035 -Baby tenacity Shoes/1000210415.png",
+      category: "shoes",
+    },
+    {
+      id: "Quad Frame",
+      name: "Quad Frame",
+      slug: "quad-frame",
+      description: "Strong metal frame engineered for speed and balance.",
+      image: "/assets/A0045-Classic Yelow Frame/AARMS Photography-56.jpg",
+      category: "quad-frames",
+    },
+    {
+      id: "Shoes & Frame",
+      name: "Shoes & Frame",
+      slug: "shoes-frame",
+      description: "Complete set pairing durable shoes with a sturdy frame.",
+      image:
+        "/assets/A0055 -Classic Yelow Frame & Quad Shoes/AARMS Photography-61.jpg",
+      category: "shoes-and-frames",
+    },
+  ];
 
   const fetchProducts = () => {
     try {
@@ -89,17 +86,17 @@ const QuadSkates = () => {
               </div>
               <div>
                 <h1 className="text-4xl sm:text-5xl md:text-[4.5rem] leading-none font-bold text-black">
-  Premium
-  <br />
-  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-500">
-    Quad Skates
-  </span>
-</h1>
-<p className="mt-4 md:mt-6 text-base md:text-lg text-gray-700 max-w-xl leading-relaxed">
-  Discover the perfect blend of style, stability, and performance with our
-  professional quad skates. Built for smooth rides, sharp turns, and endless fun.
-</p>
-
+                  Premium
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-500">
+                    Quad Skates
+                  </span>
+                </h1>
+                <p className="mt-4 md:mt-6 text-base md:text-lg text-gray-700 max-w-xl leading-relaxed">
+                  Discover the perfect blend of style, stability, and
+                  performance with our professional quad skates. Built for
+                  smooth rides, sharp turns, and endless fun.
+                </p>
               </div>
               <div className="grid grid-cols-3 gap-4 md:gap-8 pt-6 md:pt-10 border-t border-gray-100">
                 <div className="group">
@@ -138,8 +135,6 @@ const QuadSkates = () => {
       {/* Products Grid */}
       <section className="py-10 md:py-24 bg-gradient-to-br from-orange-100 via-blue-100 to-transparent">
         <div className="container mx-auto px-4">
-          
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {loading
               ? [...Array(4)].map((_, index) => (
@@ -166,9 +161,9 @@ const QuadSkates = () => {
                       {/* Image & Price */}
                       <div className="relative p-4">
                         {/* Price pill */}
-                        <div className="absolute top-3 right-3 bg-white shadow text-gray-800 text-sm font-semibold px-4 py-1 rounded-full">
+                        {/* <div className="absolute top-3 right-3 bg-white shadow text-gray-800 text-sm font-semibold px-4 py-1 rounded-full">
                           ₹{product.price}
-                        </div>
+                        </div> */}
 
                         {/* Out of stock badge */}
                         {!inStock && (

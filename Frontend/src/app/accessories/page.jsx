@@ -9,20 +9,30 @@ const productImages = {
   A0330: ["/assets/comming-soon.png"],
   A0331: ["/assets/comming-soon.png"],
   A0332: ["/assets/comming-soon.png"],
-  A0333: ["/assets/comming-soon.png"],
+  A0333: ["/assets/A0333  - Shoes Strap pcs/1000218262.png",
+    "/assets/A0333  - Shoes Strap pcs/1000218263.png",
+  ],
   A0334: ["/assets/comming-soon.png"],
   A0335: ["/assets/comming-soon.png"],
   A0336: ["/assets/comming-soon.png"],
   A0337: ["/assets/comming-soon.png"],
-  A0338: ["/assets/comming-soon.png"],
-  A0339: ["/assets/comming-soon.png"],
-  A0340: ["/assets/comming-soon.png"],
-  A0341: ["/assets/comming-soon.png"],
+  A0338: ["/assets/A0338 - Quad Shoe Nuts/1000211297.png",
+    "/assets/A0338 - Quad Shoe Nuts/1000211299.png"
+  ],
+  A0339: [
+    "/assets/A0339 - Quad Lace/1000211293.png",
+    "/assets/A0339 - Quad Lace/1000211294.png",
+    "/assets/A0339 - Quad Lace/1000211295.png"
+  ],
+  A0340: ["/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg"],
+  A0341: ["/assets/1000211300(1).png",
+    "/assets/10002113002.png"
+  ],
   A0342: ["/assets/comming-soon.png"],
   A0343: ["/assets/comming-soon.png"],
   A0344: ["/assets/comming-soon.png"],
   A0345: ["/assets/comming-soon.png"],
-  A0346: ["/assets/comming-soon.png"],
+  A0346: ["/assets/153- Allen Kay/AARMS Photography-217.jpg"],
   A0347: ["/assets/comming-soon.png"],
 };
 
@@ -376,7 +386,7 @@ export default function Accessories() {
                       Code: {product.code}
                     </p>
                   </div>
-                  
+
                   {/* Description */}
                   <p className="text-gray-600 mb-4">{product.description}</p>
 
@@ -384,18 +394,23 @@ export default function Accessories() {
                     {/* Price in flex */}
                     <div className="flex items-center">
                       <span className="text-2xl font-bold text-blue-600">
-                        ₹{product.price.toLocaleString()} <span className="text-sm font-normal text-gray-500">(incl. GST)</span>
+                        ₹{product.price.toLocaleString()}{" "}
+                        <span className="text-sm font-normal text-gray-500">
+                          (incl. GST)
+                        </span>
                       </span>
                     </div>
-                    
+
                     {/* Buttons in flex */}
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleAddToCart(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* cart icon */}
                         <svg
@@ -406,14 +421,18 @@ export default function Accessories() {
                         >
                           <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        {product.countInStock <= 0
+                          ? "Out of Stock"
+                          : "Add to Cart"}
                       </button>
                       <button
                         onClick={() => handleBuyNow(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* check icon */}
                         <svg
@@ -430,10 +449,9 @@ export default function Accessories() {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
+                        {product.countInStock <= 0 ? "Out of Stock" : "Buy Now"}
                       </button>
                     </div>
-
                   </div>
                 </div>
               </div>

@@ -10,7 +10,7 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0301: [
-    "/assets/comming-soon.png"
+    "/assets/A0301 - Bearing Puller Combo/AARMS Photography-147.jpg"
   ],
   A0302: [
     "/assets/comming-soon.png"
@@ -19,10 +19,13 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0304: [
-    "/assets/comming-soon.png"
+    "/assets/A0304 - Bearing Cleaning Bottle/1000211187.png",
+    "/assets/A0304 - Bearing Cleaning Bottle/AARMS Photography-27.jpg",
   ],
   A0305: [
-    "/assets/comming-soon.png"
+    "/assets/A0305 - Turing Stool/AARMS Photography-162.jpg",
+    "/assets/A0305 - Turing Stool/AARMS Photography-163.jpg",
+
   ],
   A0306: [
     "/assets/comming-soon.png"
@@ -40,13 +43,17 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0311: [
-    "/assets/comming-soon.png"
+    "/assets/A0311 - Parchute/1000211301.png",
+    "/assets/A0311 - Parchute/1000211304.png",
+    "/assets/A0311 - Parchute/1000211305.png"
   ],
   A0312: [
-    "/assets/comming-soon.png"
+    "/assets/A0312 - Harness/1000211284.png",
+    "/assets/A0312 - Harness/1000211285.png"
   ],
   A0313: [
-    "/assets/comming-soon.png"
+    "/assets/A0313 - Parchute With Harness/1000211284.png",
+    "/assets/A0313 - Parchute With Harness/1000211301.png",
   ]
 };
 

@@ -13,13 +13,14 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0192: [
-    "/assets/comming-soon.png"
+    "/assets/A0192 - Inline 90mm Wheel/AARMS Photography-18.jpg"
   ],
   A0193: [
-    "/assets/comming-soon.png"
+    "/assets/A0193 - Inline 100mm Wheel/AARMS Photography-17.jpg"
   ],
   A0194: [
-    "/assets/comming-soon.png"
+    "/assets/A0194 - Inline 110mm Wheel/AARMS Photography-15.jpg",
+    "/assets/A0194 - Inline 110mm Wheel/AARMS Photography-16.jpg"
   ]
 };
 

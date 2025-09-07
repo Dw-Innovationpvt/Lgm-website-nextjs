@@ -9,24 +9,37 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0200: [
-    "/assets/comming-soon.png"
+    "/assets/A0200 - 627-608 Quad & Inline Bearing (16 pcs)/Photo from Rucha Lembhe (3).jpg",
+    "/assets/A0200 - 627-608 Quad & Inline Bearing (16 pcs)/Photo from Rucha Lembhe (4).jpg"
   ],
   A0201: [
-    "/assets/comming-soon.png"
+    "/assets/A0201 - 608 ABEC7 Bearing (16pcs)/1.jpg",
+    "/assets/A0201 - 608 ABEC7 Bearing (16pcs)/2.jpg",
+    "/assets/A0201 - 608 ABEC7 Bearing (16pcs)/3.jpg",
   ],
   A0202: [
-    "/assets/comming-soon.png"
+    "/assets/A0202 - 627 - 608 Quad & Inline Practice Bearing (16 pcs)/AARMS Photography-34.jpg",
+    "/assets/A0202 - 627 - 608 Quad & Inline Practice Bearing (16 pcs)/AARMS Photography-35.jpg",
+    "/assets/A0202 - 627 - 608 Quad & Inline Practice Bearing (16 pcs)/AARMS Photography-36.jpg",
+    "/assets/A0202 - 627 - 608 Quad & Inline Practice Bearing (16 pcs)/AARMS Photography-37.jpg",
   ],
   A0203: [
-    "/assets/comming-soon.png"
+    "/assets/A0203 - 627 -608 Hybrid Antirust Black Ball Ceramic Bearing (16pcs)/1.jpg",
+    "/assets/A0203 - 627 -608 Hybrid Antirust Black Ball Ceramic Bearing (16pcs)/(2).jpg",
   ],
   A0204: [
-    "/assets/comming-soon.png"
+    "/assets/A0204  - 627 - 608 Swiss Gold ( 7 Ball ) (16pcs)/AARMS Photography-38.jpg",
+    "/assets/A0204  - 627 - 608 Swiss Gold ( 7 Ball ) (16pcs)/AARMS Photography-39.jpg",
+
   ],
   A0205: [
-    "/assets/comming-soon.png"
+    "/assets/A0205 - 608 White Ceramic  Bearing (16pcs)/AARMS Photography-29.jpg",
+    "/assets/A0205 - 608 White Ceramic  Bearing (16pcs)/AARMS Photography-30.jpg"
   ],
-  A0206: ["/assets/comming-soon.png"],
+  A0206: [
+    "/assets/A0206 - 608 Overlap Bearing ( 11 Ball ) (16pcs)/AARMS Photography-40.jpg",
+    "/assets/A0206 - 608 Overlap Bearing ( 11 Ball ) (16pcs)/AARMS Photography-41.jpg"
+  ],
   A0207: [
     "/assets/comming-soon.png"
   ],

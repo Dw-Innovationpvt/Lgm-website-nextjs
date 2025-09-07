@@ -568,21 +568,29 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0065: [
-    "/assets/comming-soon.png"
+    "/assets/A0065 -Rubber Wheel Set/WhatsApp Image 2025-07-07 at 12.59.52_fb0f8fbd.jpg"
   ],
   A0066: [
-    "/assets/comming-soon.png"
+    "/assets/A0066 -Tyro Wheel Set/AARMS Photography-128.jpg",
+    "/assets/A0066 -Tyro Wheel Set/AARMS Photography-129.jpg",
+    "/assets/A0066 -Tyro Wheel Set/AARMS Photography-130.jpg"
   ],
   A0067: [
-    "/assets/comming-soon.png"
+    "/assets/A0067 -Hyper Rollo Wheel Set/1000211310.png",
+    "/assets/A0067 -Hyper Rollo Wheel Set/1000211313.png",
+    "/assets/A0067 -Hyper Rollo Wheel Set/1000211352.png",
   ],
   A0068: [
     "/assets/comming-soon.png"
   ],
   A0069: [
-    "/assets/comming-soon.png"
+    "/assets/A0069 -Omen Wheel Set/AARMS Photography-124.jpg",
+    "/assets/A0069 -Omen Wheel Set/AARMS Photography-125.jpg",
   ],
-  A0070: ["/assets/comming-soon.png"  ],
+  A0070: [
+    "/assets/A0070 -Yoru Wheel Set/AARMS Photography-122.jpg",
+    "/assets/A0070 -Yoru Wheel Set/AARMS Photography-123.jpg",  
+  ],
 };
 
 export default function WheelSet() {

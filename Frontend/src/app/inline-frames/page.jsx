@@ -459,7 +459,14 @@ const productImages = {
     "/assets/comming-soon.png"
   ],
   A0142: [
-    "/assets/comming-soon.png"
+    "/assets/AARMS Photography-50.jpg",
+    "/assets/AARMS Photography-51.jpg",
+    "/assets/AARMS Photography-52.jpg",
+    "/assets/AARMS Photography-53.jpg",
+    "/assets/AARMS Photography-54.jpg",
+    "/assets/AARMS Photography-55.jpg",
+    "/assets/AARMS Photography-56.jpg",
+    "/assets/AARMS Photography-57.jpg"
   ],
   A0143: [
     "/assets/comming-soon.png"

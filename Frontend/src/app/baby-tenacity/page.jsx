@@ -8,7 +8,9 @@ import Image from "next/image";
 const productImages = {
   A0001: [
     "/assets/1-Baby Skate/AARMS-Photography-184.jpg",
+    "/assets/1-Baby Skate/AARMS-Photography-185.jpg",
     "/assets/1-Baby Skate/AARMS-Photography-186.jpg",
+
   ],
   A0002: [
     "/assets/2-Tenacity Skate/AARMS Photography-187.jpg",

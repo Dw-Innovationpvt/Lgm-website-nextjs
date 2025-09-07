@@ -6,28 +6,29 @@ import Image from "next/image";
 
 const productImages = {
   A0245: [
-    "/assets/114 -LGM Helmet/AARMS Photography-131.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-132.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-133.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-134.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-135.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-136.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-137.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-138.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-139.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-140.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-142.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-143.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-144.jpg",
-    "/assets/114 -LGM Helmet/AARMS Photography-145.jpg",
+    "/assets/A0245 - Patti Head Gear/1000211176.png",
+    "/assets/A0245 - Patti Head Gear/1000211177.png",
+    "/assets/A0245 - Patti Head Gear/1000211233.png",
   ],
   A0246: [
-    "/assets/113 - Fluoescent Helmet/1000211220.png",
-    "/assets/113 - Fluoescent Helmet/1000211222.png",
-    "/assets/113 - Fluoescent Helmet/1000211229.png",
+    "/assets/A0246 - Round Fluoescent Helmet/1000211225.png",
+    "/assets/A0246 - Round Fluoescent Helmet/1000211226.png",
+    "/assets/A0246 - Round Fluoescent Helmet/1000211228.png",
+    "/assets/A0246 - Round Fluoescent Helmet/1000211231.png",
   ],
-  A0247: ["/assets/comming-soon.png"],
-  A0248: ["/assets/comming-soon.png"],
+  A0247: [
+    "/assets/A0247 - Fluoescent Helmet/1000211220.png",
+    "/assets/A0247 - Fluoescent Helmet/1000211222.png",
+    "/assets/A0247 - Fluoescent Helmet/1000211229.png"
+  ],
+  A0248: [
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-131.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-134.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-137.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-141.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-144.jpg"
+  ],
+
   A0249: ["/assets/comming-soon.png"],
 };
 
@@ -363,12 +364,9 @@ export default function Helmet() {
                         {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
                       </button>
                     </div>
-
-
-                    
                   </div>
                     {/* Specifications (with Color & Size dropdowns on the right) */}
-                    <div className="border-t border-gray-100 pt-4">
+                    {/* <div className="border-t border-gray-100 pt-4">
                       <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
                         Specifications:
                       </h4>
@@ -382,10 +380,10 @@ export default function Helmet() {
                           </span>
                         </li>
 
-                        {/* <li className="flex justify-between items-center">
+                        <li className="flex justify-between items-center">
                           <span className="capitalize font-medium text-gray-700">Wheels:</span>
                           <span className="text-gray-600">{product.specs.wheels || "—"}</span>
-                        </li> */}
+                        </li>
 
                         <li className="flex justify-between items-center">
                           <span className="capitalize font-medium text-gray-700">
@@ -436,7 +434,7 @@ export default function Helmet() {
                           </select>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
              
