@@ -82,6 +82,7 @@ export default function ProfilePage() {
       );
       const data = await res.json();
       if (data.success) {
+        console.log("Order data received:", data.orders);
         setOrders(data.orders);
       }
     } catch (err) {
@@ -206,16 +207,18 @@ export default function ProfilePage() {
     {activeTab === "orders" && (
       <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-xl max-w-3xl mx-auto transition-all">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Order History</h2>
+          <h2 className="text-2xl font-bold text-blue-700">Order History</h2>
         </div>
 
         {loadingOrders ? (
-          <p className="text-center text-gray-500 py-10">Loading orders...</p>
+          <div className="flex justify-center py-10">
+            <div className="w-10 h-10 border-4 border-blue-600 border-t-orange-500 rounded-full animate-spin"></div>
+          </div>
         ) : orders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 border rounded-2xl bg-gray-50 text-center">
+          <div className="flex flex-col items-center justify-center py-16 border-2 border-blue-100 rounded-2xl bg-white text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-14 w-14 text-gray-400 mb-4"
+              className="h-16 w-16 text-orange-400 mb-4"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -224,18 +227,18 @@ export default function ProfilePage() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M9 17v1a1 1 0 001 1h4a1 1 0 001-1v-1M9 12h.01M15 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
               />
             </svg>
-            <p className="text-lg sm:text-xl font-semibold mb-2 text-gray-800">
+            <p className="text-xl sm:text-2xl font-semibold mb-2 text-blue-700">
               No orders yet
             </p>
-            <p className="mb-6 text-gray-500 text-sm sm:text-base">
-              You haven't placed any orders yet.
+            <p className="mb-6 text-gray-600 text-sm sm:text-base max-w-xs mx-auto">
+              You haven't placed any orders yet. Start shopping to see your orders here.
             </p>
             <button
               onClick={() => router.push("/inline-skates")}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all text-sm sm:text-base shadow-md hover:shadow-lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition-all text-sm sm:text-base shadow-md hover:shadow-lg"
             >
               Browse Products
             </button>
@@ -245,45 +248,84 @@ export default function ProfilePage() {
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="p-5 rounded-2xl border border-gray-200 bg-gray-50 shadow-sm hover:shadow-md transition"
+                className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-sm hover:shadow-md transition group"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between text-sm text-gray-500 mb-4">
-                  <span>
-                    <strong className="text-gray-700">Order ID:</strong> #
-                    {order.id}
-                  </span>
-                  <span>
-                    {new Date(order.createdAt).toLocaleString("en-IN", {
-                      dateStyle: "medium",
-                      timeStyle: "short",
-                    })}
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-gray-800 mb-3">
-                  {order.items.map((item) => (
-                    <div key={item.id} className="flex justify-between">
-                      <span>
-                        {item.name} × {item.quantity}
+                {/* Order Header */}
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-5 py-3 text-white">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                      <span className="font-medium">
+                        Order #<span className="font-bold">{order.id}</span>
                       </span>
-                      <span>₹{item.price * (item.quantity / 100)}</span>
                     </div>
-                  ))}
+                    <span className="text-sm opacity-90 mt-1 sm:mt-0">
+                      {new Date(order.createdAt).toLocaleString("en-IN", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
+                    </span>
+                  </div>
                 </div>
+                
+                {/* Order Items */}
+                <div className="p-5">
+                  <div className="space-y-3 text-gray-800 mb-4">
+                    {order.items.map((item) => (
+                      <div key={item.id} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+                        <div className="flex items-center gap-2">
+                          <span className="h-2 w-2 rounded-full bg-orange-500"></span>
+                          <span className="font-medium">
+                            {item.name} 
+                            <span className="text-blue-600 ml-1 font-semibold">× {item.quantity}</span>
+                          </span>
+                        </div>
+                        <span className="font-semibold">₹{item.price * (item.quantity / 100)}</span>
+                      </div>
+                    ))}
+                  </div>
 
-                <div className="flex justify-between items-center border-t pt-3 mt-3">
-                  <span className="text-sm font-semibold text-gray-600">
-                    Total:
-                  </span>
-                  <span className="text-xl font-bold text-gray-900">
-                    ₹{order.totalAmount/100}
-                  </span>
+                  {/* Order Total with Discount Breakdown */}
+                  <div className="bg-blue-50 rounded-xl overflow-hidden mt-3">
+                    {/* Show discount section if any discount indicator is present */}
+                    {(order.discountApplied === true || 
+                      (order.couponData && Object.keys(order.couponData).length > 0) ||
+                      (typeof order.discountAmount === 'number' && order.discountAmount > 0)) && (
+                      <>
+                        <div className="bg-orange-100 px-3 py-2 border-b border-orange-200 flex justify-between items-center">
+                          <span className="text-sm font-medium text-orange-700 flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                              <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                            </svg>
+                            Academic Discount
+                          </span>
+                          <span className="text-sm font-semibold text-orange-700">-10%</span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center px-3 py-2 text-sm text-gray-600">
+                          <span>Subtotal</span>
+                          <span className="line-through">₹{Math.round((order.totalAmount/100) / 0.9)}</span>
+                        </div>
+                      </>
+                    )}
+                    
+                    {/* Total amount */}
+                    <div className="flex justify-between items-center p-3">
+                      <span className="font-medium text-blue-800">
+                        Total Amount
+                      </span>
+                      <span className="text-xl font-bold text-blue-800">
+                        ₹{order.totalAmount/100}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-
       </div>
     )}
   </main>
