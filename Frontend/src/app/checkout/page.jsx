@@ -588,7 +588,7 @@ export default function CheckoutPage() {
               <div className="bg-gray-50 mt-4 p-3 rounded">
                 <div className="flex items-center text-sm text-green-600 mb-1">
                   <svg
-                    className="w-4 h-4 mr-1"
+                    className="w-4 h-4 mr-2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -605,7 +605,7 @@ export default function CheckoutPage() {
                 <div className="flex items-center justify-between text-sm text-green-600 mb-2">
                   <div className="flex items-center">
                     <svg
-                      className="w-4 h-4 mr-2 mb-4 flex-shrink-0"
+                      className="w-4 h-4 mr-2 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -674,7 +674,7 @@ export default function CheckoutPage() {
     {/* Header */}
     <div className="flex items-center justify-between mb-4">
       <div className="flex items-center gap-2">
-        <GraduationCap className="w-6 h-6 text-green-600" />
+        <GraduationCap className="w-6 h-6 text-orange-600" />
         <h3 className="text-lg font-semibold text-gray-800">
           Apply Academic Discount
         </h3>
@@ -739,7 +739,7 @@ export default function CheckoutPage() {
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md"
+          className="px-4 py-2 bg-gradient-to-r from-orange-400 via-red-300 to-blue-300 text-black rounded-lg hover:bg-green-700 transition shadow-md"
         >
           Apply
         </button>

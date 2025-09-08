@@ -203,49 +203,36 @@ export default function Navbar() {
       </div>
 
       {/* Navbar */}
-      <nav className="bg-white shadow-md px-4 md:px-12 flex justify-between items-center py-3 sticky top-0 z-50 font-[var(--font-raleway)]">
+      <nav className="bg-gradient-to-r from-blue-400 via-red-300 to-orange-200 shadow-md px-4 md:px-12 flex justify-between items-center py-3 sticky top-0 z-50 font-[var(--font-raleway)]">
         {/* Left Nav */}
         <div className="flex items-center gap-6">
           {/* Mobile Menu Button */}
           <HiMenu
-            className="text-3xl text-gray-800 md:hidden cursor-pointer hover:scale-110 transition-transform duration-200"
+            className="text-3xl text-gray-800 md:hidden cursor-pointer hover:scale-125 transition-transform duration-300"
             onClick={() => setMobileMenu(!mobileMenu)}
           />
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex flex-wrap items-center gap-x-4 text-[16px] md:text-[17px] max-w-5xl tracking-wide">
-            <Link
-              href="/"
-              className={`${navLinkClass(
-                "/"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Home
-            </Link>
-            <Link
-              href="/inline-skates"
-              className={`${navLinkClass(
-                "/inline-skates"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4 `}
-            >
-              Professional Inline Skates
-            </Link>
-            <Link
-              href="/adjustable-inline-skates"
-              className={`${navLinkClass(
-                "/adjustable-inline-skates"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Adjustable Inline Skates
-            </Link>
-            <Link
-              href="/hockey-skates"
-              className={`${navLinkClass(
-                "/hockey-skates"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Roller / Quad Hockey Skates
-            </Link>
+          <div className="hidden md:flex flex-wrap items-center gap-x-6 text-[16px] md:text-[17px] max-w-5xl tracking-wide">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/inline-skates", label: "Professional Inline Skates" },
+              {
+                href: "/adjustable-inline-skates",
+                label: "Adjustable Inline Skates",
+              },
+              { href: "/hockey-skates", label: "Roller / Quad Hockey Skates" },
+            ].map((link, idx) => (
+              <Link
+                key={idx}
+                href={link.href}
+                className={`${navLinkClass(
+                  link.href
+                )} transition-all duration-300  transform hover:!text-orange-400 hover:scale-100 hover:-translate-y-1 hover:font-bold`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
             {/* Dropdown */}
             <div
@@ -253,7 +240,7 @@ export default function Navbar() {
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-blue-600 hover:bg-blue-50 group font-medium">
+              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-white hover:scale-110 hover:-translate-y-1 font-bold">
                 Products
                 <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
               </button>
@@ -262,62 +249,47 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-10 left-0 bg-white w-60 shadow-xl border rounded-xl overflow-hidden z-50"
+                  className="absolute top-10 left-0 !bg-white w-60 shadow-xl border rounded-xl overflow-hidden z-50"
                 >
                   <Link
                     href="/accessories"
-                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:text-blue-600 transition"
+                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:!text-orange-400 transition-all duration-300 hover:font-semibold"
                   >
                     Accessories
                   </Link>
                   <Link
                     href="/product"
-                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:text-blue-600 transition"
+                    className="block px-5 py-2 !text-black hover:bg-blue-100 hover:!text-orange-400 transition-all duration-300 hover:font-semibold"
                   >
                     Products
                   </Link>
                 </motion.div>
               )}
             </div>
-            <Link
-              href="/workout-gear"
-              className={`${navLinkClass(
-                "/workout-gear"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Workout Gear
-            </Link>
-            <Link
-              href="/quad-skates"
-              className={`${navLinkClass(
-                "/quad-skates"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Quad Skates
-            </Link>
-            <Link
-              href="/baby-tenacity"
-              className={`${navLinkClass(
-                "/baby-tenacity"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Tenacity & Baby Skates
-            </Link>
-            <Link
-              href="/cycling"
-              className={`${navLinkClass(
-                "/cycling"
-              )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
-            >
-              Cycling
-            </Link>
+
+            {[
+              { href: "/workout-gear", label: "Workout Gear" },
+              { href: "/quad-skates", label: "Quad Skates" },
+              { href: "/baby-tenacity", label: "Tenacity & Baby Skates" },
+              { href: "/cycling", label: "Cycling" },
+            ].map((link, idx) => (
+              <Link
+                key={idx}
+                href={link.href}
+                className={`${navLinkClass(
+                  link.href
+                )} transition-all duration-300 transform hover:!text-orange-400 hover:scale-100 hover:-translate-y-1 hover:font-bold`}
+              >
+                {link.label}
+              </Link>
+            ))}
 
             {isAdmin && (
               <Link
                 href="/admin-dashboard"
                 className={`${navLinkClass(
                   "/admin-dashboard"
-                )} transition-all duration-300 hover:text-blue-600 hover:underline underline-offset-4`}
+                )} transition-all bg-gradient-to-r from-orange-200 via-red-300 to-blue-200 ml-96 duration-300 transform hover:!text-white hover:scale-100 hover:-translate-y-1 hover:font-bold`}
               >
                 Admin Dashboard
               </Link>
@@ -326,7 +298,7 @@ export default function Navbar() {
         </div>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-3 md:gap-5 pb-10 relative font-semibold">
+        <div className="flex items-center gap-3 md:gap-5 relative font-semibold">
           <div className="hidden md:block relative group">
             <input
               type="text"
@@ -337,7 +309,7 @@ export default function Navbar() {
               }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               placeholder="Search products..."
-              className="rounded-full border border-gray-300 py-2.5 px-5 pr-12 text-sm w-80 outline-none text-gray-800 transition-all duration-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 group-hover:border-blue-300"
+              className="rounded-full border border-gray-500 py-2.5 px-5 pr-12 text-sm w-80 outline-none !text-black transition-all duration-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 group-hover:border-blue-300"
             />
 
             <button className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-500 text-lg bg-blue-100 hover:bg-blue-200 transition-colors duration-300 p-1.5 rounded-full">
@@ -408,7 +380,7 @@ export default function Navbar() {
                 transition={{ duration: 0.2 }}
                 className="dropdown-menu absolute right-0 mt-3 w-60 rounded-2xl shadow-2xl z-50 overflow-hidden bg-white border border-gray-100"
               >
-                <div className="px-3 py-3 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+                <div className="px-3 py-3 bg-gradient-to-r from-blue-200 via-red-300 to-yellow-200 border-b border-gray-100">
                   <h3 className="text-sm font-bold text-gray-700 tracking-wider">
                     Account Access
                   </h3>
