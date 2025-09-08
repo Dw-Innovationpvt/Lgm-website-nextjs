@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import { LogOut, User, Mail, Phone } from "lucide-react";
 
 export default function ProfilePage() {
   // Import additional icons
@@ -142,63 +143,72 @@ export default function ProfilePage() {
 
 {/* Profile Tab */}
 {activeTab === "profile" && (
-  <div className="bg-gradient-to-tr from-white via-gray-100 to-white p-8 rounded-3xl shadow-xl max-w-3xl mx-auto transition-all duration-300">
-    {/* Header */}
-    <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
-      {/* Avatar with pulse animation */}
-      <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-yellow-400 flex items-center justify-center text-3xl font-extrabold text-white shadow-lg animate-pulse-slow">
-        {user?.name?.charAt(0) || "U"}
+  <div className="bg-gradient-to-tr from-gray-50 via-white to-gray-50 p-10 rounded-3xl shadow-2xl max-w-4xl mx-auto transition-all duration-500">
+    
+    {/* Header Section */}
+    <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
+      
+      {/* Avatar with Pulse + Border */}
+      <div className="relative w-28 h-28 rounded-full bg-gradient-to-br from-orange-400 to-yellow-400 flex items-center justify-center text-5xl font-extrabold text-white shadow-xl animate-pulse-slow border-4 border-white">
+        {user?.name?.charAt(0).toUpperCase() || "U"}
       </div>
+      
       {/* User Info */}
       <div className="text-center md:text-left">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 transition-transform duration-300 hover:scale-105">
+        <h2 className="text-3xl font-bold text-gray-800 hover:text-orange-500 transition-colors duration-300">
           {user?.name || "Unknown User"}
         </h2>
-        <p className="text-gray-600 mt-1">{user?.email || "No email provided"}</p>
+        <p className="text-gray-600 mt-2 flex items-center justify-center md:justify-start gap-2">
+          <Mail className="w-4 h-4 text-gray-500" /> {user?.email || "No email provided"}
+        </p>
         {user?.phone && (
-          <p className="text-gray-500 mt-1 text-sm">Phone: {user.phone}</p>
+          <p className="text-gray-500 mt-1 flex items-center gap-2 text-sm">
+            <Phone className="w-4 h-4 text-gray-400" /> {user.phone}
+          </p>
         )}
       </div>
     </div>
 
-    <hr className="border-gray-300 mb-8" />
+    <hr className="border-gray-300 mb-10" />
 
     {/* User Details Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {["Full Name", "Email Address", "Phone Number"].map((label, index) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {[
+        { label: "Full Name", icon: User, value: user?.name || "Not Provided" },
+        { label: "Email Address", icon: Mail, value: user?.email || "Not Provided" },
+        { label: "Phone Number", icon: Phone, value: user?.phone || "Not Provided" },
+      ].map((field, index) => (
         <div
           key={index}
-          className="bg-white p-5 rounded-xl shadow-sm hover:shadow-lg transition-transform duration-300 hover:-translate-y-1 hover:scale-[1.01]"
+          className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-transform duration-300 hover:-translate-y-1"
         >
-          <label className="block text-sm font-medium mb-2 text-gray-600">
-            {label}
-          </label>
+          <div className="flex items-center gap-3 mb-3 text-orange-500">
+            <field.icon className="w-5 h-5" />
+            <span className="font-medium text-gray-700">{field.label}</span>
+          </div>
           <input
-            value={
-              label === "Full Name"
-                ? user?.name || "Not Provided"
-                : label === "Email Address"
-                ? user?.email || "Not Provided"
-                : user?.phone || "Not Provided"
-            }
+            type="text"
+            value={field.value}
             readOnly
-            className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 font-medium focus:ring-2 focus:ring-blue-300 transition-all duration-200"
+            className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-700 font-medium focus:ring-2 focus:ring-orange-300 transition-all duration-200"
           />
         </div>
       ))}
     </div>
 
     {/* Logout Button */}
-    <div className="mt-8 flex justify-center md:justify-start">
+    <div className="mt-10 flex justify-center md:justify-start">
       <button
         onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-200 hover:scale-[1.05] active:scale-95 hover:shadow-2xl"
+        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-7 py-3 rounded-2xl font-semibold shadow-lg transition-all duration-200 hover:scale-[1.05] active:scale-95"
       >
+        <LogOut className="w-5 h-5" />
         Logout
       </button>
     </div>
   </div>
 )}
+
 
 
 
