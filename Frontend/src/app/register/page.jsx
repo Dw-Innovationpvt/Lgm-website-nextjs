@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { BeatLoader } from "react-spinners";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -31,9 +33,10 @@ export default function RegisterPage() {
       setMessage("Passwords do not match");
       return;
     }
+    setLoading(true);
 
     try {
-      const res = await fetch("https://api.lgmsports.in/api/auth/signup", {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,12 +62,14 @@ export default function RegisterPage() {
         );
         localStorage.setItem("token", data.token);
 
-        router.push("/userProfile")
+        router.push("/userProfile");
       } else {
         setMessage(data.message || "Signup failed");
       }
     } catch (error) {
       setMessage("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -163,9 +168,16 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:opacity-90 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all"
+              disabled={loading}
+              className={`w-full bg-gradient-to-r from-orange-500 to-yellow-400 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
+              }`}
             >
-              Create Account
+              {loading ? (
+                <BeatLoader size={7} color="#ffffff" />
+              ) : (
+                "Create Account"
+              )}
             </button>
 
             {message && (

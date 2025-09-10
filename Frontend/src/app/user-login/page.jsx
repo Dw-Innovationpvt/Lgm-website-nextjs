@@ -5,16 +5,20 @@ import { Mail, Lock } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const loginPromise = fetch("https://api.lgmsports.in/api/auth/login", {
+    setLoading(true);
+
+    const loginPromise = fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -30,6 +34,7 @@ export default function LoginPage() {
         // Dispatch custom event to notify other components about login
         window.dispatchEvent(new Event("authChange"));
 
+        setLoading(false);
         return data;
       })
       .then(() => router.push("/userProfile"));
@@ -110,9 +115,16 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:opacity-90 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all"
+              disabled={loading}
+              className={`w-full bg-gradient-to-r from-orange-500 to-yellow-400 text-white py-2 rounded-md font-semibold text-sm shadow-md transition-all ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
+              }`}
             >
-              Login
+              {loading ? (
+                <BeatLoader size={7} color="#ffffff" />
+              ) : (
+                "Login"
+              )}
             </button>
           </form>
 

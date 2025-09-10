@@ -240,7 +240,7 @@ export default function Navbar() {
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-white hover:scale-110 hover:-translate-y-1 font-bold">
+              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-red-500 hover:scale-110 hover:-translate-y-1 font-bold">
                 Products
                 <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
               </button>

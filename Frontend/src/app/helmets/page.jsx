@@ -65,7 +65,7 @@ export default function Helmet() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://api.lgmsports.in/api/products");
+        const res = await fetch("http://localhost:5000/api/products");
         let data = await res.json();
 
         // Filter only Helmet
