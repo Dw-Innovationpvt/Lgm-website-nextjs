@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CategoryWrapper from "../components/CategoryWrapper";
-import { Toaster } from "react-hot-toast";
 import { FaWhatsapp } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 import Loader from '../components/Loader';
@@ -31,7 +30,6 @@ export default function ClientLayout({ children }) {
     <>
       {!hideNavFooter && <Navbar />}
       {!hideNavFooter && <CategoryWrapper />}
-      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       {/* Loader will appear when loading is true */}
       <Loader loading={loading} />
       {children}

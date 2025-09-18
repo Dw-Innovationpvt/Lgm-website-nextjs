@@ -1,6 +1,8 @@
 import prisma from "../lib/prismaClient.js";
 import nodemailer from "nodemailer";
 import { io } from "../server.js";
+import PDFDocument from "pdfkit";
+import path from 'path';
 
 export const createOrder = async (req, res) => {
   try {
@@ -101,6 +103,242 @@ export const createOrder = async (req, res) => {
       }
     }
 
+    const generateInvoicePdf = (order) => {
+      return new Promise((resolve, reject) => {
+        const doc = new PDFDocument({
+          margin: 50,
+          bufferPages: true,
+          font: "Helvetica",
+        });
+
+        const chunks = [];
+        const primaryColor = "#FF6B00";
+        const accentColor = "#333333";
+        const lightGray = "#F5F5F5";
+
+        doc.on("data", (chunk) => chunks.push(chunk));
+        doc.on("end", () => {
+          const pdfBuffer = Buffer.concat(chunks);
+          resolve(pdfBuffer);
+        });
+        doc.on("error", reject);
+
+        // Load logo image path
+        const logoPath = path.resolve('E:/Projects/Lgm-website-nextjs/Frontend/public/logo.jpg');
+
+
+        // Header Section
+        const headerHeight = 80;
+        const pageWidth = doc.page.width;
+
+        doc.fillColor(lightGray).rect(0, 0, doc.page.width, 80).fill();
+
+        // Add Logo at Top Center
+        doc.image(logoPath, (doc.page.width - 100) / 2, 15, {
+          fit: [100, 50], // Adjust logo size (width:100px, height:50px)
+          align: "center",
+          valign: "top",
+        });
+
+        doc
+          .fontSize(24)
+          .fillColor("black")
+          .text("INVOICE", 50, 30, { align: "left", bold: true })
+          .fontSize(10)
+          .text("LGMSports Pvt Ltd", { align: "right", lineBreak: false })
+          .text("Proud Member of India Sports Association", { align: "right" });
+
+        // Dealer Info Box
+        doc
+          .fillColor(lightGray)
+          .rect(50, 100, 250, 75)
+          .fill()
+          .fontSize(10)
+          .fillColor(accentColor)
+          .text("Registered Office:", 60, 105)
+          .text("Omkar Nandan Soc -A2-303, Near Navale Bridge,", 60, 120)
+          .text("Vadgaon Budruk, Pune-411041", 60, 135)
+          .text("support@lgmsports.in | +91-7744042929", 60, 150);
+
+        // Invoice Metadata
+        const invoiceDate = new Date().toLocaleDateString();
+        doc
+          .fontSize(14)
+          .fillColor(accentColor)
+          .text(`Invoice #${order.id}`, 50, 190, { bold: true })
+          .fontSize(10)
+          .fillColor("#666")
+          .text(`Issue Date: ${invoiceDate}`, 50, 210);
+
+        // Billing & Shipping Sections
+        const sectionY = 240;
+        doc
+          .fontSize(12)
+          .fillColor(primaryColor)
+          .text("BILLING DETAILS", 50, sectionY)
+          .text("SHIPPING DETAILS", 300, sectionY);
+
+        const detailsText = [
+          `${order.firstName} ${order.lastName}`,
+          order.address,
+          `${order.city}, ${order.state} - ${order.pincode}`,
+          order.email,
+          order.phone,
+        ].join("\n");
+
+        [50, 300].forEach((x) => {
+          doc
+            .fontSize(10)
+            .fillColor("#444")
+            .text(detailsText, x, sectionY + 20, {
+              width: 200,
+              lineBreak: true,
+              paragraphGap: 4,
+            });
+        });
+
+        // Divider Line
+        doc
+          .moveTo(50, sectionY + 85)
+          .lineTo(550, sectionY + 85)
+          .lineWidth(0.5)
+          .strokeColor("#DDD")
+          .stroke();
+
+        // Items Table
+        const tableTop = sectionY + 100;
+        const colX = {
+          quantity: 50,
+          uom: 120,
+          description: 180,
+          unitPrice: 390,
+          total: 480,
+        };
+
+        // Table Header with Gradient
+        const gradient = doc
+          .linearGradient(50, tableTop, 550, tableTop + 20)
+          .stop(0, primaryColor)
+          .stop(1, "#FF8C00");
+
+        doc
+          .fill(gradient)
+          .rect(50, tableTop, 500, 20)
+          .fill()
+          .fillColor("white")
+          .fontSize(10)
+          .text("QTY", colX.quantity, tableTop + 5)
+          .text("UNIT", colX.uom, tableTop + 5)
+          .text("DESCRIPTION", colX.description, tableTop + 5)
+          .text("PRICE (₹)", colX.unitPrice, tableTop + 5)
+          .text("TOTAL (₹)", colX.total, tableTop + 5);
+
+        // Table Rows
+        let y = tableTop + 25;
+        let subtotal = 0;
+
+        order.items.forEach((item, index) => {
+          if (index % 2 === 0) {
+            doc
+              .fillColor(lightGray)
+              .rect(50, y - 5, 500, 20)
+              .fill();
+          }
+
+          const itemTotal = (item.price / 100) * item.quantity;
+          subtotal += itemTotal;
+
+          doc
+            .fillColor(accentColor)
+            .fontSize(10)
+            .text(item.quantity, colX.quantity, y)
+            .text("EA", colX.uom, y)
+            .text(item.name, colX.description, y)
+            .text(
+              (item.price / 100).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
+              colX.unitPrice,
+              y
+            )
+            .text(
+              itemTotal.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
+              colX.total,
+              y
+            );
+
+          y += 20;
+        });
+
+        // Totals Section
+        const totalDue = subtotal;
+        const totalsY = y + 30;
+
+        doc
+          .fontSize(12)
+          .fillColor(accentColor)
+          .text(
+            `Subtotal: ₹${subtotal.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+            })}`,
+            400,
+            totalsY,
+            { align: "right" }
+          )
+          .font("Helvetica-Bold")
+          .text(
+            `Total Due: ₹${subtotal.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+            })}`,
+            400,
+            totalsY + 20,
+            {
+              align: "right",
+              underline: true,
+            }
+          );
+
+        // Footer
+        doc
+          .fontSize(10)
+          .fillColor("#666")
+          .text(
+            "Terms & Conditions: Payment due within 30 days",
+            50,
+            doc.page.height - 80
+          )
+          .text(
+            "Late payments subject to 1.5% monthly interest",
+            50,
+            doc.page.height - 65
+          )
+          .text("Thank you for choosing LGMSports!", {
+            align: "center",
+            width: 500,
+            color: primaryColor,
+            bold: true,
+            y: doc.page.height - 50,
+          });
+
+        // Watermark
+        doc
+          .opacity(0.1)
+          .fontSize(80)
+          .fillColor(primaryColor)
+          .text("LGMSports", 100, 300, {
+            align: "center",
+            opacity: 0.1,
+          })
+          .opacity(1);
+
+        doc.end();
+      });
+    };
+
     // Send Order Confirmation Email
     try {
       const transporter = nodemailer.createTransport({
@@ -110,6 +348,8 @@ export const createOrder = async (req, res) => {
           pass: process.env.EMAIL_PASS,
         },
       });
+
+      const pdfBuffer = await generateInvoicePdf(newOrder);
 
       const orderItemsHtml = newOrder.items
         .map(
@@ -193,6 +433,13 @@ export const createOrder = async (req, res) => {
       </footer>
     </div>
   `,
+        attachments: [
+          {
+            filename: `Invoice_${newOrder.id}.pdf`,
+            content: pdfBuffer,
+            contentType: "application/pdf",
+          },
+        ],
       };
 
       await transporter.sendMail(mailOptions);

@@ -30,7 +30,7 @@ export default function Navbar() {
   const products = [
     { name: "Professional Inline Skates", path: "/inline-skates" },
     { name: "Adjustable Inline Skates", path: "/adjustable-inline-skates" },
-    { name: "Roller / Quad Hockey Skates", path: "/roller-quad-hockey-skates" },
+    { name: "Roller / Quad Hockey Skates", path: "/hockey-skates" },
     { name: "Quad Skates", path: "/quad-skates" },
     { name: "Tenacity & Baby Skates", path: "/baby-tenacity" },
     { name: "Cycling", path: "/cycling" },

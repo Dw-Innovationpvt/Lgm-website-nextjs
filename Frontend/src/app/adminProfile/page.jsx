@@ -29,7 +29,7 @@ const AdminProfile = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-200 text-gray-900 font-sans">
-      <div className="bg-white/90 backdrop-blur-xl p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md text-center border border-gray-200 mt-10 animate-fadeIn">
+      <div className="bg-white/90 backdrop-blur-xl sm:p-10 rounded-2xl shadow-2xl w-full max-w-md text-center border border-gray-200 animate-fadeIn">
         
         {/* Admin Icon */}
         <div className="flex justify-center mb-5">
@@ -63,7 +63,7 @@ const AdminProfile = () => {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center gap-2 w-full bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-105 transition-all duration-200"
+          className="flex items-center cursor-pointer justify-center gap-2 w-full bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:scale-105 transition-all duration-200"
         >
           <LogOut size={20} />
           Logout

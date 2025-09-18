@@ -15,35 +15,36 @@ export default function LoginPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
-    const loginPromise = fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || "Login failed");
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }), // Use the state variables directly
+      });
 
-        const { name, email, phone } = data.user;
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify({ name, email, phone }));
-        
-        // Dispatch custom event to notify other components about login
-        window.dispatchEvent(new Event("authChange"));
+      const data = await res.json();
 
-        setLoading(false);
-        return data;
-      })
-      .then(() => router.push("/userProfile"));
+      if (!res.ok) throw new Error(data.message || "Login failed");
 
-    toast.promise(loginPromise, {
-      loading: "Logging in...",
-      success: "Login successful!",
-      error: (err) => err.message || "Login failed",
-    });
+      const { name, email: userEmail, phone } = data.user; // Rename destructured email to avoid shadowing
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ name, email: userEmail, phone })
+      );
+
+      window.dispatchEvent(new Event("authChange"));
+
+      toast.success("Login successful!");
+      router.push("/userProfile");
+    } catch (error) {
+      toast.error(error.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -120,11 +121,7 @@ export default function LoginPage() {
                 loading ? "opacity-70 cursor-not-allowed" : "hover:opacity-90"
               }`}
             >
-              {loading ? (
-                <BeatLoader size={7} color="#ffffff" />
-              ) : (
-                "Login"
-              )}
+              {loading ? <BeatLoader size={7} color="#ffffff" /> : "Login"}
             </button>
           </form>
 
@@ -172,8 +169,8 @@ export default function LoginPage() {
             <p className="text-sm md:text-base font-medium text-gray-900 leading-relaxed">
               Sign in to access your{" "}
               <span className="font-semibold text-orange-600">Skates</span>,
-              <span className="font-semibold text-blue-600"> Cycling Gear</span>,
-              and
+              <span className="font-semibold text-blue-600"> Cycling Gear</span>
+              , and
               <span className="font-semibold text-orange-600">
                 {" "}
                 Workout Essentials

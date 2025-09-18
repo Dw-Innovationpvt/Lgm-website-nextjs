@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Footer from "@/components/Footer";
 import { LogOut, User, Mail, Phone } from "lucide-react";
 
 export default function ProfilePage() {
@@ -124,6 +123,24 @@ export default function ProfilePage() {
     } finally {
       setLoadingOrders(false);
     }
+  };
+
+  const downloadInvoice = async (order) => {
+    const res = await fetch("/api/generate-invoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order }),
+    });
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `invoice_${order.id}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   };
 
   const handleLogout = () => {
@@ -400,6 +417,16 @@ export default function ProfilePage() {
                           <span className="text-xl font-bold text-blue-800">
                             ₹{order.totalAmount / 100}
                           </span>
+                        </div>
+
+                        {/* Download Invoice Button */}
+                        <div className="mt-4 mb-4 text-center">
+                          <button
+                            onClick={() => downloadInvoice(order)}
+                            className="bg-orange-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
+                          >
+                            Download Invoice
+                          </button>
                         </div>
                       </div>
                     </div>
