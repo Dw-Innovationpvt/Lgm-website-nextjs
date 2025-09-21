@@ -30,33 +30,33 @@ export default function Navbar() {
   const products = [
     { name: "Professional Inline Skates", path: "/inline-skates" },
     { name: "Adjustable Inline Skates", path: "/adjustable-inline-skates" },
-    { name: "Roller / Quad Hockey Skates", path: "/roller-quad-hockey-skates" },
+    { name: "Roller / Quad Hockey Skates", path: "/hockey-skates" },
     { name: "Quad Skates", path: "/quad-skates" },
     { name: "Tenacity & Baby Skates", path: "/baby-tenacity" },
     { name: "Cycling", path: "/cycling" },
     { name: "Workout Gear", path: "/workout-gear" },
-    { name: "Fleet Altra Package", link: "/fleet-altra-package" },
-    { name: "Raptor Flash Package", link: "/raptor-flash-package" },
-    { name: "Rapid Wrap Package", link: "/rapid-wrap-package" },
-    { name: "Inline Frames", link: "/inline-frames" },
-    { name: "Inline Shoes", link: "/inline-shoes" },
-    { name: "Professional Inline Wheels", link: "/inline-wheels" },
-    { name: "Inline Practice Wheels", link: "/inline-practice-wheel" },
-    { name: "Bearings", link: "/bearings" },
-    { name: "Bags", link: "/bags" },
-    { name: "GuardSet & Ezeefit", link: "/guardset-ezeefit" },
-    { name: "Helmets", link: "/helmets" },
-    { name: "Skin Suits", link: "/skinsuits" },
-    { name: "Spacer-Axle-Adapter", link: "/spacers-axle-adapter" },
-    { name: "Sunglasses", link: "/sunglasses" },
-    { name: "Basic Full Set Package", link: "/basic-full-set-package" },
-    { name: "HQ Quad Package", link: "/hq-quad-package" },
-    { name: "Shoes", link: "/shoes" },
-    { name: "Quad Frame", link: "/quad-frame" },
-    { name: "Shoes & Frame", link: "/shoes-frame" },
-    { name: "Wheel Set", link: "/wheel-set" },
-    { name: "Quad Rink Wheel", link: "/quad-rink-wheel" },
-    { name: "Hangers", link: "/hangers" },
+    { name: "Fleet Altra Package", path: "/fleet-altra-package" },
+    { name: "Raptor Flash Package", path: "/raptor-flash-package" },
+    { name: "Rapid Wrap Package", path: "/rapid-wrap-package" },
+    { name: "Inline Frames", path: "/inline-frames" },
+    { name: "Inline Shoes", path: "/inline-shoes" },
+    { name: "Professional Inline Wheels", path: "/inline-wheels" },
+    { name: "Inline Practice Wheels", path: "/inline-practice-wheel" },
+    { name: "Bearings", path: "/bearings" },
+    { name: "Bags", path: "/bags" },
+    { name: "GuardSet & Ezeefit", path: "/guardset-ezeefit" },
+    { name: "Helmets", path: "/helmets" },
+    { name: "Skin Suits", path: "/skinsuits" },
+    { name: "Spacer-Axle-Adapter", path: "/spacers-axle-adapter" },
+    { name: "Sunglasses", path: "/sunglasses" },
+    { name: "Basic Full Set Package", path: "/basic-full-set-package" },
+    { name: "HQ Quad Package", path: "/hq-quad-package" },
+    { name: "Shoes", path: "/shoes" },
+    { name: "Quad Frame", path: "/quad-frame" },
+    { name: "Shoes & Frame", path: "/shoes-frame" },
+    { name: "Wheel Set", path: "/wheel-set" },
+    { name: "Quad Rink Wheel", path: "/quad-rink-wheel" },
+    { name: "Hangers", path: "/hangers" },
   ];
 
   const filtered = query
@@ -203,7 +203,7 @@ export default function Navbar() {
       </div>
 
       {/* Navbar */}
-      <nav className="bg-gradient-to-r from-blue-400 via-red-300 to-orange-200 shadow-md px-4 md:px-12 flex justify-between items-center py-3 sticky top-0 z-50 font-[var(--font-raleway)]">
+      <nav className="bg-gray-50   px-4 md:px-12 flex justify-between items-center py-3 sticky top-0 z-50 font-[var(--font-raleway)]">
         {/* Left Nav */}
         <div className="flex items-center gap-6">
           {/* Mobile Menu Button */}
@@ -240,7 +240,7 @@ export default function Navbar() {
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-white hover:scale-110 hover:-translate-y-1 font-bold">
+              <button className="flex items-center ml-12 text-black gap-1 px-4 py-2 rounded-full transition-all duration-300 hover:text-red-500 hover:scale-110 hover:-translate-y-1 font-bold">
                 Products
                 <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
               </button>
@@ -323,9 +323,11 @@ export default function Navbar() {
                   <div
                     key={index}
                     onMouseDown={() => {
-                      router.push(item.path); // 🔥 redirect to product page
-                      setQuery(item.name); // show product name in search bar
-                      setShowSuggestions(false);
+                      if (item.path) {
+                        router.push(item.path); // 🔥 redirect to product page
+                        setQuery(item.name); // show product name in search bar
+                        setShowSuggestions(false);
+                      }
                     }}
                     className="px-4 py-2 cursor-pointer hover:bg-blue-50 text-sm text-gray-700"
                   >

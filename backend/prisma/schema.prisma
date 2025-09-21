@@ -22,7 +22,7 @@ model admin {
 }
 
 model Order {
-  id                Int         @id @default(autoincrement())
+  id                Int              @id @default(autoincrement())
   firstName         String
   lastName          String
   email             String
@@ -33,15 +33,16 @@ model Order {
   pincode           String
   paymentMethod     String
   totalAmount       Int
-  createdAt         DateTime    @default(now())
-  paymentStatus     String      @default("pending")
-  razorpayOrderId   String?     @unique
+  createdAt         DateTime         @default(now())
+  paymentStatus     String           @default("pending")
+  deliveryStatus    String           @default("In Progress")
+  razorpayOrderId   String?          @unique
   razorpayPaymentId String?
   razorpaySignature String?
-  items             OrderItem[]
-  discountApplied   Boolean     @default(false)
-  discountAmount    Int         @default(0)
+  discountAmount    Int              @default(0)
+  discountApplied   Boolean          @default(false)
   academicDetails   AcademicDetails?
+  items             OrderItem[]
 }
 
 model OrderItem {
@@ -72,11 +73,11 @@ model PasswordResetToken {
 }
 
 model AcademicDetails {
-  id            Int      @id @default(autoincrement())
-  studentName   String
-  academyName   String
+  id             Int      @id @default(autoincrement())
+  studentName    String
+  academyName    String
   studentAddress String
-  orderId       Int      @unique
-  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
+  orderId        Int      @unique
+  createdAt      DateTime @default(now())
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }

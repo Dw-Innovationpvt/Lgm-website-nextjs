@@ -1,25 +1,37 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CategoryWrapper from "../components/CategoryWrapper";
-import { Toaster } from "react-hot-toast";
 import { FaWhatsapp } from "react-icons/fa";
 import { usePathname } from "next/navigation";
+import Loader from '../components/Loader';
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
+  const [loading, setLoading] = useState(false);
 
   // Pages where Navbar/Footer should be hidden
-  const noNavFooter = ["/register", "/user-login", "/forgot-password", "/reset-password", "/admin-login"];
+  const noNavFooter = ["/register", "/user-login", "/forgot-password", "/reset-password", "/admin-login", "/components/Loader"];
   const hideNavFooter = noNavFooter.includes(pathname);
+
+  useEffect(() => {
+    setLoading(true);
+
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    },1900);
+
+    return () => clearTimeout(timeout);
+  }, [pathname]);
 
   return (
     <>
       {!hideNavFooter && <Navbar />}
       {!hideNavFooter && <CategoryWrapper />}
-      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-
+      {/* Loader will appear when loading is true */}
+      <Loader loading={loading} />
       {children}
 
       {!hideNavFooter && (

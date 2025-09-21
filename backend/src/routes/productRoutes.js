@@ -125,4 +125,29 @@ router.put("/:id/stock", async (req, res) => {
   }
 });
 
+// routes/productRoutes.js
+
+// Correct route for price update using Prisma
+router.put("/:id/price", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newPrice } = req.body;
+
+    if (newPrice === undefined || isNaN(parseFloat(newPrice))) {
+      return res.status(400).json({ success: false, message: "Valid price is required" });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: { price: parseFloat(newPrice) },
+    });
+
+    res.json({ success: true, product: updatedProduct });
+  } catch (error) {
+    console.error("Error updating product price:", error);
+    res.status(500).json({ success: false, message: "Failed to update product price" });
+  }
+});
+
+
 export default router;
