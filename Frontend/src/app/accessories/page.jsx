@@ -32,7 +32,7 @@ const productImages = {
   A0343: ["/assets/comming-soon.png"],
   A0344: ["/assets/comming-soon.png"],
   A0345: ["/assets/comming-soon.png"],
-  A0346: ["/assets/153- Allen Kay/AARMS Photography-217.jpg"],
+  A0346: ["/assets/A0346 - Allen Kay/AARMS Photography-217.jpg"],
   A0347: ["/assets/comming-soon.png"],
 };
 
@@ -181,78 +181,6 @@ export default function Accessories() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
-
-  // const products = [
-  //   {
-  //     id: "quad-shoe-nuts-1",
-  //     name: "Quad Shoe Nuts",
-  //     image: quadShoeNuts1,
-  //     images: [quadShoeNuts1, quadShoeNuts2],
-  //     price: 100,
-  //     countInStock: 20,
-  //     description:
-  //       "Sturdy nuts that keep your skate wheels securely in place for smooth and safe rides.",
-  //     specs: {
-  //       usage: "Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "washers-(7mm-8mm)",
-  //     name: "Washers (7mm-8mm)",
-  //     image: washers1,
-  //     images: [washers1],
-  //     price: 400,
-  //     countInStock: 20,
-  //     description:
-  //       "Durable washers for 7mm–8mm axles, reducing friction and keeping wheels aligned.",
-  //     specs: {
-  //       usage: "Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Stainless Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "quad-lace",
-  //     name: "Quad Lace",
-  //     image: quadLace1,
-  //     images: [quadLace1, quadLace2, quadLace3],
-  //     price: 100,
-  //     countInStock: 20,
-  //     description:
-  //       "Strong, stylish laces that provide a secure fit and add flair to your skates.",
-  //     specs: {
-  //       usage: "Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Polyester Blend",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "allen-kay",
-  //     name: "Allen Kay",
-  //     image: allenKay1,
-  //     images: [allenKay1],
-  //     price: 300,
-  //     countInStock: 20,
-  //     description:
-  //       "Compact Allen key tool for quick and easy skate adjustments on the go.",
-  //     specs: {
-  //       usage: "Skating",
-  //       wheels: "4 Wheel",
-  //       material: "Hardened Steel",
-  //     },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  // ];
-
   return (
     <div className="min-h-screen bg-blue-50">
       <div className="container mx-auto px-4 py-8">

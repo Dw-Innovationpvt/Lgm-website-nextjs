@@ -12,6 +12,8 @@ const productImages = {
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-32.jpg",
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-219.jpg",
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-220.jpg",
+    "/assets/A0016-Tyro Wheel Package/AARMS Photography-221.jpg",
+    "/assets/A0016-Tyro Wheel Package/AARMS Photography-222.jpg",
   ],
   A0017: ["/assets/A0017-Hyper Rollo Packege/AARMS Photography-11.jpg"],
 };
