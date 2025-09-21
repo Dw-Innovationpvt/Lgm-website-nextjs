@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useState, Suspense, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 
-
-export default function ResetPasswordPage() {
-  const searchParams = useSearchParams();
-  const email = searchParams.get("email");
+// Client component that uses searchParams
+function ResetPasswordForm() {
+  const [email, setEmail] = useState("");
+  
+  useEffect(() => {
+    // Get email from URL params on client side only
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get("email");
+      if (emailParam) {
+        setEmail(emailParam);
+      }
+    }
+  }, []);
   const router = useRouter();
 
   const [otp, setOtp] = useState("");
@@ -151,5 +161,34 @@ export default function ResetPasswordPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+// Loading fallback
+function ResetPasswordLoading() {
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-xl shadow-lg">
+        <h2 className="text-xl font-bold mb-4 text-center">Loading...</h2>
+        <div className="animate-pulse flex space-x-4">
+          <div className="flex-1 space-y-4 py-1">
+            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordLoading />}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

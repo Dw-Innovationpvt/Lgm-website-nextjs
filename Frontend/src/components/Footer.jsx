@@ -22,7 +22,7 @@ const Footer = () => {
     { name: 'Quad & Inline Bearings', path: '/bearings' },
     { name: 'QuadSkates & Accessories', path: '/quad-skates-accessories' },
     { name: 'Shoes & Frame', path: '/shoes-frame' },
-    { name: 'SkinSuits', path: '/skin-suits' },
+    { name: 'SkinSuits', path: '/skinsuits' },
   ];
 
   return (

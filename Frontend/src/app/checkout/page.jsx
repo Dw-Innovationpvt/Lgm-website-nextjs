@@ -3,13 +3,38 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { User, GraduationCap, MapPin, X } from "lucide-react"
+import { User, GraduationCap, MapPin, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
+import { BeatLoader } from "react-spinners";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { clearCart } = useCart();
+  const { clearCart: contextClearCart } = useCart();
+
+  // Custom clearCart function that clears both context and localStorage
+  const clearCart = () => {
+    // Clear cart in context
+    contextClearCart();
+
+    // Also clear cart in localStorage for the current user
+    const getUserId = () => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.id || userData.email || "guest";
+        } catch (e) {
+          return "guest";
+        }
+      }
+      return "guest";
+    };
+
+    const userId = getUserId();
+    const cartKey = `cart_${userId}`;
+    localStorage.setItem(cartKey, JSON.stringify([]));
+  };
 
   // Shipping/checkout form
   const [formData, setFormData] = useState({
@@ -28,12 +53,12 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // --- Coupon / discount state ---
+  // --- Academic discount state ---
   const [showCouponForm, setShowCouponForm] = useState(false);
   const [couponData, setCouponData] = useState({
     studentName: "",
-    academyAddress: "",
-    studentId: "",
+    academyName: "",
+    studentAddress: "",
   });
   const [discountApplied, setDiscountApplied] = useState(false);
 
@@ -47,23 +72,53 @@ export default function CheckoutPage() {
 
   const deliveryMessage = "Free delivery on every order";
   const policy = "Extra 10% discount for Academic Students";
-  const returnPolicy = "If you have to return it should be done within 1 week of purchase or else it won't be accepted";
-  const condition = "The returned goods should be returned in same condition with all accessories as they were purchased or else it won't be accepted";
+  const returnPolicy =
+    "If you have to return it should be done within 1 week of purchase or else it won't be accepted";
+  const condition =
+    "The returned goods should be returned in same condition with all accessories as they were purchased or else it won't be accepted";
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    // Get user ID for cart key
+    const getUserId = () => {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.id || userData.email || "guest";
+        } catch (e) {
+          return "guest";
+        }
+      }
+      return "guest";
+    };
+
+    const userId = getUserId();
+    const cartKey = `cart_${userId}`;
+    const storedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
     setCart(storedCart);
-    
+
     // Pre-fill email from logged in user if available
     const storedUser = JSON.parse(localStorage.getItem("user")) || {};
     if (storedUser && storedUser.email) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         email: storedUser.email,
-        firstName: storedUser.name?.split(' ')[0] || '',
-        lastName: storedUser.name?.split(' ')[1] || ''
+        firstName: storedUser.name?.split(" ")[0] || "",
+        lastName: storedUser.name?.split(" ")[1] || "",
       }));
     }
+
+    // Listen for cart changes
+    const handleCartChange = () => {
+      const updatedCart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      setCart(updatedCart);
+    };
+
+    window.addEventListener("cartChange", handleCartChange);
+
+    return () => {
+      window.removeEventListener("cartChange", handleCartChange);
+    };
   }, []);
 
   const handleChange = (e) => {
@@ -80,14 +135,14 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (
       couponData.studentName &&
-      couponData.academyAddress &&
-      couponData.studentId
+      couponData.academyName &&
+      couponData.studentAddress
     ) {
       setDiscountApplied(true);
       setShowCouponForm(false);
-      alert("10% academic discount applied!");
+      toast.success("10% academic discount applied!");
     } else {
-      alert("Please fill all coupon details.");
+      toast.error("Please fill all academic details.");
     }
   };
 
@@ -139,13 +194,23 @@ export default function CheckoutPage() {
               // Get user email from localStorage if available
               const storedUser = JSON.parse(localStorage.getItem("user")) || {};
               const userEmail = storedUser.email || formData.email;
-              
+
               // Make sure email is set in formData
               const updatedFormData = {
                 ...formData,
-                email: userEmail
+                email: userEmail,
               };
-              
+
+              // Transform coupon data to academicDetails format if discount is applied
+              const academicDetails = discountApplied
+                ? {
+                    studentName: couponData.studentName,
+                    academyName: couponData.academyName,
+                    studentAddress: couponData.studentAddress,
+                    discountAmount: discountAmount * 100, // Convert to paise/cents for backend
+                  }
+                : null;
+
               // Verify + save order
               const verify = await axios.post(
                 "http://localhost:5000/api/payment/verify",
@@ -156,20 +221,21 @@ export default function CheckoutPage() {
                   formData: updatedFormData,
                   cart,
                   totalAmount,
-                  discountApplied,
-                  discountAmount,
-                  couponData,
+                  academicDetails,
                 }
               );
 
               if (verify.data.success) {
-                // Clear cart using CartContext function
+                // Clear cart using our custom function
                 clearCart();
-                
-                alert("Payment successful! Order placed.");
+
+                // Dispatch event to notify other components
+                window.dispatchEvent(new Event("cartChange"));
+
+                toast.success("Payment successful! Order placed.");
                 router.replace("/userProfile?tab=orders");
               } else {
-                alert("Payment verification failed.");
+                toast.error("Payment verification failed.");
               }
             } catch (err) {
               console.error("Payment verification error", err);
@@ -200,13 +266,23 @@ export default function CheckoutPage() {
       // Get user email from localStorage if available
       const storedUser = JSON.parse(localStorage.getItem("user")) || {};
       const userEmail = storedUser.email || formData.email;
-      
+
       // Make sure email is set in formData
       const updatedFormData = {
         ...formData,
-        email: userEmail
+        email: userEmail,
       };
-      
+
+      // Transform coupon data to academicDetails format if discount is applied
+      const academicDetails = discountApplied
+        ? {
+            studentName: couponData.studentName,
+            academyName: couponData.academyName,
+            studentAddress: couponData.studentAddress,
+            discountAmount: discountAmount * 100, // Convert to paise/cents for backend
+          }
+        : null;
+
       const response = await fetch("http://localhost:5000/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -214,24 +290,25 @@ export default function CheckoutPage() {
           formData: updatedFormData,
           cart,
           totalAmount,
-          discountApplied,
-          discountAmount,
-          couponData,
+          academicDetails,
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        // Clear cart using CartContext function
+        // Clear cart using our custom function
         clearCart();
-        
-        alert("Order placed successfully!");
-        
+
+        // Dispatch event to notify other components
+        window.dispatchEvent(new Event("cartChange"));
+
+        toast.success("Order placed successfully!");
+
         // Use router.replace for a clean navigation without history stacking
         router.replace("/userProfile?tab=orders");
       } else {
-        alert("Failed to place order. Try again.");
+        toast.error("Failed to place order. Try again.");
       }
     } catch (err) {
       console.error("Order Error:", err);
@@ -246,8 +323,18 @@ export default function CheckoutPage() {
       <div className="min-h-screen flex items-center justify-center text-center bg-gradient-to-br from-blue-50 to-orange-50 font-['Arimo']">
         <div className="bg-white p-8 rounded-xl shadow-lg border border-blue-100 bg-gradient-to-br from-white to-blue-50 max-w-md w-full">
           <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-            <svg className="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            <svg
+              className="w-12 h-12 text-orange-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent inline-block mb-2">
@@ -269,7 +356,9 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-orange-50 py-2 font-['Arimo'] pb-12">
       <Toaster position="top-center" />
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent inline-block">Checkout</h1>
+        <h1 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent inline-block">
+          Checkout
+        </h1>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* LEFT: Shipping form */}
@@ -356,7 +445,9 @@ export default function CheckoutPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-1 text-gray-700">City *</label>
+                <label className="block text-sm font-semibold mb-1 text-gray-700">
+                  City *
+                </label>
                 <input
                   name="city"
                   value={formData.city}
@@ -378,7 +469,9 @@ export default function CheckoutPage() {
                     onChange={handleChange}
                     className="w-full border border-gray-300 px-4 py-2.5 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-500 focus:outline-none transition-all duration-200 shadow-sm hover:border-blue-300 font-medium text-gray-700 appearance-none bg-white"
                   >
-                    <option value="" disabled>Select your state</option>
+                    <option value="" disabled>
+                      Select your state
+                    </option>
                     <option value="Maharashtra">Maharashtra</option>
                     <option value="Delhi">Delhi</option>
                     <option value="Karnataka">Karnataka</option>
@@ -389,8 +482,18 @@ export default function CheckoutPage() {
                     <option value="Other">Other</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <svg
+                      className="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -444,9 +547,20 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-6 w-full bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white py-3 rounded-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 disabled:bg-gray-400 disabled:transform-none disabled:shadow-none"
+              className={`mt-6 w-full bg-gradient-to-r from-blue-500 to-orange-500 text-white py-3 rounded-lg font-medium shadow-md transform transition-all duration-300 disabled:bg-gray-400 disabled:transform-none disabled:shadow-none ${
+                isSubmitting
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:from-blue-600 hover:to-orange-600 hover:shadow-lg hover:-translate-y-0.5"
+              }`}
             >
-              {isSubmitting ? "Placing Order..." : "Place Order"}
+              {isSubmitting ? (
+                <div className="flex items-center justify-center gap-3">
+                  <span>Placing Order</span>
+                  <BeatLoader size={5} color="#ffffff" />
+                </div>
+              ) : (
+                "Place Order"
+              )}
             </button>
           </form>
 
@@ -496,8 +610,18 @@ export default function CheckoutPage() {
               {discountApplied && (
                 <div className="flex justify-between text-sm text-green-600 p-2 bg-green-50 rounded-lg my-2">
                   <span className="flex items-center">
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     Academic Discount (10%)
                   </span>
@@ -511,14 +635,16 @@ export default function CheckoutPage() {
               </div>
               <div className="border-t mt-3 pt-3 flex justify-between text-lg font-semibold">
                 <span className="text-gray-900">Total</span>
-                <span className="bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">₹{finalTotal}</span>
+                <span className="bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
+                  ₹{finalTotal}
+                </span>
               </div>
               <p className="text-xs text-gray-500 mt-1">Including GST</p>
 
               <div className="bg-gray-50 mt-4 p-3 rounded">
                 <div className="flex items-center text-sm text-green-600 mb-1">
                   <svg
-                    className="w-4 h-4 mr-1"
+                    className="w-4 h-4 mr-2"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -535,7 +661,7 @@ export default function CheckoutPage() {
                 <div className="flex items-center justify-between text-sm text-green-600 mb-2">
                   <div className="flex items-center">
                     <svg
-                      className="w-4 h-4 mr-2 mb-4 flex-shrink-0"
+                      className="w-4 h-4 mr-2 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -598,86 +724,84 @@ export default function CheckoutPage() {
 
       {/* Coupon Modal */}
       {showCouponForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+          <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border border-gray-200">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <GraduationCap className="w-6 h-6 text-orange-600" />
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Apply Academic Discount
+                </h3>
+              </div>
+              <button onClick={() => setShowCouponForm(false)}>
+                <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
+              </button>
+            </div>
 
-<div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-  <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border border-gray-200">
-    {/* Header */}
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex items-center gap-2">
-        <GraduationCap className="w-6 h-6 text-green-600" />
-        <h3 className="text-lg font-semibold text-gray-800">
-          Apply Academic Discount
-        </h3>
-      </div>
-      <button onClick={() => setShowCouponForm(false)}>
-        <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
-      </button>
-    </div>
+            {/* Form */}
+            <form onSubmit={applyCoupon} className="space-y-4 text-black">
+              {/* Student Name */}
+              <div className="relative">
+                <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  name="studentName"
+                  value={couponData.studentName}
+                  onChange={handleCouponChange}
+                  placeholder="Your Name"
+                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                  required
+                />
+              </div>
 
-    {/* Form */}
-    <form onSubmit={applyCoupon} className="space-y-4 text-black">
-      {/* Student Name */}
-      <div className="relative">
-        <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          name="studentName"
-          value={couponData.studentName}
-          onChange={handleCouponChange}
-          placeholder="Your Name"
-          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-          required
-        />
-      </div>
+              {/* Academy Name */}
+              <div className="relative">
+                <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  name="academyName"
+                  value={couponData.academyName}
+                  onChange={handleCouponChange}
+                  placeholder="Academy Name"
+                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                  required
+                />
+              </div>
 
-      {/* Academy Name */}
-      <div className="relative">
-        <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          name="academyAddress"
-          value={couponData.academyAddress}
-          onChange={handleCouponChange}
-          placeholder="Academy Name"
-          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-          required
-        />
-      </div>
+              {/* Student Address */}
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  name="studentAddress"
+                  value={couponData.studentAddress}
+                  onChange={handleCouponChange}
+                  placeholder="Student's Address"
+                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+                  required
+                />
+              </div>
 
-      {/* Student Address */}
-      <div className="relative">
-        <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          name="studentId"
-          value={couponData.studentId}
-          onChange={handleCouponChange}
-          placeholder="Student's Address"
-          className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-          required
-        />
-      </div>
-
-      {/* Actions */}
-      <div className="flex justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onClick={() => setShowCouponForm(false)}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-        >
-          Cancel
-        </button>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md"
-        >
-          Apply
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCouponForm(false)}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-gradient-to-r from-orange-400 via-red-300 to-blue-300 text-black rounded-lg hover:bg-green-700 transition shadow-md"
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

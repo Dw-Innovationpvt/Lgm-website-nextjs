@@ -1,10 +1,13 @@
 import express from "express";
-import { createOrder, getOrdersByEmail, getAllOrders, getAllAcademicDetails, createAcademicDetails } from "../controllers/orderController.js";
+import { createOrder, getOrdersByEmail, getAllOrders, getAllAcademicDetails, createAcademicDetails, updateDeliveryStatus  } from "../controllers/orderController.js";
 
 const router = express.Router();
 
 router.post("/orders", createOrder);
 router.get("/orders", getOrdersByEmail); 
+
+// Update delivery status
+router.put("/orders/:id/status", updateDeliveryStatus);
 
 // Academic details routes
 router.post("/academic-details", createAcademicDetails);
