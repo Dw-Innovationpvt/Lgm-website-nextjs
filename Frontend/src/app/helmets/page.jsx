@@ -9,6 +9,7 @@ const productImages = {
     "/assets/A0245 - Patti Head Gear/1000211176.png",
     "/assets/A0245 - Patti Head Gear/1000211177.png",
     "/assets/A0245 - Patti Head Gear/1000211233.png",
+    "/assets/A0245 - Patti Head Gear/1000211234.png",
   ],
   A0246: [
     "/assets/A0246 - Round Fluoescent Helmet/1000211225.png",
@@ -19,38 +20,28 @@ const productImages = {
   A0247: [
     "/assets/A0247 - Fluoescent Helmet/1000211220.png",
     "/assets/A0247 - Fluoescent Helmet/1000211222.png",
-    "/assets/A0247 - Fluoescent Helmet/1000211229.png"
+    "/assets/A0247 - Fluoescent Helmet/1000211229.png",
   ],
   A0248: [
     "/assets/A0248 - Keeper Helmet/AARMS Photography-131.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-132.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-133.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-134.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-135.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-136.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-137.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-138.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-139.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-140.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-141.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-144.jpg"
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-142.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-143.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-144.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-145.jpg",
   ],
 
   A0249: ["/assets/comming-soon.png"],
 };
-
-// // Images
-// import lgmHelmet1 from "/public/assets/114 -LGM Helmet/AARMS Photography-131.jpg";
-// import lgmHelmet2 from "/public/assets/114 -LGM Helmet/AARMS Photography-132.jpg";
-// import lgmHelmet3 from "/public/assets/114 -LGM Helmet/AARMS Photography-133.jpg";
-// import lgmHelmet4 from "/public/assets/114 -LGM Helmet/AARMS Photography-134.jpg";
-// import lgmHelmet5 from "/public/assets/114 -LGM Helmet/AARMS Photography-135.jpg";
-// import lgmHelmet6 from "/public/assets/114 -LGM Helmet/AARMS Photography-136.jpg";
-// import lgmHelmet7 from "/public/assets/114 -LGM Helmet/AARMS Photography-137.jpg";
-// import lgmHelmet8 from "/public/assets/114 -LGM Helmet/AARMS Photography-138.jpg";
-// import lgmHelmet9 from "/public/assets/114 -LGM Helmet/AARMS Photography-139.jpg";
-// import lgmHelmet10 from "/public/assets/114 -LGM Helmet/AARMS Photography-140.jpg";
-// import lgmHelmet11 from "/public/assets/114 -LGM Helmet/AARMS Photography-142.jpg";
-// import lgmHelmet12 from "/public/assets/114 -LGM Helmet/AARMS Photography-143.jpg";
-// import lgmHelmet13 from "/public/assets/114 -LGM Helmet/AARMS Photography-144.jpg";
-// import lgmHelmet14 from "/public/assets/114 -LGM Helmet/AARMS Photography-145.jpg";
-
-// import fluoescentHelmet1 from "/public/assets/113 - Fluoescent Helmet/1000211220.png";
-// import fluoescentHelmet2 from "/public/assets/113 - Fluoescent Helmet/1000211222.png";
-// import fluoescentHelmet3 from "/public/assets/113 - Fluoescent Helmet/1000211229.png";
 
 export default function Helmet() {
   const [view, setView] = useState("grid");
@@ -147,40 +138,6 @@ export default function Helmet() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedProduct]);
-
-  //   const products = [
-  //   {
-  //     id: "lgm-helmets",
-  //     name: "LGM Helmets",
-  //     image: lgmHelmet1,
-  //     images: [
-  //       lgmHelmet1, lgmHelmet2, lgmHelmet3, lgmHelmet4, lgmHelmet5,
-  //       lgmHelmet6, lgmHelmet7, lgmHelmet8, lgmHelmet9, lgmHelmet10,
-  //       lgmHelmet11, lgmHelmet12, lgmHelmet13
-  //     ],
-  //     price: 200,
-  //     countInStock: 20,
-  //     description:
-  //       "Lightweight, durable helmet offering reliable protection for everyday skating.",
-  //     specs: { usage: "Skating", wheels: "4 Wheel", material: "Stainless Steel" },
-  //     colors: ["Black", "Red", "Blue"],
-  //     sizes: ["Small", "Medium", "Large"],
-  //   },
-  //   {
-  //     id: "fluoescent helmet",
-  //     name: "Fluoescent Helmet",
-  //     image: fluoescentHelmet1,
-  //     images: [fluoescentHelmet1, fluoescentHelmet2, fluoescentHelmet3],
-  //     price: 250,
-  //     countInStock: 12,
-  //     description:
-  //       "Bright fluorescent helmet designed for visibility, comfort, and extra safety.",
-  //     specs: { usage: "Professional Skating", material: "Stainless Steel" },
-  //     colors: ["Silver", "Black"],
-  //     sizes: ["Medium", "Large"],
-  //   }
-  // ];
-
   return (
     <div className="min-h-screen bg-blue-50">
       <div className="container mx-auto px-4 py-8">
@@ -297,7 +254,7 @@ export default function Helmet() {
                   </button>
                 </div>
 
-                 {/* Details */}
+                {/* Details */}
                 <div
                   className={`flex flex-col ${
                     view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
@@ -312,10 +269,11 @@ export default function Helmet() {
                       Code: {product.code}
                     </p>
                   </div>
-                  
+
                   {/* Description */}
                   <p className="text-gray-600 mb-4">
-                    {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
+                    {product.description ||
+                      "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
                   </p>
 
                   <div className="space-y-4 mt-auto">
@@ -324,9 +282,11 @@ export default function Helmet() {
                       <button
                         onClick={() => handleAddToCart(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* cart icon */}
                         <svg
@@ -337,14 +297,18 @@ export default function Helmet() {
                         >
                           <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        {product.countInStock <= 0
+                          ? "Out of Stock"
+                          : "Add to Cart"}
                       </button>
                       <button
                         onClick={() => handleBuyNow(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* check icon */}
                         <svg
@@ -361,12 +325,12 @@ export default function Helmet() {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
+                        {product.countInStock <= 0 ? "Out of Stock" : "Buy Now"}
                       </button>
                     </div>
                   </div>
-                    {/* Specifications (with Color & Size dropdowns on the right) */}
-                    {/* <div className="border-t border-gray-100 pt-4">
+                  {/* Specifications (with Color & Size dropdowns on the right) */}
+                  {/* <div className="border-t border-gray-100 pt-4">
                       <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
                         Specifications:
                       </h4>
@@ -435,9 +399,8 @@ export default function Helmet() {
                         </li>
                       </ul>
                     </div> */}
-                  </div>
                 </div>
-             
+              </div>
             );
           })}
         </div>

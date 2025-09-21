@@ -15,19 +15,20 @@ const productImages = {
     "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-59.jpg",
     "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-60.jpg",
     "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-63.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-64.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-77.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-78.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-80.jpg",
+    "/assets/A0056 - Naylon Yelow or Black Frame  with Quad Shoes/AARMS Photography-82.jpg",
   ],
-  A0057: [
-    "/assets/comming-soon.png"
-  ],
+  A0057: ["/assets/comming-soon.png"],
   A0058: [
     "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-157.jpg",
     "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-158.jpg",
     "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-159.jpg",
     "/assets/A0058 -Aluminium Frame & HQ Quad Shoes/AARMS Photography-160.jpg",
   ],
-  A0059: [
-    "/assets/comming-soon.png"
-  ]
+  A0059: ["/assets/comming-soon.png"],
 };
 
 export default function ShoesFramePage() {
@@ -48,13 +49,7 @@ export default function ShoesFramePage() {
 
         // Filter only Baby + Tenacity codes
         data = data.filter((p) =>
-          [
-            "A0055",
-            "A0056",
-            "A0057",
-            "A0058",
-            "A0059"
-          ].includes(p.code)
+          ["A0055", "A0056", "A0057", "A0058", "A0059"].includes(p.code)
         );
 
         // Attach images from local mapping
@@ -141,7 +136,8 @@ export default function ShoesFramePage() {
             Shoes & Frame
           </h1>
           <p className="text-lg text-gray-600 mb-6 font-['Arimo']">
-            High-performance skating shoes paired with a sturdy frame, engineered for optimal support, control, and durability.
+            High-performance skating shoes paired with a sturdy frame,
+            engineered for optimal support, control, and durability.
           </p>
           <div className="flex items-center justify-between pb-6">
             <p className="text-gray-600">{products.length} products</p>
@@ -250,7 +246,7 @@ export default function ShoesFramePage() {
                   </button>
                 </div>
 
-                 {/* Details */}
+                {/* Details */}
                 <div
                   className={`flex flex-col ${
                     view === "grid" ? "flex-1 p-6" : "w-2/3 p-6"
@@ -265,28 +261,34 @@ export default function ShoesFramePage() {
                       Code: {product.code}
                     </p>
                   </div>
-                  
+
                   {/* Description */}
                   <p className="text-gray-600 mb-4">
-                    {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
+                    {product.description ||
+                      "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
                   </p>
 
                   <div className="space-y-4 mt-auto">
                     {/* Price in flex */}
                     <div className="flex items-center">
                       <span className="text-2xl font-bold text-blue-600">
-                        ₹{product.price.toLocaleString()} <span className="text-sm font-normal text-gray-500">(incl. GST)</span>
+                        ₹{product.price.toLocaleString()}{" "}
+                        <span className="text-sm font-normal text-gray-500">
+                          (incl. GST)
+                        </span>
                       </span>
                     </div>
-                    
+
                     {/* Buttons in flex */}
                     <div className="flex gap-2 justify-end">
                       <button
                         onClick={() => handleAddToCart(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* cart icon */}
                         <svg
@@ -297,14 +299,18 @@ export default function ShoesFramePage() {
                         >
                           <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a1 1 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 100-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        {product.countInStock <= 0
+                          ? "Out of Stock"
+                          : "Add to Cart"}
                       </button>
                       <button
                         onClick={() => handleBuyNow(product)}
                         disabled={product.countInStock <= 0}
-                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${product.countInStock <= 0 
-                          ? 'bg-gray-400 text-gray-200 cursor-not-allowed opacity-70' 
-                          : 'bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer'}`}
+                        className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                          product.countInStock <= 0
+                            ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                            : "bg-green-600 text-white hover:bg-green-700 hover:shadow-lg active:transform active:scale-95 cursor-pointer"
+                        }`}
                       >
                         {/* check icon */}
                         <svg
@@ -321,12 +327,10 @@ export default function ShoesFramePage() {
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                        {product.countInStock <= 0 ? 'Out of Stock' : 'Buy Now'}
+                        {product.countInStock <= 0 ? "Out of Stock" : "Buy Now"}
                       </button>
                     </div>
-
-
-                                       </div>
+                  </div>
                 </div>
               </div>
             );

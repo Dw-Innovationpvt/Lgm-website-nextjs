@@ -52,8 +52,8 @@ const productImages = {
   ],
   A0158: [
     "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
-    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
-    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_1b5dd10c.jpg",
+    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.14_30070646.jpg",
+    "/assets/A0158 - Rapid Shoes/WhatsApp Image 2025-09-04 at 16.40.15_626c6db1.jpg",
   ]
 };
 
