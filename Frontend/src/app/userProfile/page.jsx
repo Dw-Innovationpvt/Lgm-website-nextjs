@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut, User, Mail, Phone } from "lucide-react";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 export default function ProfilePage() {
   // Import additional icons
@@ -61,6 +62,7 @@ export default function ProfilePage() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
+  const [loadingId, setLoadingId] = useState(null); 
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -126,21 +128,32 @@ export default function ProfilePage() {
   };
 
   const downloadInvoice = async (order) => {
-    const res = await fetch("/api/generate-invoice", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ order }),
-    });
+    try {
+      setLoadingId(order.id);
 
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
+      const res = await fetch("/api/generate-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order }),
+      });
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `invoice_${order.id}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+      if (!res.ok) throw new Error("Failed to generate invoice");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `invoice_${order.id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.error("Invoice download error:", err);
+      alert("Something went wrong while generating the invoice!");
+    } finally {
+      setLoadingId(null);
+    }
   };
 
   const handleLogout = () => {
@@ -421,12 +434,23 @@ export default function ProfilePage() {
 
                         {/* Download Invoice Button */}
                         <div className="mt-4 mb-4 text-center">
-                          <button
-                            onClick={() => downloadInvoice(order)}
-                            className="bg-orange-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
-                          >
-                            Download Invoice
-                          </button>
+                          {loadingId === order.id ? (
+                            <div className="flex justify-center items-center">
+                              <ScaleLoader
+                                color="#f97316"
+                                height={20}
+                                width={4}
+                              />
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => downloadInvoice(order)}
+                              disabled={loadingId === order.id}
+                              className="bg-orange-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
+                            >
+                              Download Invoice
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

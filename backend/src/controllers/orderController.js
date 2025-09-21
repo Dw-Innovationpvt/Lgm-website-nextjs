@@ -1,8 +1,9 @@
 import prisma from "../lib/prismaClient.js";
 import nodemailer from "nodemailer";
 import { io } from "../server.js";
-import PDFDocument from "pdfkit";
+import puppeteer from "puppeteer";
 import path from 'path';
+import fs from "fs";
 
 export const createOrder = async (req, res) => {
   try {
@@ -103,241 +104,150 @@ export const createOrder = async (req, res) => {
       }
     }
 
-    const generateInvoicePdf = (order) => {
-      return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({
-          margin: 50,
-          bufferPages: true,
-          font: "Helvetica",
-        });
+    // ---- Puppeteer Invoice Generation ----
+  const generateInvoicePdf = async (order) => {
+  const browser = await puppeteer.launch({ headless: "new" });
+  const page = await browser.newPage();
 
-        const chunks = [];
-        const primaryColor = "#FF6B00";
-        const accentColor = "#333333";
-        const lightGray = "#F5F5F5";
+  // Convert logo to Base64
+  const logoPath = path.resolve(
+    "E:/Projects/Lgm-website-nextjs/Frontend/public/logo.jpg"
+  );
+  const logoBase64 = fs.readFileSync(logoPath).toString("base64");
+  const logoData = `data:image/jpeg;base64,${logoBase64}`;
 
-        doc.on("data", (chunk) => chunks.push(chunk));
-        doc.on("end", () => {
-          const pdfBuffer = Buffer.concat(chunks);
-          resolve(pdfBuffer);
-        });
-        doc.on("error", reject);
+  // Prepare table rows
+  const itemsRows = order.items
+    .map(
+      (item) => `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.quantity}</td>
+        <td>₹${(item.price / 100).toFixed(2)}</td>
+        <td>₹${((item.price * item.quantity) / 100).toFixed(2)}</td>
+      </tr>`
+    )
+    .join("");
 
-        // Load logo image path
-        const logoPath = path.resolve('E:/Projects/Lgm-website-nextjs/Frontend/public/logo.jpg');
+  const subtotal = (order.totalAmount / 100).toFixed(2);
+  const discount =
+    typeof order.discountAmount === "number" && order.discountAmount > 0
+      ? `₹${(order.discountAmount / 100).toFixed(2)}`
+      : "₹0.00";
 
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #2c3e50;
+        background: #ffffff;
+      }
 
-        // Header Section
-        const headerHeight = 80;
-        const pageWidth = doc.page.width;
+      .header { text-align: center; padding: 10px 20px 0; border-bottom: 3px solid #3498db; }
+      .header img { max-width: 100px; margin-top: 5px; }
+      .header h1 { margin: 0; font-size: 28px; color: #fc6b03; letter-spacing: 1px; }
 
-        doc.fillColor(lightGray).rect(0, 0, doc.page.width, 80).fill();
+      .info-section { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 50px 10px; font-size: 14px; gap: 60px; }
+      .info-left, .info-right { flex: 1; }
+      .info-right { text-align: right; }
+      .info-block { margin-bottom: 18px; }
+      .info-block .label { font-size: 11px; color: #7f8c8d; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px; display: block; }
+      .info-block strong { font-size: 16px; color: #2c3e50; }
 
-        // Add Logo at Top Center
-        doc.image(logoPath, (doc.page.width - 100) / 2, 15, {
-          fit: [100, 50], // Adjust logo size (width:100px, height:50px)
-          align: "center",
-          valign: "top",
-        });
+      table { width: 90%; margin: 10px auto 30px; border-collapse: collapse; font-size: 14px; }
+      thead { background: #ecf0f1; }
+      th, td { padding: 12px 10px; border-bottom: 1px solid #dcdcdc; text-align: center; }
+      th { color: #3498db; font-weight: 600; }
+      td:first-child { text-align: left; }
 
-        doc
-          .fontSize(24)
-          .fillColor("black")
-          .text("INVOICE", 50, 30, { align: "left", bold: true })
-          .fontSize(10)
-          .text("LGMSports Pvt Ltd", { align: "right", lineBreak: false })
-          .text("Proud Member of India Sports Association", { align: "right" });
+      .totals { width: 90%; margin: 20px auto 40px; border-top: 2px solid #3498db; font-size: 16px; }
+      .totals tr td { padding: 8px 0; }
+      .totals td:nth-child(2) { text-align: right; }
+      .grand td { font-size: 18px; font-weight: bold; color: #e74c3c; padding-top: 10px; }
 
-        // Dealer Info Box
-        doc
-          .fillColor(lightGray)
-          .rect(50, 100, 250, 75)
-          .fill()
-          .fontSize(10)
-          .fillColor(accentColor)
-          .text("Registered Office:", 60, 105)
-          .text("Omkar Nandan Soc -A2-303, Near Navale Bridge,", 60, 120)
-          .text("Vadgaon Budruk, Pune-411041", 60, 135)
-          .text("support@lgmsports.in | +91-7744042929", 60, 150);
+      .footer { text-align: center; padding: 20px; color: #7f8c8d; font-size: 13px; border-top: 1px solid #ecf0f1; }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>INVOICE</h1>
+      <img src="${logoData}" alt="Logo" />
+    </div>
 
-        // Invoice Metadata
-        const invoiceDate = new Date().toLocaleDateString();
-        doc
-          .fontSize(14)
-          .fillColor(accentColor)
-          .text(`Invoice #${order.id}`, 50, 190, { bold: true })
-          .fontSize(10)
-          .fillColor("#666")
-          .text(`Issue Date: ${invoiceDate}`, 50, 210);
+    <div class="info-section">
+      <div class="info-left">
+        <div class="info-block">
+          <span class="label">Order From</span>
+          <strong>LGMSports Pvt Ltd</strong><br/>
+          Omkar Nandan Soc -A2-303,<br/>
+          Near Navale Bridge,<br/>
+          Vadgaon Budruk, Pune-411041<br/>
+          support@lgmsports.in | +91-7744042929
+        </div>
+      </div>
 
-        // Billing & Shipping Sections
-        const sectionY = 240;
-        doc
-          .fontSize(12)
-          .fillColor(primaryColor)
-          .text("BILLING DETAILS", 50, sectionY)
-          .text("SHIPPING DETAILS", 300, sectionY);
+      <div class="info-right">
+        <div class="info-block">
+          <span class="label">Billed To</span>
+          <b>Name</b> : ${order.firstName} ${order.lastName}<br/>
+          <b>Email</b> : ${order.email}<br/>
+          <b>Address</b> : ${order.address}<br/>
+          <b>Phone No.</b> : ${order.phone}
+        </div>
+        <div class="info-block">
+          <span class="label">Order Details</span>
+          Order ID: <strong>${order.id}</strong><br/>
+          Payment Method: <strong>${order.paymentMethod}</strong><br/>
+          Date: ${new Date(order.createdAt).toLocaleString("en-IN")}
+        </div>
+      </div>
+    </div>
 
-        const detailsText = [
-          `${order.firstName} ${order.lastName}`,
-          order.address,
-          `${order.city}, ${order.state} - ${order.pincode}`,
-          order.email,
-          order.phone,
-        ].join("\n");
+    <table>
+      <thead>
+        <tr>
+          <th>Item Description</th>
+          <th>Quantity</th>
+          <th>Unit Price (₹)</th>
+          <th>Total Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${itemsRows}
+      </tbody>
+    </table>
 
-        [50, 300].forEach((x) => {
-          doc
-            .fontSize(10)
-            .fillColor("#444")
-            .text(detailsText, x, sectionY + 20, {
-              width: 200,
-              lineBreak: true,
-              paragraphGap: 4,
-            });
-        });
+    <table class="totals">
+      <tr><td>Subtotal</td><td>₹${subtotal}</td></tr>
+      <tr><td>Discount Applied</td><td>${discount}</td></tr>
+      <tr class="grand"><td>Total Amount Payable</td><td>₹${subtotal}</td></tr>
+    </table>
 
-        // Divider Line
-        doc
-          .moveTo(50, sectionY + 85)
-          .lineTo(550, sectionY + 85)
-          .lineWidth(0.5)
-          .strokeColor("#DDD")
-          .stroke();
+    <div class="footer">
+      Thank you for shopping with LGMSports!
+    </div>
+  </body>
+  </html>
+  `;
 
-        // Items Table
-        const tableTop = sectionY + 100;
-        const colX = {
-          quantity: 50,
-          uom: 120,
-          description: 180,
-          unitPrice: 390,
-          total: 480,
-        };
+  await page.setContent(html, { waitUntil: "networkidle0" });
 
-        // Table Header with Gradient
-        const gradient = doc
-          .linearGradient(50, tableTop, 550, tableTop + 20)
-          .stop(0, primaryColor)
-          .stop(1, "#FF8C00");
+  const pdfBuffer = await page.pdf({
+    format: "A4",
+    printBackground: true,
+    margin: { top: "5mm", bottom: "20mm" },
+  });
 
-        doc
-          .fill(gradient)
-          .rect(50, tableTop, 500, 20)
-          .fill()
-          .fillColor("white")
-          .fontSize(10)
-          .text("QTY", colX.quantity, tableTop + 5)
-          .text("UNIT", colX.uom, tableTop + 5)
-          .text("DESCRIPTION", colX.description, tableTop + 5)
-          .text("PRICE (₹)", colX.unitPrice, tableTop + 5)
-          .text("TOTAL (₹)", colX.total, tableTop + 5);
-
-        // Table Rows
-        let y = tableTop + 25;
-        let subtotal = 0;
-
-        order.items.forEach((item, index) => {
-          if (index % 2 === 0) {
-            doc
-              .fillColor(lightGray)
-              .rect(50, y - 5, 500, 20)
-              .fill();
-          }
-
-          const itemTotal = (item.price / 100) * item.quantity;
-          subtotal += itemTotal;
-
-          doc
-            .fillColor(accentColor)
-            .fontSize(10)
-            .text(item.quantity, colX.quantity, y)
-            .text("EA", colX.uom, y)
-            .text(item.name, colX.description, y)
-            .text(
-              (item.price / 100).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }),
-              colX.unitPrice,
-              y
-            )
-            .text(
-              itemTotal.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }),
-              colX.total,
-              y
-            );
-
-          y += 20;
-        });
-
-        // Totals Section
-        const totalDue = subtotal;
-        const totalsY = y + 30;
-
-        doc
-          .fontSize(12)
-          .fillColor(accentColor)
-          .text(
-            `Subtotal: ₹${subtotal.toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-            })}`,
-            400,
-            totalsY,
-            { align: "right" }
-          )
-          .font("Helvetica-Bold")
-          .text(
-            `Total Due: ₹${subtotal.toLocaleString("en-IN", {
-              minimumFractionDigits: 2,
-            })}`,
-            400,
-            totalsY + 20,
-            {
-              align: "right",
-              underline: true,
-            }
-          );
-
-        // Footer
-        doc
-          .fontSize(10)
-          .fillColor("#666")
-          .text(
-            "Terms & Conditions: Payment due within 30 days",
-            50,
-            doc.page.height - 80
-          )
-          .text(
-            "Late payments subject to 1.5% monthly interest",
-            50,
-            doc.page.height - 65
-          )
-          .text("Thank you for choosing LGMSports!", {
-            align: "center",
-            width: 500,
-            color: primaryColor,
-            bold: true,
-            y: doc.page.height - 50,
-          });
-
-        // Watermark
-        doc
-          .opacity(0.1)
-          .fontSize(80)
-          .fillColor(primaryColor)
-          .text("LGMSports", 100, 300, {
-            align: "center",
-            opacity: 0.1,
-          })
-          .opacity(1);
-
-        doc.end();
-      });
-    };
+  await browser.close();
+  return pdfBuffer;
+};
 
     // Send Order Confirmation Email
     try {
