@@ -533,6 +533,20 @@ export default function AdminDashboard() {
                                   <span className="text-sm font-medium text-gray-700">
                                     {item.name}
                                   </span>
+                                  {item.selectedColor && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span
+                                      className="w-5 h-5 rounded-full border border-gray-300 shadow-sm"
+                                      style={{
+                                        backgroundColor:
+                                          item.selectedColorHex || "#f5f5f5",
+                                      }}
+                                    ></span>
+                                    <span className="text-sm font-medium text-gray-600">
+                                      {item.selectedColor}
+                                    </span>
+                                  </div>
+                                )}
                                   <span className="text-sm bg-orange-50 text-orange-700 px-2 py-0.5 rounded-md">
                                     × {item.quantity}
                                   </span>

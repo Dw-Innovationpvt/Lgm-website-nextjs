@@ -76,10 +76,18 @@ export default function QuadRinkWheel() {
   };
 
   const handleAddToCart = (product) => {
-    const { color = "", size = "" } = selections[product.id] || {};
-    addToCart({ ...product, selectedColor: color, selectedSize: size });
-    router.push("/cart");
-  };
+  const selectedColor = selections[product.id]?.color || null;
+
+  addToCart({
+    ...product,
+    selectedColor,
+    selectedColorHex:
+      product.colors.find((c) => c.name === selectedColor)?.hexCode || null,
+    uniqueKey: `${product.id}-${selectedColor || "default"}`, // 👈 Important
+  });
+
+  router.push("/cart");
+};
 
   const handleBuyNow = (product) => {
     const { color = "", size = "" } = selections[product.id] || {};
