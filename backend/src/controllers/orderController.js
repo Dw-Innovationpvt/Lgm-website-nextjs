@@ -52,6 +52,8 @@ export const createOrder = async (req, res) => {
             name: item.name,
             quantity: item.quantity,
             price: item.price * 100,
+            selectedColor: item.selectedColor || null,
+            selectedColorHex: item.selectedColorHex || null,
           })),
         },
       },
@@ -121,7 +123,24 @@ export const createOrder = async (req, res) => {
     .map(
       (item) => `
       <tr>
-        <td>${item.name}</td>
+        <td>
+          ${item.name} 
+          ${
+            item.selectedColor
+              ? `<span style="
+                  display: inline-block;
+                  width: 12px;
+                  height: 12px;
+                  border-radius: 50%;
+                  background-color: ${item.selectedColorHex || '#ffffff'};
+                  border: 1px solid #ccc;
+                  margin-left: 5px;
+                  vertical-align: middle;
+                "></span>
+                <span style="margin-left: 4px; font-size: 0.9em;">${item.selectedColor}</span>`
+              : ''
+          }
+        </td>
         <td>${item.quantity}</td>
         <td>₹${(item.price / 100).toFixed(2)}</td>
         <td>₹${((item.price * item.quantity) / 100).toFixed(2)}</td>
@@ -189,7 +208,7 @@ export const createOrder = async (req, res) => {
           Omkar Nandan Soc -A2-303,<br/>
           Near Navale Bridge,<br/>
           Vadgaon Budruk, Pune-411041<br/>
-          support@lgmsports.in | +91-7744042929
+          sportslgm@gmail.com | +91-7744042929
         </div>
       </div>
 
@@ -199,6 +218,9 @@ export const createOrder = async (req, res) => {
           <b>Name</b> : ${order.firstName} ${order.lastName}<br/>
           <b>Email</b> : ${order.email}<br/>
           <b>Address</b> : ${order.address}<br/>
+          <b>City</b> : ${order.city}<br/>
+          <b>Pincode</b> : ${order.pincode}<br/>
+          <b>State</b> : ${order.state}<br/>
           <b>Phone No.</b> : ${order.phone}
         </div>
         <div class="info-block">
@@ -213,7 +235,7 @@ export const createOrder = async (req, res) => {
     <table>
       <thead>
         <tr>
-          <th>Item Description</th>
+          <th style="text-align: left">Item Description</th>
           <th>Quantity</th>
           <th>Unit Price (₹)</th>
           <th>Total Price (₹)</th>
@@ -296,9 +318,25 @@ export const createOrder = async (req, res) => {
                 (item) => `
               <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
                 <strong>${item.name}</strong><br/>
-                Quantity: ${item.quantity} | Price: ₹${(
-                  item.price / 100
-                ).toFixed(2)}
+                Quantity: ${item.quantity} | Price: ₹${(item.price / 100).toFixed(2)}
+                ${
+                  item.selectedColor
+                    ? ` | Color: 
+                      <span style="
+                        display: inline-block;
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 50%;
+                        background-color: ${item.selectedColorHex || "#ffffff"};
+                        border: 1px solid #ccc;
+                        vertical-align: middle;
+                        margin-left: 4px;
+                      "></span>
+                      <span style="margin-left: 4px; font-size: 0.9em;">${
+                        item.selectedColor
+                      }</span>`
+                    : ""
+                }
               </li>
             `
               )

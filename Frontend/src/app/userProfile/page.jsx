@@ -62,7 +62,7 @@ export default function ProfilePage() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("profile");
-  const [loadingId, setLoadingId] = useState(null); 
+  const [loadingId, setLoadingId] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -366,22 +366,47 @@ export default function ProfilePage() {
 
                     {/* Order Items */}
                     <div className="p-5">
-                      <div className="space-y-3 text-gray-800 mb-4">
+                      <div className="space-y-4 text-gray-800 mb-6">
                         {order.items.map((item) => (
                           <div
                             key={item.id}
-                            className="flex justify-between items-center py-3 border-b border-gray-200 last:border-0"
+                            className="flex justify-between items-start rounded-lg bg-white p-4 shadow-sm border border-gray-200"
                           >
-                            <div className="flex items-center gap-3">
-                              <span className="h-3 w-3 rounded-full bg-orange-500"></span>
-                              <span className="font-medium text-gray-700">
-                                {item.name}
-                                <span className="text-blue-600 ml-1 font-semibold">
-                                  × {item.quantity}
+                            {/* Left: Product Info */}
+                            <div className="flex items-start gap-4">
+                              {/* Bullet/Icon */}
+                              <span className="flex-shrink-0 h-3 w-3 mt-2 rounded-full bg-orange-500"></span>
+
+                              {/* Product Details */}
+                              <div className="flex flex-col">
+                                {/* Product Name + Quantity */}
+                                <span className="font-semibold text-gray-900">
+                                  {item.name}
+                                  <span className="ml-1 text-blue-600 font-bold">
+                                    × {item.quantity}
+                                  </span>
                                 </span>
-                              </span>
+
+                                {/* Color Info (Only if product has color) */}
+                                {item.selectedColor && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span
+                                      className="w-5 h-5 rounded-full border border-gray-300 shadow-sm"
+                                      style={{
+                                        backgroundColor:
+                                          item.selectedColorHex || "#f5f5f5",
+                                      }}
+                                    ></span>
+                                    <span className="text-sm font-medium text-gray-600">
+                                      {item.selectedColor}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <span className="font-semibold text-gray-800">
+
+                            {/* Right: Price */}
+                            <span className="font-bold text-gray-900 text-lg">
                               ₹{(item.price * item.quantity) / 100}
                             </span>
                           </div>

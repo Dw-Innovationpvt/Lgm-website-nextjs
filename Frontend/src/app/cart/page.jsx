@@ -163,6 +163,16 @@ const CartPage = () => {
                             ₹{item.oldPrice}
                           </p>
                         )}
+                        {/* ✅ Show color ONLY if it exists */}
+                          {item.selectedColor && (
+                            <div className="flex items-center gap-2 mt-1">
+                              <span
+                                className="w-5 h-5 rounded-full border"
+                                style={{ backgroundColor: item.selectedColorHex || "#fff" }}
+                              ></span>
+                              <span className="text-sm text-gray-700">{item.selectedColor}</span>
+                            </div>
+                          )}
                       </div>
                     </div>
 

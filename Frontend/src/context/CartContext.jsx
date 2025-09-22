@@ -171,20 +171,27 @@ export const CartProvider = ({ children }) => {
   }, [cartItems, userId]);
 
   const addToCart = (product) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prev, { ...product, quantity: 1 }]; // ✅ keep product.price
-      }
-    });
-    setCartUpdated(true);
-  };
+  setCartItems((prev) => {
+    const existing = prev.find(
+      (item) => item.uniqueKey === product.uniqueKey   // 👈 compare with uniqueKey
+    );
+
+    if (existing) {
+      // If same product + same color already in cart, just increase quantity
+      return prev.map((item) =>
+        item.uniqueKey === product.uniqueKey
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      // Otherwise add a *new* entry (different color is treated as separate)
+      return [...prev, { ...product, quantity: 1 }];
+    }
+  });
+
+  setCartUpdated(true);
+};
+
 
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));

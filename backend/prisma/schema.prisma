@@ -56,6 +56,9 @@ model OrderItem {
   // ✅ Color selected by the user (nullable for products without color)
   productColorId Int?
   productColor   ProductColor? @relation(fields: [productColorId], references: [id])
+
+  selectedColor    String?
+  selectedColorHex String?
 }
 
 model Product {
