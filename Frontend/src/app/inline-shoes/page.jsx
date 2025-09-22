@@ -30,19 +30,22 @@ const productImages = {
   A0155: [
     "/assets/comming-soon.png"
   ],
-  A0156: [
+  A0156: {
+    Green: [
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.16_693773c2 - Copy.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.16_d28ad902 - Copy.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_0d11a1d3.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_8db26341.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.17_ed919160.jpg",
+  ],
+  White: [
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_2b2e5855.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_6784b777.jpg",
-    "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_e7b3abe6 - Copy.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.18_e7b3abe6 - Copy.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.19_a2b01628.jpg",
     "/assets/A0156 - Fleet Shoes/WhatsApp Image 2025-08-07 at 12.07.19_eb84e256.jpg",
   ],
+  },
   A0157: [
     "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.13_66cf49a6.jpg",
     "/assets/A0157 -Raptor Shoes/WhatsApp Image 2025-09-04 at 16.40.13_75aa5246.jpg",
@@ -84,19 +87,50 @@ export default function InlineShoesPage() {
         );
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
+
 
         setProducts(data);
       } catch (err) {
@@ -275,6 +309,43 @@ export default function InlineShoesPage() {
                     </svg>
                   </button>
                 </div>
+                
+                      {/* Color selector */}
+                      {["A0156"].includes(product.code) && product.colors?.length > 0 && (
+                          <div className="flex items-center gap-2 ml-5">
+                            {product.colors.map((color) => {
+                              const isSelected = selections[product.id]?.color === color.name;
+                              return (
+                                <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>
+                              );
+                            })}
+                          </div>
+                      )}                
 
                 {/* Details */}
                 <div

@@ -138,7 +138,7 @@ const slideGroups = [
     {
       category: 'ROLLER SKATES',
       image: '/banner/banner2.jpg',
-      link: '/roller-skates',
+      link: '/hockey-skates',
       color: 'bg-sky-400 hover:bg-sky-500',
       buttonText: 'SHOP NOW',
       desc: 'Retro vibes with modern performance.',

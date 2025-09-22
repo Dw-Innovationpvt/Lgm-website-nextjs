@@ -5,12 +5,19 @@ import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
 const productImages = {
-  A0085: [
+  A0085: {
+    Yellow:[
     "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-151.jpg",
     "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-152.jpg",
-    "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
+    ],
+
+    Black: [
+      "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-153.jpg",
     "/assets/A0085 -Quad Naylon Hanger 7mm/AARMS Photography-154.jpg",
-  ],
+    ]
+    
+    
+  },
   A0086: [
     "/assets/A0086 -Quad Naylon Hanger 8mm/1000211173.png",
     "/assets/A0086 -Quad Naylon Hanger 8mm/1000211174.png",
@@ -48,19 +55,49 @@ export default function Hangers() {
         );
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -236,6 +273,43 @@ export default function Hangers() {
                   </button>
                 </div>
 
+                    {/* Color selector */}
+                      {["A0085"].includes(product.code) && product.colors?.length > 0 && (
+                          <div className="flex items-center gap-2 ml-5">
+                            {product.colors.map((color) => {
+                              const isSelected = selections[product.id]?.color === color.name;
+                              return (
+                               <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>
+                              );
+                            })}
+                          </div>
+                      )}
+
                  {/* Details */}
                 <div
                   className={`flex flex-col ${
@@ -256,7 +330,12 @@ export default function Hangers() {
                   <p className="text-gray-600 mb-4">
                     {product.description || "Premium quality skating gear for beginners and young skaters. Designed for comfort, safety, and durability."}
                   </p>
-
+                    {/* Price in flex */}
+                    <div className="flex items-center">
+                      <span className="text-2xl font-bold text-blue-600 mb-3">
+                        ₹{product.price.toLocaleString()} <span className="text-sm font-normal text-gray-500">(incl. GST)</span>
+                      </span>
+                    </div>
                   <div className="space-y-4 mt-auto">
                     {/* Buttons in flex */}
                     <div className="flex gap-2 justify-end">
@@ -307,80 +386,7 @@ export default function Hangers() {
 
                     
                   </div>
-                    {/* Specifications (with Color & Size dropdowns on the right) */}
-                    <div className="border-t border-gray-100 pt-4">
-                      <h4 className="font-['Arimo'] font-bold text-gray-900 mb-2">
-                        Specifications:
-                      </h4>
-                      <ul className="space-y-1.5 text-sm text-gray-600">
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Usage:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.usage}
-                          </span>
-                        </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Wheels:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.wheels || "—"}
-                          </span>
-                        </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Color:
-                          </span>
-                          <select
-                            value={sel.color}
-                            onChange={(e) =>
-                              setSelection(product.id, "color", e.target.value)
-                            }
-                            className="border rounded-md py-1.5 px-3 text-gray-700"
-                          >
-                            <option value="">Select Color</option>
-                            {product.colors?.map((c) => (
-                              <option key={c} value={c}>
-                                {c}
-                              </option>
-                            ))}
-                          </select>
-                        </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Material:
-                          </span>
-                          <span className="text-gray-600">
-                            {product.specs.material || "—"}
-                          </span>
-                        </li>
-
-                        <li className="flex justify-between items-center">
-                          <span className="capitalize font-medium text-gray-700">
-                            Size:
-                          </span>
-                          <select
-                            value={sel.size}
-                            onChange={(e) =>
-                              setSelection(product.id, "size", e.target.value)
-                            }
-                            className="border rounded-md py-1.5 px-3 text-gray-700"
-                          >
-                            <option value="">Select Size</option>
-                            {product.sizes?.map((s) => (
-                              <option key={s} value={s}>
-                                {s}
-                              </option>
-                            ))}
-                          </select>
-                        </li>
-                      </ul>
-                    </div>
+                    
                   </div>
                 </div>
               
