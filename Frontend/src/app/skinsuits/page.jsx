@@ -10,12 +10,15 @@ const productImages = {
     "/assets/A0260 - Normal Skin Suit/1000211197.png",
     "/assets/A0260 - Normal Skin Suit/1000211201.png",
   ],
-  A0261: [
+  A0261: {
+    Red:[
     "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211198.png",
-    "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211200.png",
+    "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211200.png"],
+
+    Blue:[
     "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211208.png",
-    "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211209.png",
-  ],
+    "/assets/A0261 - Half Sublimation Skin Suit 22 to 24/1000211209.png",]
+},
   A0262: [
     "/assets/A0262 - Half Sublimation Skin Suit 26 to 36/1000211199.png",
     "/assets/A0262 - Half Sublimation Skin Suit 26 to 36/1000211202.png",
@@ -61,19 +64,49 @@ export default function BabyTenacityPage() {
         );
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -253,7 +286,44 @@ export default function BabyTenacityPage() {
                     </svg>
                   </button>
                 </div>
-
+              
+                    {/* Color selector */}
+                      {["A0261"].includes(product.code) && product.colors?.length > 0 && (
+                          <div className="flex items-center gap-2 ml-5">
+                            {product.colors.map((color) => {
+                              const isSelected = selections[product.id]?.color === color.name;
+                              return (
+                                <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>
+                              );
+                            })}
+                          </div>
+                      )}
+              
                 {/* Details */}
                 <div
                   className={`flex flex-col ${

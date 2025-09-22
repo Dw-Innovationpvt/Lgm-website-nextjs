@@ -19,11 +19,11 @@ const productImages = {
   A0338: ["/assets/A0338 - Quad Shoe Nuts/1000211297.png",
     "/assets/A0338 - Quad Shoe Nuts/1000211299.png"
   ],
-  A0339: [
-    "/assets/A0339 - Quad Lace/1000211293.png",
-    "/assets/A0339 - Quad Lace/1000211294.png",
-    "/assets/A0339 - Quad Lace/1000211295.png"
-  ],
+  A0339: {
+    Black:"/assets/A0339 - Quad Lace/1000211293.png",
+    Red: "/assets/A0339 - Quad Lace/1000211294.png",
+    Blue: "/assets/A0339 - Quad Lace/1000211295.png"
+},
   A0340: ["/assets/144 - Washers ( 7mm - 8mm )/AARMS Photography-218.jpg"],
   A0341: ["/assets/1000211300(1).png",
     "/assets/10002113002.png"
@@ -108,21 +108,32 @@ export default function Accessories() {
               "A0347",
             ].includes(p.code)
         );
+        
+        data = data.map((p) => {
+          const firstColorImage = productImages[p.code]
+            ? productImages[p.code][Object.keys(productImages[p.code])[0]]
+            : "/placeholder.png";
 
-        // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+          return {
+            ...p,
+            image: firstColorImage,
+            images: Object.values(
+              productImages[p.code] || ["/placeholder.png"]
+            ),
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: p.colors.map((c) => ({
+              name: c.name,
+              hexCode: c.hexCode,
+              image: productImages[p.code]?.[c.name] || firstColorImage,
+            })),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -298,6 +309,38 @@ export default function Accessories() {
                     </svg>
                   </button>
                 </div>
+
+                {/* Color selector */}
+                {product.code === "A0339" && product.colors?.length > 0 && (
+                  <div className="flex items-center gap-2 ml-5">
+                    {product.colors.map((color) => {
+                      const isSelected = selections[product.id]?.color === color.name;
+                      return (
+                        <button
+                          key={color.name}
+                          onClick={() => {
+                            setSelection(product.id, "color", color.name);
+                            setProducts((prev) =>
+                              prev.map((p) =>
+                                p.id === product.id
+                                  ? { ...p, image: color.image }
+                                  : p
+                              )
+                            );
+                          }}
+                          className={`w-6 h-6 rounded-full border-2 ${
+                            selections[product.id]?.color === color.name
+                              ? "border-black"
+                              : "border-gray-300"
+                          }`}
+                          style={{
+                            backgroundColor: color.hexCode?.trim() || "#fff",
+                          }}
+                        ></button>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Details */}
                 <div

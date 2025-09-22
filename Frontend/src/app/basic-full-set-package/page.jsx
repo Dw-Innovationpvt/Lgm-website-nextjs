@@ -7,14 +7,16 @@ import Image from "next/image";
 // Local images mapping
 const productImages = {
   A0015: ["/assets/A0015-Rubber Wheel Package/AARMS Photography-9.jpg"],
-  A0016: [
-    "/assets/A0016-Tyro Wheel Package/AARMS Photography-10.jpg",
+  A0016: {
+    Orange: [
+      "/assets/A0016-Tyro Wheel Package/AARMS Photography-10.jpg",
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-32.jpg",
-    "/assets/A0016-Tyro Wheel Package/AARMS Photography-219.jpg",
+    ],
+    Blue:[  "/assets/A0016-Tyro Wheel Package/AARMS Photography-219.jpg",
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-220.jpg",
     "/assets/A0016-Tyro Wheel Package/AARMS Photography-221.jpg",
-    "/assets/A0016-Tyro Wheel Package/AARMS Photography-222.jpg",
-  ],
+    "/assets/A0016-Tyro Wheel Package/AARMS Photography-222.jpg",]
+  },
   A0017: ["/assets/A0017-Hyper Rollo Packege/AARMS Photography-11.jpg"],
 };
 
@@ -38,19 +40,49 @@ export default function ShoesFramePage() {
         data = data.filter((p) => ["A0015", "A0016", "A0017"].includes(p.code));
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -231,7 +263,42 @@ export default function ShoesFramePage() {
                     </svg>
                   </button>
                 </div>
-
+                      {/* Color selector */}
+                      {["A0016"].includes(product.code) && product.colors?.length > 0 && (
+                          <div className="flex items-center gap-2 ml-5">
+                            {product.colors.map((color) => {
+                              const isSelected = selections[product.id]?.color === color.name;
+                              return (
+                                <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>
+                              );
+                            })}
+                          </div>
+                      )}
                 {/* Details */}
                 <div
                   className={`flex flex-col ${

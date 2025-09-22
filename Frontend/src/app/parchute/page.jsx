@@ -6,11 +6,11 @@ import Image from "next/image";
 
 // Local images mapping
 const productImages = {
-  A0311: [
-    "/assets/A0311 - Parchute/1000211301.png",
-    "/assets/A0311 - Parchute/1000211304.png",
-    "/assets/A0311 - Parchute/1000211305.png"
-  ]
+  A0311: {
+    Green: ["/assets/A0311 - Parchute/1000211301.png"],
+    Orange: ["/assets/A0311 - Parchute/1000211304.png"],
+    Blue: ["/assets/A0311 - Parchute/1000211305.png"],
+  },
 };
 
 export default function FleetAltraPackagePage() {
@@ -33,19 +33,49 @@ export default function FleetAltraPackagePage() {
         data = data.filter((p) => ["A0311"].includes(p.code));
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -226,6 +256,45 @@ export default function FleetAltraPackagePage() {
                     </svg>
                   </button>
                 </div>
+
+                {/* Color selector */}
+                {["A0311"].includes(product.code) &&
+                  product.colors?.length > 0 && (
+                    <div className="flex items-center gap-2 ml-5">
+                      {product.colors.map((color) => {
+                        const isSelected =
+                          selections[product.id]?.color === color.name;
+                        return (
+                          <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>
+                        );
+                      })}
+                    </div>
+                  )}
 
                 {/* Details */}
                 <div

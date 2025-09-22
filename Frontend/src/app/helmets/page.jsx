@@ -5,40 +5,45 @@ import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
 const productImages = {
-  A0245: [
-    "/assets/A0245 - Patti Head Gear/1000211176.png",
-    "/assets/A0245 - Patti Head Gear/1000211177.png",
+  A0245: {
+    Red: ["/assets/A0245 - Patti Head Gear/1000211176.png"],
+    Blue: [
     "/assets/A0245 - Patti Head Gear/1000211233.png",
-    "/assets/A0245 - Patti Head Gear/1000211234.png",
-  ],
-  A0246: [
-    "/assets/A0246 - Round Fluoescent Helmet/1000211225.png",
-    "/assets/A0246 - Round Fluoescent Helmet/1000211226.png",
-    "/assets/A0246 - Round Fluoescent Helmet/1000211228.png",
-    "/assets/A0246 - Round Fluoescent Helmet/1000211231.png",
-  ],
-  A0247: [
-    "/assets/A0247 - Fluoescent Helmet/1000211220.png",
-    "/assets/A0247 - Fluoescent Helmet/1000211222.png",
-    "/assets/A0247 - Fluoescent Helmet/1000211229.png",
-  ],
-  A0248: [
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-131.jpg",
+    "/assets/A0245 - Patti Head Gear/1000211177.png",
+    "/assets/A0245 - Patti Head Gear/1000211234.png",]
+  },
+  A0246: {
+    Green: ["/assets/A0246 - Round Fluoescent Helmet/1000211225.png"],
+    Red:["/assets/A0246 - Round Fluoescent Helmet/1000211226.png"],
+    Orange: ["/assets/A0246 - Round Fluoescent Helmet/1000211228.png",
+    "/assets/A0246 - Round Fluoescent Helmet/1000211231.png",]
+  },
+  A0247: {
+    Red: ["/assets/A0247 - Fluoescent Helmet/1000211220.png"],
+    Blue: ["/assets/A0247 - Fluoescent Helmet/1000211222.png",
+    "/assets/A0247 - Fluoescent Helmet/1000211229.png",]
+  },
+  A0248: {
+    Orange: ["/assets/A0248 - Keeper Helmet/AARMS Photography-131.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-132.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-133.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-134.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-133.jpg"],
+
+    Blue: ["/assets/A0248 - Keeper Helmet/AARMS Photography-134.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-135.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-136.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-137.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-136.jpg"],
+
+    Green: ["/assets/A0248 - Keeper Helmet/AARMS Photography-137.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-138.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-139.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-140.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-139.jpg"],
+
+    Pink: ["/assets/A0248 - Keeper Helmet/AARMS Photography-140.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-141.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-142.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-143.jpg",
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-142.jpg"],
+
+    DarkBlue: ["/assets/A0248 - Keeper Helmet/AARMS Photography-143.jpg",
     "/assets/A0248 - Keeper Helmet/AARMS Photography-144.jpg",
-    "/assets/A0248 - Keeper Helmet/AARMS Photography-145.jpg",
-  ],
+    "/assets/A0248 - Keeper Helmet/AARMS Photography-145.jpg"],
+  },
 
   A0249: ["/assets/comming-soon.png"],
 };
@@ -67,19 +72,49 @@ export default function Helmet() {
         );
 
         // Attach images from local mapping
-        data = data.map((p) => ({
-          ...p,
-          image: productImages[p.code]?.[0] || "/placeholder.png",
-          images: productImages[p.code] || ["/placeholder.png"],
-          specs: {
-            usage: "Skating",
-            wheels: "4 Wheel",
-            material: "Stainless Steel",
-          },
-          colors: ["red", "blue", "green", "pink"],
-          sizes: ["Small", "Medium", "Large"],
-          countInStock: p.stockQuantity ?? 0,
-        }));
+        data = data.map((p) => {
+          const productImg = productImages[p.code];
+
+          // Determine first image to display
+          let firstImage = "/placeholder.png";
+
+          if (Array.isArray(productImg) && productImg.length > 0) {
+            firstImage = productImg[0];
+          } else if (productImg && typeof productImg === "object") {
+            const firstColor = Object.keys(productImg)[0];
+            firstImage = productImg[firstColor][0];
+          }
+
+          // All images for product
+          let allImages = [];
+          if (Array.isArray(productImg)) allImages = productImg;
+          else if (productImg && typeof productImg === "object") {
+            allImages = Object.values(productImg).flat();
+          } else allImages = ["/placeholder.png"];
+
+          return {
+            ...p,
+            image: firstImage,
+            images: allImages,
+            specs: {
+              usage: "Skating",
+              wheels: "4 Wheel",
+              material: "Stainless Steel",
+            },
+            colors: (p.colors || []).map((c) => {
+              let colorImage = firstImage;
+              if (productImg && productImg[c.name])
+                colorImage = productImg[c.name][0];
+              return {
+                name: c.name,
+                hexCode: c.hexCode,
+                image: colorImage,
+              };
+            }),
+            sizes: ["Small", "Medium", "Large"],
+            countInStock: p.stockQuantity ?? 0,
+          };
+        });
 
         setProducts(data);
       } catch (err) {
@@ -255,7 +290,44 @@ export default function Helmet() {
                             </svg>
                           </button>
                         </div>
-        
+                              
+                        {/* Color selector */}
+                        {["A0246", "A0247", "A0248", "A0245"].includes(product.code) && product.colors?.length > 0 && (
+                          <div className="flex items-center gap-2 ml-5">
+                            {product.colors.map((color) => {
+                              const isSelected = selections[product.id]?.color === color.name;
+                              return (
+                                <button
+                                  key={color.name}
+                                  onClick={() => {
+                                    setSelection(
+                                      product.id,
+                                      "color",
+                                      color.name
+                                    );
+                                    setProducts((prev) =>
+                                      prev.map((p) =>
+                                        p.id === product.id
+                                          ? { ...p, image: color.image }
+                                          : p
+                                      )
+                                    );
+                                  }}
+                                  className={`w-6 h-6 rounded-full border-2 ${
+                                    selections[product.id]?.color === color.name
+                                      ? "border-black"
+                                      : "border-gray-300"
+                                  }`}
+                                  style={{
+                                    backgroundColor:
+                                      color.hexCode?.trim() || "#fff",
+                                  }}
+                                ></button>  
+                              );
+                            })}
+                          </div>
+                        )}
+
                         {/* Details */}
                         <div
                           className={`flex flex-col ${

@@ -52,16 +52,35 @@ model OrderItem {
   price    Int
   orderId  Int
   order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // ✅ Color selected by the user (nullable for products without color)
+  productColorId Int?
+  productColor   ProductColor? @relation(fields: [productColorId], references: [id])
 }
 
 model Product {
-  id            String   @id
+  id            String         @id
   name          String
   description   String?
-  stockQuantity Int      @default(0)
-  createdAt     DateTime @default(now())
-  code          String   @unique
+  stockQuantity Int            @default(0)
+  createdAt     DateTime       @default(now())
+  code          String         @unique
   price         Int
+  // ✅ Optional relation to available colors
+  colors        ProductColor[]
+}
+
+model ProductColor {
+  id          Int     @id @default(autoincrement())
+  name        String // e.g. "Red", "Blue", "Black"
+  hexCode     String? // Optional for UI (#FF0000)
+  productCode String
+  product     Product @relation(fields: [productCode], references: [code], onDelete: Cascade)
+
+  // ✅ Opposite side of OrderItem relation
+  orderItems OrderItem[]
+
+  @@unique([productCode, name]) // ✅ Compound unique key
 }
 
 model PasswordResetToken {

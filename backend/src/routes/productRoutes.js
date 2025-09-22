@@ -74,6 +74,9 @@ router.get("/", async (req, res) => {
   try {
     const products = await prisma.product.findMany({
       orderBy: { createdAt: "desc" }, // latest first
+      include: { 
+        colors: true, // ✅ include all related ProductColor entries
+      },
     });
     res.json(products);
   } catch (error) {
