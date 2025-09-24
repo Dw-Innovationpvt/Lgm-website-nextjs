@@ -44,7 +44,7 @@ export default function ShoesFramePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/products");
+        const res = await fetch("https://api.lgmsports.in/api/products");
         let data = await res.json();
 
         // Filter only Baby + Tenacity codes
@@ -260,6 +260,32 @@ export default function ShoesFramePage() {
                     </svg>
                   </button>
                 </div>
+                {/* Size selector */}
+                {["A0055", "A0056", "A0058", "A0059", "A0057"].includes(product.code) && (
+                  <div className="flex items-center gap-2 ml-5 mt-2">
+                    {["6", "7", "8", "9"].map((size) => {
+                      const isSelected = selections[product.id]?.size === size;
+                      return (
+                        <button
+                          key={size}
+                          onClick={() => setSelection(product.id, "size", size)}
+                          className={`
+            w-10 h-10 flex items-center justify-center 
+            rounded-md border-2 font-medium text-sm
+            transition-all duration-200
+            ${
+              isSelected
+                ? "border-black bg-black text-white"
+                : "border-gray-300 bg-white text-gray-700 hover:border-black hover:bg-gray-100"
+            }
+          `}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Details */}
                 <div
