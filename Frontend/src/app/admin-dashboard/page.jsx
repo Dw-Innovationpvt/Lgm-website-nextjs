@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `https://api.lgmsports.in/api/products/${pricePopover.productId}/price`,
+        `http://localhost:5000/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -197,14 +197,14 @@ export default function AdminDashboard() {
       router.push("/admin-login");
     } else {
       // Fetch orders
-      fetch("https://api.lgmsports.in/api/admin/orders")
+      fetch("http://localhost:5000/api/admin/orders")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) setOrders(data.orders);
         });
 
       // Fetch products
-      fetch("https://api.lgmsports.in/api/products")
+      fetch("http://localhost:5000/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -212,7 +212,7 @@ export default function AdminDashboard() {
 
       // Fetch academic details
       setLoadingAcademic(true);
-      fetch("https://api.lgmsports.in/api/admin/academic-details")
+      fetch("http://localhost:5000/api/admin/academic-details")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `https://api.lgmsports.in/api/products/${productId}/stock`,
+        `http://localhost:5000/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
   const handleDeliveryStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `https://api.lgmsports.in/api/orders/${orderId}/status`,
+        `http://localhost:5000/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -738,6 +738,9 @@ export default function AdminDashboard() {
                           Academy Name
                         </th>
                         <th className="px-6 py-4 text-left font-semibold text-blue-800">
+                          Academy No.
+                        </th>
+                        <th className="px-6 py-4 text-left font-semibold text-blue-800">
                           Student Address
                         </th>
                         <th className="px-6 py-4 text-left font-semibold text-blue-800">
@@ -821,6 +824,17 @@ export default function AdminDashboard() {
                                 />
                                 <div className="text-sm text-gray-900">
                                   {detail.academyName}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <GraduationCap
+                                  size={16}
+                                  className="text-orange-500 mr-2"
+                                />
+                                <div className="text-sm text-gray-900">
+                                  {detail.academyNo}
                                 </div>
                               </div>
                             </td>

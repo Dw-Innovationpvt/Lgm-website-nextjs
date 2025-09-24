@@ -36,7 +36,7 @@ export default function AcademicDetailsPage() {
   const fetchAcademicDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://api.lgmsports.in/api/admin/academic-details");
+      const response = await fetch("http://localhost:5000/api/admin/academic-details");
       const data = await response.json();
       
       if (data.success) {
@@ -55,6 +55,7 @@ export default function AcademicDetailsPage() {
   const filteredDetails = academicDetails.filter(detail => 
     detail.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     detail.academyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    detail.academyNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     detail.studentAddress?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     detail.order?.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -73,11 +74,12 @@ export default function AcademicDetailsPage() {
   const exportToCSV = () => {
     if (academicDetails.length === 0) return;
     
-    const headers = ["Student Name", "Academy Name", "Student Address", "Order ID", "Order Date", "Customer Name", "Email", "Discount Amount"];
+    const headers = ["Student Name", "Academy Name", "Academy No", "Student Address", "Order ID", "Order Date", "Customer Name", "Email", "Discount Amount"];
     
     const csvData = academicDetails.map(detail => [
       detail.studentName,
       detail.academyName,
+      detail.academyNo,
       detail.studentAddress,
       detail.orderId,
       detail.createdAt ? formatDate(detail.createdAt) : "-",
@@ -194,6 +196,7 @@ export default function AcademicDetailsPage() {
                 <tr>
                   <th className="px-6 py-4 text-left font-semibold text-blue-800">Student Name</th>
                   <th className="px-6 py-4 text-left font-semibold text-blue-800">Academy Name</th>
+                  <th className="px-6 py-4 text-left font-semibold text-blue-800">Academy No.</th>
                   <th className="px-6 py-4 text-left font-semibold text-blue-800">Student Address</th>
                   <th className="px-6 py-4 text-left font-semibold text-blue-800">Order Date</th>
                   <th className="px-6 py-4 text-left font-semibold text-blue-800">Customer</th>
@@ -235,6 +238,12 @@ export default function AcademicDetailsPage() {
                         <div className="flex items-center">
                           <GraduationCap size={16} className="text-orange-500 mr-2" />
                           <div className="text-sm text-gray-900">{detail.academyName}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <GraduationCap size={16} className="text-orange-500 mr-2" />
+                          <div className="text-sm text-gray-900">{detail.academyNo}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

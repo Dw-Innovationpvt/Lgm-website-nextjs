@@ -58,6 +58,7 @@ export default function CheckoutPage() {
   const [couponData, setCouponData] = useState({
     studentName: "",
     academyName: "",
+    academyNo: "",
     studentAddress: "",
   });
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -136,6 +137,7 @@ export default function CheckoutPage() {
     if (
       couponData.studentName &&
       couponData.academyName &&
+      couponData.academyNo &&
       couponData.studentAddress
     ) {
       setDiscountApplied(true);
@@ -176,7 +178,7 @@ export default function CheckoutPage() {
       try {
         // Create Razorpay order
         const { data } = await axios.post(
-          "https://api.lgmsports.in/api/payment/order",
+          "http://localhost:5000/api/payment/order",
           {
             amount: totalAmount,
           }
@@ -206,6 +208,7 @@ export default function CheckoutPage() {
                 ? {
                     studentName: couponData.studentName,
                     academyName: couponData.academyName,
+                    academyNo: couponData.academyNo,
                     studentAddress: couponData.studentAddress,
                     discountAmount: discountAmount * 100, // Convert to paise/cents for backend
                   }
@@ -213,7 +216,7 @@ export default function CheckoutPage() {
 
               // Verify + save order
               const verify = await axios.post(
-                "https://api.lgmsports.in/api/payment/verify",
+                "http://localhost:5000/api/payment/verify",
                 {
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
@@ -278,12 +281,13 @@ export default function CheckoutPage() {
         ? {
             studentName: couponData.studentName,
             academyName: couponData.academyName,
+            academyNo: couponData.academyNo,
             studentAddress: couponData.studentAddress,
             discountAmount: discountAmount * 100, // Convert to paise/cents for backend
           }
         : null;
 
-      const response = await fetch("https://api.lgmsports.in/api/orders", {
+      const response = await fetch("http://localhost:5000/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -751,65 +755,80 @@ export default function CheckoutPage() {
 
             {/* Form */}
             <form onSubmit={applyCoupon} className="space-y-4 text-black">
-              {/* Student Name */}
-              <div className="relative">
-                <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="studentName"
-                  value={couponData.studentName}
-                  onChange={handleCouponChange}
-                  placeholder="Your Name"
-                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-                  required
-                />
-              </div>
+  {/* Student Name */}
+  <div className="relative">
+    <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+    <input
+      type="text"
+      name="studentName"
+      value={couponData.studentName}
+      onChange={handleCouponChange}
+      placeholder="Your Name"
+      className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+      required
+    />
+  </div>
 
-              {/* Academy Name */}
-              <div className="relative">
-                <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="academyName"
-                  value={couponData.academyName}
-                  onChange={handleCouponChange}
-                  placeholder="Academy Name"
-                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-                  required
-                />
-              </div>
+  {/* Academy Name */}
+  <div className="relative">
+    <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+    <input
+      type="text"
+      name="academyName"
+      value={couponData.academyName}
+      onChange={handleCouponChange}
+      placeholder="Academy Name"
+      className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+      required
+    />
+  </div>
 
-              {/* Student Address */}
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  name="studentAddress"
-                  value={couponData.studentAddress}
-                  onChange={handleCouponChange}
-                  placeholder="Student's Address"
-                  className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
-                  required
-                />
-              </div>
+  {/* Academy No. */}
+  <div className="relative">
+    <GraduationCap className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+    <input
+      type="text"
+      name="academyNo"
+      value={couponData.academyNo}
+      onChange={handleCouponChange}
+      placeholder="Academy No."
+      className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+      required
+    />
+  </div>
 
-              {/* Actions */}
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCouponForm(false)}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-gradient-to-r from-orange-400 via-red-300 to-blue-300 text-black rounded-lg hover:bg-green-700 transition shadow-md"
-                >
-                  Apply
-                </button>
-              </div>
-            </form>
+  {/* Student Address */}
+  <div className="relative">
+    <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+    <input
+      type="text"
+      name="studentAddress"
+      value={couponData.studentAddress}
+      onChange={handleCouponChange}
+      placeholder="Student's Address"
+      className="w-full border px-10 py-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+      required
+    />
+  </div>
+
+  {/* Actions */}
+  <div className="flex justify-end gap-2 pt-2">
+    <button
+      type="button"
+      onClick={() => setShowCouponForm(false)}
+      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      className="px-4 py-2 bg-gradient-to-r from-orange-400 via-red-300 to-blue-300 text-black rounded-lg hover:bg-green-700 transition shadow-md"
+    >
+      Apply
+    </button>
+  </div>
+</form>
+
           </div>
         </div>
       )}

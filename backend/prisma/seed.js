@@ -18,7 +18,7 @@
       { code: "A0339", colors: [{ name: "Black", hexCode: "#000000" }, { name: "Blue", hexCode: "#0000FF" }, { name: "Red", hexCode: "#FF0000" }] },
       { code: "A0311", colors: [{ name: "Green", hexCode: "#00FF00" },{ name: "Blue", hexCode: "#0000FF" }, { name: "Orange", hexCode: "#FFA500"} ] },
       { code: "A0016", colors: [{ name: "Orange", hexCode: "#FFA500" }, { name: "Blue", hexCode: "#0000FF" }] },
-      { code: "A0036", colors: [{ name: "Blue", hexCode: "#0000FF" }, { name: "Red", hexCode: "#FF0000" }, { name: "Green", hexCode: "#00FF00" }] },
+      { code: "A0036", colors: [{ name: "Blue", hexCode: "#0000FF" }, { name: "Red", hexCode: "#FF0000" }, { name: "LightBlue", hexCode: "#ADD8E6" }] },
       { code: "A0046", colors: [{ name: "Black", hexCode: "#000000" }, { name: "Yellow", hexCode: "#FFFF00" }] },
       { code: "A0066", colors: [{ name: "Yellow", hexCode: "#FFFF00" }, { name: "Blue", hexCode: "#0000FF" }, { name: "Orange", hexCode: "#FFA500" }] },
       { code: "A0067", colors: [{ name: "Green", hexCode: "#00FF00" }, { name: "Orange", hexCode: "#FFA500" }] },
