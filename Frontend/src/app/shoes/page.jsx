@@ -59,7 +59,7 @@ export default function Shoes() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/products");
+        const res = await fetch("https://api.lgmsports.in/api/products");
         let data = await res.json();
 
         // Filter only Baby + Tenacity codes
@@ -305,42 +305,67 @@ export default function Shoes() {
                     </svg>
                   </button>
                 </div>
-                    {/* Color selector */}
-                      {["A0036"].includes(product.code) && product.colors?.length > 0 && (
-                          <div className="flex items-center gap-2 ml-5">
-                            {product.colors.map((color) => {
-                              const isSelected = selections[product.id]?.color === color.name;
-                              return (
-                                <button
-                                  key={color.name}
-                                  onClick={() => {
-                                    setSelection(
-                                      product.id,
-                                      "color",
-                                      color.name
-                                    );
-                                    setProducts((prev) =>
-                                      prev.map((p) =>
-                                        p.id === product.id
-                                          ? { ...p, image: color.image }
-                                          : p
-                                      )
-                                    );
-                                  }}
-                                  className={`w-6 h-6 rounded-full border-2 ${
-                                    selections[product.id]?.color === color.name
-                                      ? "border-black"
-                                      : "border-gray-300"
-                                  }`}
-                                  style={{
-                                    backgroundColor:
-                                      color.hexCode?.trim() || "#fff",
-                                  }}
-                                ></button>
+                {/* Color selector */}
+                {["A0036"].includes(product.code) &&
+                  product.colors?.length > 0 && (
+                    <div className="flex items-center gap-2 ml-5">
+                      {product.colors.map((color) => {
+                        const isSelected =
+                          selections[product.id]?.color === color.name;
+                        return (
+                          <button
+                            key={color.name}
+                            onClick={() => {
+                              setSelection(product.id, "color", color.name);
+                              setProducts((prev) =>
+                                prev.map((p) =>
+                                  p.id === product.id
+                                    ? { ...p, image: color.image }
+                                    : p
+                                )
                               );
-                            })}
-                          </div>
-                      )}
+                            }}
+                            className={`w-6 h-6 rounded-full border-2 ${
+                              selections[product.id]?.color === color.name
+                                ? "border-black"
+                                : "border-gray-300"
+                            }`}
+                            style={{
+                              backgroundColor: color.hexCode?.trim() || "#fff",
+                            }}
+                          ></button>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                {/* Size selector */}
+                {["A0036", "A0037", "A0035", "A0038", "A0039"].includes(product.code) && (
+                  <div className="flex items-center gap-2 ml-5 mt-2">
+                    {["6", "7", "8", "9"].map((size) => {
+                      const isSelected = selections[product.id]?.size === size;
+                      return (
+                        <button
+                          key={size}
+                          onClick={() => setSelection(product.id, "size", size)}
+                          className={`
+            w-10 h-10 flex items-center justify-center 
+            rounded-md border-2 font-medium text-sm
+            transition-all duration-200
+            ${
+              isSelected
+                ? "border-black bg-black text-white"
+                : "border-gray-300 bg-white text-gray-700 hover:border-black hover:bg-gray-100"
+            }
+          `}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
                 {/* Details */}
                 <div
                   className={`flex flex-col ${
