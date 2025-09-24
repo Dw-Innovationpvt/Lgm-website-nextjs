@@ -113,7 +113,7 @@ export default function ProfilePage() {
     try {
       setLoadingOrders(true);
       const res = await fetch(
-        `http://localhost:5000/api/orders?email=${email}`
+        `https://api.lgmsports.in/api/orders?email=${email}`
       );
       const data = await res.json();
       if (data.success) {

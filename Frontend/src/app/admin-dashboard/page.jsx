@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `http://localhost:5000/api/products/${pricePopover.productId}/price`,
+        `https://api.lgmsports.in/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -197,14 +197,14 @@ export default function AdminDashboard() {
       router.push("/admin-login");
     } else {
       // Fetch orders
-      fetch("http://localhost:5000/api/admin/orders")
+      fetch("https://api.lgmsports.in/api/admin/orders")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) setOrders(data.orders);
         });
 
       // Fetch products
-      fetch("http://localhost:5000/api/products")
+      fetch("https://api.lgmsports.in/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -212,7 +212,7 @@ export default function AdminDashboard() {
 
       // Fetch academic details
       setLoadingAcademic(true);
-      fetch("http://localhost:5000/api/admin/academic-details")
+      fetch("https://api.lgmsports.in/api/admin/academic-details")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/products/${productId}/stock`,
+        `https://api.lgmsports.in/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
   const handleDeliveryStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/orders/${orderId}/status`,
+        `https://api.lgmsports.in/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
