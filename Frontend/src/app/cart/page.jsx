@@ -202,7 +202,7 @@ const CartPage = () => {
                       </div>
 
                       <button
-                        onClick={() => removeFromCart(item.id, item.type)}
+                        onClick={() => removeFromCart(item.uniqueKey, item.type)}
                         className="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200 transform hover:scale-110 hover:rotate-12"
                         aria-label="Remove item"
                       >

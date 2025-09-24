@@ -96,6 +96,7 @@ export const createOrder = async (req, res) => {
           data: {
             studentName: academicDetails.studentName,
             academyName: academicDetails.academyName,
+            academyNo: academicDetails.academyNo,
             studentAddress: academicDetails.studentAddress,
             orderId: newOrder.id,
           },
@@ -525,11 +526,12 @@ export const createAcademicDetails = async (req, res) => {
       orderId,
       studentName,
       academyName,
+      academyNo,
       studentAddress,
       discountAmount,
     } = req.body;
 
-    if (!orderId || !studentName || !academyName || !studentAddress) {
+    if (!orderId || !studentName || !academyName || !academyNo || !studentAddress) {
       return res.status(400).json({
         success: false,
         message:
@@ -565,6 +567,7 @@ export const createAcademicDetails = async (req, res) => {
       data: {
         studentName,
         academyName,
+        academyNo,
         studentAddress,
         orderId: parseInt(orderId),
       },

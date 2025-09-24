@@ -41,7 +41,7 @@ export default function GuardSet() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://api.lgmsports.in/api/products");
+        const res = await fetch("http://localhost:5000/api/products");
         let data = await res.json();
 
         // Filter only Guard Set codes
@@ -131,11 +131,18 @@ export default function GuardSet() {
 };
 
   const handleBuyNow = (product) => {
-    const { color = "", size = "" } = selections[product.id] || {};
-    addToCart({ ...product, selectedColor: color, selectedSize: size });
-    router.push("/checkout");
-  };
+  const selectedColor = selections[product.id]?.color || null;
 
+  addToCart({
+    ...product,
+    selectedColor,
+    selectedColorHex:
+      product.colors.find((c) => c.name === selectedColor)?.hexCode || null,
+    uniqueKey: `${product.id}-${selectedColor || "default"}`, // 👈 Important
+  });
+
+  router.push("/checkout");
+  };
   const openImageModal = (product) => {
     setSelectedProduct(product);
     setCurrentImageIndex(0);
