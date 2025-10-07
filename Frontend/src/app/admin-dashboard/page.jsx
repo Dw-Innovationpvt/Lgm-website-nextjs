@@ -143,6 +143,7 @@ export default function AdminDashboard() {
     const headers = [
       "Student Name",
       "Academy Name",
+      "Academy No",
       "Student Address",
       "Order ID",
       "Order Date",
@@ -154,6 +155,7 @@ export default function AdminDashboard() {
     const csvData = academicDetails.map((detail) => [
       detail.studentName,
       detail.academyName,
+      detail.academyNo,
       detail.studentAddress,
       detail.orderId,
       detail.createdAt ? formatDate(detail.createdAt) : "-",
