@@ -574,7 +574,7 @@ export default function BabyTenacityPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://api.lgmsports.in/api/products");
+        const res = await fetch("https://lgmsports.onrender.com/api/products");
         let data = await res.json();
 
         // Filter only Baby + Tenacity codes

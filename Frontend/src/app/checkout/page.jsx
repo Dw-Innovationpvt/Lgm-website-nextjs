@@ -178,7 +178,7 @@ export default function CheckoutPage() {
       try {
         // Create Razorpay order
         const { data } = await axios.post(
-          "https://api.lgmsports.in/api/payment/order",
+          "https://lgmsports.onrender.com/api/payment/order",
           {
             amount: totalAmount,
           }
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
 
               // Verify + save order
               const verify = await axios.post(
-                "https://api.lgmsports.in/api/payment/verify",
+                "https://lgmsports.onrender.com/api/payment/verify",
                 {
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
@@ -287,7 +287,7 @@ export default function CheckoutPage() {
           }
         : null;
 
-      const response = await fetch("https://api.lgmsports.in/api/orders", {
+      const response = await fetch("https://lgmsports.onrender.com/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -36,7 +36,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://api.lgmsports.in/api/auth/signup", {
+      const res = await fetch("https://lgmsports.onrender.com/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

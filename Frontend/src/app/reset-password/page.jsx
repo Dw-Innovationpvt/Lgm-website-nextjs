@@ -28,7 +28,7 @@ function ResetPasswordForm() {
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
-    const resetPromise = fetch("https://api.lgmsports.in/api/auth/reset-password", {
+    const resetPromise = fetch("https://lgmsports.onrender.com/api/auth/reset-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, otp, newPassword }),
