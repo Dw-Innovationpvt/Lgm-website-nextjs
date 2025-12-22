@@ -113,7 +113,7 @@ export default function ProfilePage() {
     try {
       setLoadingOrders(true);
       const res = await fetch(
-        `https://lgmsports.onrender.com/api/orders?email=${email}`
+        `https://lgmsports.in/api/orders?email=${email}`
       );
       const data = await res.json();
       if (data.success) {

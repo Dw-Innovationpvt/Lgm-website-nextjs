@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `https://lgmsports.onrender.com/api/products/${pricePopover.productId}/price`,
+        `https://lgmsports.in/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -197,14 +197,14 @@ export default function AdminDashboard() {
       router.push("/admin-login");
     } else {
       // Fetch orders
-      fetch("https://lgmsports.onrender.com/api/admin/orders")
+      fetch("https://lgmsports.in/api/admin/orders")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) setOrders(data.orders);
         });
 
       // Fetch products
-      fetch("https://lgmsports.onrender.com/api/products")
+      fetch("https://lgmsports.in/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -212,7 +212,7 @@ export default function AdminDashboard() {
 
       // Fetch academic details
       setLoadingAcademic(true);
-      fetch("https://lgmsports.onrender.com/api/admin/academic-details")
+      fetch("https://lgmsports.in/api/admin/academic-details")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `https://lgmsports.onrender.com/api/products/${productId}/stock`,
+        `https://lgmsports.in/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
   const handleDeliveryStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `https://lgmsports.onrender.com/api/orders/${orderId}/status`,
+        `https://lgmsports.in/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

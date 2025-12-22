@@ -41,7 +41,7 @@ export default function GuardSet() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://lgmsports.onrender.com/api/products");
+        const res = await fetch("https://lgmsports.in/api/products");
         let data = await res.json();
 
         // Filter only Guard Set codes

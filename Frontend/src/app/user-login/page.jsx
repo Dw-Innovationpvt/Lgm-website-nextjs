@@ -18,7 +18,7 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://lgmsports.onrender.com/api/auth/login", {
+      const res = await fetch("https://lgmsports.in/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }), // Use the state variables directly
