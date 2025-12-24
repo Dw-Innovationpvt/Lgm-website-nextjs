@@ -1,5 +1,5 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { createServer } from "http";
@@ -11,6 +11,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 
 dotenv.config();
+console.log(process.env.RAZORPAY_KEY_ID);
 
 const app = express();
 const prisma = new PrismaClient();
