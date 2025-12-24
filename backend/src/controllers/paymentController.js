@@ -210,110 +210,164 @@
 
 
 
-
-// controllers/paymentController.js
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import prisma from "../lib/prismaClient.js";
 
-
+// Razorpay instance
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Create Razorpay order
+/**
+ * =========================
+ * CREATE RAZORPAY ORDER
+ * =========================
+ * Expects: { amount }
+ * amount = total amount in rupees
+ */
 export const createOrder = async (req, res) => {
-  const { amount } = req.body;
   try {
+    const { amount } = req.body;
+
+    if (!amount) {
+      return res.status(400).json({
+        success: false,
+        message: "Amount is required",
+      });
+    }
+
     const order = await razorpay.orders.create({
-      amount: amount * 100, // paise
+      amount: amount * 100, // convert to paise
       currency: "INR",
-      receipt: `order_${Date.now()}`,
+      receipt: `receipt_${Date.now()}`,
     });
-    res.json(order);
+
+    return res.status(200).json(order);
   } catch (error) {
-    console.error("Error creating Razorpay order:", error);
-    res.status(500).json({ error: "Failed to create order" });
+    console.error("❌ Razorpay order error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to create Razorpay order",
+    });
   }
 };
 
-// Verify Razorpay payment
+/**
+ * =========================
+ * VERIFY PAYMENT & SAVE ORDER
+ * =========================
+ */
 export const verifyPayment = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, formData, cart, totalAmount, discountApplied, discountAmount, couponData } = req.body;
-
   try {
-    // Verify the payment signature
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      formData,
+      cart,
+      totalAmount,
+      discountApplied,
+      discountAmount,
+      couponData,
+    } = req.body;
+
+    // Basic validation
+    if (
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !razorpay_signature
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing Razorpay payment details",
+      });
+    }
+
+    // Verify signature
     const sign = `${razorpay_order_id}|${razorpay_payment_id}`;
-    const expectedSign = crypto
+    const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(sign)
       .digest("hex");
 
-    if (expectedSign !== razorpay_signature) {
-      return res.status(400).json({ success: false, message: "Invalid payment signature" });
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid payment signature",
+      });
     }
 
-    // Extract user email from the form data
-    const userEmail = formData.email;
-    if (!userEmail) {
-      return res.status(400).json({ success: false, message: "User email is required" });
+    if (!formData?.email) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer email is required",
+      });
     }
 
-    // Create the order in the database
-    const order = await prisma.$transaction(async (tx) => {
-      // Create the order
+    // Transaction: create order + items + update stock
+    await prisma.$transaction(async (tx) => {
+      // Create Order
       const newOrder = await tx.order.create({
         data: {
           firstName: formData.firstName,
           lastName: formData.lastName,
-          email: userEmail, // Explicitly set the email field
+          email: formData.email,
           phone: formData.phone,
           address: formData.address,
           city: formData.city,
           state: formData.state,
           pincode: formData.pincode,
+
           paymentMethod: "razorpay",
-          totalAmount: totalAmount * 100, // Convert to paise
           paymentStatus: "success",
+
+          totalAmount: totalAmount * 100, // paise
+          discountApplied: discountApplied || false,
+          discountAmount: discountAmount ? discountAmount * 100 : 0,
+          couponCode: couponData?.code || null,
+
           razorpayOrderId: razorpay_order_id,
           razorpayPaymentId: razorpay_payment_id,
           razorpaySignature: razorpay_signature,
+
           items: {
             create: cart.map((item) => ({
+              productId: item.id,
               name: item.name,
               quantity: item.quantity,
-              price: item.price * 100, // Convert to paise
+              price: item.price * 100, // paise
             })),
           },
         },
       });
 
-      // Update stock for each product (if product exists)
+      // Update stock
       for (const item of cart) {
-        const productExists = await tx.product.findUnique({
+        await tx.product.update({
           where: { id: item.id },
-        });
-        
-        if (productExists) {
-          await tx.product.update({
-            where: { id: item.id },
-            data: {
-              stockQuantity: {
-                decrement: item.quantity,
-              },
+          data: {
+            stockQuantity: {
+              decrement: item.quantity,
             },
-          });
-        }
+          },
+        });
       }
 
       return newOrder;
     });
 
-    res.status(200).json({ success: true, message: "Payment verified & order created successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "Payment verified & order placed successfully",
+    });
   } catch (error) {
-    console.error("Error verifying payment:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("❌ Payment verification error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while verifying payment",
+    });
   }
 };
 
