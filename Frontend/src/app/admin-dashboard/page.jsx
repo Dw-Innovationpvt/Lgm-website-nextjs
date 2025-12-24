@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `https://api.lgmsports.in/api/products/${pricePopover.productId}/price`,
+        `http://64.227.150.72/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -204,7 +204,7 @@ export default function AdminDashboard() {
         });
 
       // Fetch products
-      fetch("https://api.lgmsports.in/api/products")
+      fetch("http://64.227.150.72/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `https://api.lgmsports.in/api/products/${productId}/stock`,
+        `http://64.227.150.72/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
