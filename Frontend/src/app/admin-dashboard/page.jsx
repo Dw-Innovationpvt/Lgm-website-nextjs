@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `http://64.227.150.72/api/products/${pricePopover.productId}/price`,
+        `http://64.227.150.72:5000/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -197,14 +197,14 @@ export default function AdminDashboard() {
       router.push("/admin-login");
     } else {
       // Fetch orders
-      fetch("https://api.lgmsports.in/api/admin/orders")
+      fetch("http://64.227.150.72:5000/api/admin/orders")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) setOrders(data.orders);
         });
 
       // Fetch products
-      fetch("http://64.227.150.72/api/products")
+      fetch("http://64.227.150.72:5000/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -212,7 +212,7 @@ export default function AdminDashboard() {
 
       // Fetch academic details
       setLoadingAcademic(true);
-      fetch("https://api.lgmsports.in/api/admin/academic-details")
+      fetch("http://64.227.150.72:5000/api/admin/academic-details")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `http://64.227.150.72/api/products/${productId}/stock`,
+        `http://64.227.150.72:5000/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
@@ -285,7 +285,7 @@ export default function AdminDashboard() {
   const handleDeliveryStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `https://api.lgmsports.in/api/orders/${orderId}/status`,
+        `http://64.227.150.72:5000/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

@@ -61,7 +61,7 @@ export default function Accessories() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://64.227.150.72/api/products");
+        const res = await fetch("http://64.227.150.72:5000/api/products");
         let data = await res.json();
 
         // Filter only Guard Set codes
@@ -110,26 +110,32 @@ export default function Accessories() {
         );
         
         data = data.map((p) => {
-          const firstColorImage = productImages[p.code]
-            ? productImages[p.code][Object.keys(productImages[p.code])[0]]
-            : "/placeholder.png";
+          let firstColorImage = "/placeholder.png";
+
+          if (Array.isArray(productImages[p.code])) {
+            firstColorImage = productImages[p.code][0];
+          } else if (typeof productImages[p.code] === "object") {
+            firstColorImage = Object.values(productImages[p.code])[0];
+          }
 
           return {
             ...p,
             image: firstColorImage,
-            images: Object.values(
-              productImages[p.code] || ["/placeholder.png"]
-            ),
+            images: Array.isArray(productImages[p.code])
+              ? productImages[p.code]
+              : Object.values(productImages[p.code] || ["/placeholder.png"]),
             specs: {
               usage: "Skating",
               wheels: "4 Wheel",
               material: "Stainless Steel",
             },
-            colors: p.colors.map((c) => ({
-              name: c.name,
-              hexCode: c.hexCode,
-              image: productImages[p.code]?.[c.name] || firstColorImage,
-            })),
+            colors: Array.isArray(p.colors)
+              ? p.colors.map((c) => ({
+                  name: c.name,
+                  hexCode: c.hexCode,
+                  image: productImages[p.code]?.[c.name] || firstColorImage,
+                }))
+              : [],
             sizes: ["Small", "Medium", "Large"],
             countInStock: p.stockQuantity ?? 0,
           };

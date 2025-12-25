@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
   const handleSendOTP = async (e) => {
     e.preventDefault();
 
-    const otpPromise = fetch("https://api.lgmsports.in/api/auth/forgot-password", {
+    const otpPromise = fetch("http://64.227.150.72:5000/api/auth/forgot-password", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

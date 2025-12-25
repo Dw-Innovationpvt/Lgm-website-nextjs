@@ -460,7 +460,7 @@ export default function SpacersAxleAdapter() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://64.227.150.72/api/products");
+        const res = await fetch("http://64.227.150.72:5000/api/products");
         let data = await res.json();
 
         // Filter only Baby + Tenacity codes

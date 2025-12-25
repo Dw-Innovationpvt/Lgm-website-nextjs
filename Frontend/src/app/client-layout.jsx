@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import CategoryWrapper from "../components/CategoryWrapper";
 import { FaWhatsapp } from "react-icons/fa";
 import { usePathname } from "next/navigation";
-import Loader from '../components/Loader';
+// import Loader from '../components/Loader';
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export default function ClientLayout({ children }) {
 
     const timeout = setTimeout(() => {
       setLoading(false);
-    },1900);
+    },300);
 
     return () => clearTimeout(timeout);
   }, [pathname]);
@@ -31,7 +31,7 @@ export default function ClientLayout({ children }) {
       {!hideNavFooter && <Navbar />}
       {!hideNavFooter && <CategoryWrapper />}
       {/* Loader will appear when loading is true */}
-      <Loader loading={loading} />
+
       {children}
 
       {!hideNavFooter && (
