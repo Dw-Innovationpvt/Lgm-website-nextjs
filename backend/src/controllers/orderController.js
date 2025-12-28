@@ -113,7 +113,16 @@ export const createOrder = async (req, res) => {
 
     // ---- Puppeteer Invoice Generation ----
   const generateInvoicePdf = async (order) => {
-  const browser = await puppeteer.launch({ headless: "new" });
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--single-process"
+    ]
+  });
   const page = await browser.newPage();
 
   // Convert logo to Base64
