@@ -115,7 +115,7 @@ export const createOrder = async (req, res) => {
   const generateInvoicePdf = async (order) => {
   const browser = await puppeteer.launch({
   headless: "new",
-  executablePath: '/root/.cache/puppeteer/chrome/linux-140.0.7339.82/chrome-linux64/chrome',
+  executablePath: '/usr/bin/chromium-browser',
   args: [
     "--no-sandbox",
     "--disable-setuid-sandbox",
