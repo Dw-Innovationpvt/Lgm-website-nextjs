@@ -61,7 +61,7 @@ const CartPage = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/inline-skates"
-                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-orange-500 text-white px-6 py-3.5 rounded-lg font-medium hover:from-blue-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1 active:translate-y-0"
+                className="inline-flex items-center justify-center cursor-pointer gap-2 bg-gradient-to-r from-blue-500 to-orange-500 text-white px-6 py-3.5 rounded-lg font-medium hover:from-blue-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-1 active:translate-y-0"
               >
                 <FiShoppingBag className="w-5 h-5" />
                 Start Shopping
@@ -114,7 +114,7 @@ const CartPage = () => {
                 </Link>
                 <button
                   onClick={clearCart}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all text-sm md:text-base font-medium border border-red-200"
+                  className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all text-sm md:text-base font-medium border border-red-200"
                 >
 
                   {/* <div className="w-20 h-20 md:w-24 md:h-24 flex-shrink-0 mx-auto sm:mx-0">
@@ -203,7 +203,7 @@ const CartPage = () => {
 
                       <button
                         onClick={() => removeFromCart(item.uniqueKey, item.type)}
-                        className="p-2 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200 transform hover:scale-110 hover:rotate-12"
+                        className="p-2 cursor-pointer text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-200 transform hover:scale-110 hover:rotate-12"
                         aria-label="Remove item"
                       >
                         <FiTrash2 className="w-5 h-5" />
@@ -269,7 +269,7 @@ const CartPage = () => {
                             router.push("/user-login");
                           }
                         }}
-                        className="w-full bg-gradient-to-r from-blue-500 to-orange-500 text-white py-3.5 rounded-lg text-base font-semibold hover:from-blue-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 transform hover:translate-y-[-2px] active:translate-y-[0px]"
+                        className="w-full cursor-pointer bg-gradient-to-r from-blue-500 to-orange-500 text-white py-3.5 rounded-lg text-base font-semibold hover:from-blue-600 hover:to-orange-600 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 transform hover:translate-y-[-2px] active:translate-y-[0px]"
                       >
                         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M20 12V22H4V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -319,7 +319,6 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

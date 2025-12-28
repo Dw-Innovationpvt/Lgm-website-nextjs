@@ -113,11 +113,11 @@ export default function ProfilePage() {
     try {
       setLoadingOrders(true);
       const res = await fetch(
-        `http://64.227.150.72:5000/api/orders?email=${email}`
+        `https://api.lgmsports.in/api/orders?email=${email}`
       );
       const data = await res.json();
       if (data.success) {
-        console.log("Order data received:", data.orders);
+        // console.log("Order data received:", data.orders);
         setOrders(data.orders);
       }
     } catch (err) {
@@ -131,7 +131,7 @@ export default function ProfilePage() {
     try {
       setLoadingId(order.id);
 
-      const res = await fetch("/api/generate-invoice", {
+      const res = await fetch("https://api.lgmsports.in/api/generate-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order }),
@@ -183,7 +183,7 @@ export default function ProfilePage() {
         <div className="flex justify-center mb-8 border-b border-gray-300">
           <button
             onClick={() => setActiveTab("profile")}
-            className={`px-6 py-3 font-semibold border-b-2 ${
+            className={`px-6 py-3 font-semibold cursor-pointer border-b-2 ${
               activeTab === "profile"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-gray-500 hover:text-gray-700 transition"
@@ -193,7 +193,7 @@ export default function ProfilePage() {
           </button>
           <button
             onClick={() => setActiveTab("orders")}
-            className={`px-6 py-3 font-semibold border-b-2 ${
+            className={`px-6 py-3 font-semibold cursor-pointer border-b-2 ${
               activeTab === "orders"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-gray-500 hover:text-gray-700 transition"
@@ -275,7 +275,7 @@ export default function ProfilePage() {
             <div className="mt-10 flex justify-center md:justify-start">
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-7 py-3 rounded-2xl font-semibold shadow-lg transition-all duration-200 hover:scale-[1.05] active:scale-95"
+                className="flex items-center gap-2 cursor-pointer bg-red-500 hover:bg-red-600 text-white px-7 py-3 rounded-2xl font-semibold shadow-lg transition-all duration-200 hover:scale-[1.05] active:scale-95"
               >
                 <LogOut className="w-5 h-5" />
                 Logout
@@ -471,7 +471,7 @@ export default function ProfilePage() {
                             <button
                               onClick={() => downloadInvoice(order)}
                               disabled={loadingId === order.id}
-                              className="bg-orange-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
+                              className="bg-orange-600 hover:bg-blue-500 cursor-pointer text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
                             >
                               Download Invoice
                             </button>

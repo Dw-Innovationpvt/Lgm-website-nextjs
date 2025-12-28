@@ -4,6 +4,10 @@ import { io } from "../server.js";
 import puppeteer from "puppeteer";
 import path from 'path';
 import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const createOrder = async (req, res) => {
   try {
@@ -113,9 +117,7 @@ export const createOrder = async (req, res) => {
   const page = await browser.newPage();
 
   // Convert logo to Base64
-  const logoPath = path.resolve(
-    "E:/Projects/Lgm-website-nextjs/Frontend/public/logo.jpg"
-  );
+  const logoPath = path.join(__dirname, "../../public/logo.jpg");
   const logoBase64 = fs.readFileSync(logoPath).toString("base64");
   const logoData = `data:image/jpeg;base64,${logoBase64}`;
 

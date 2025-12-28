@@ -342,7 +342,7 @@ export default function Navbar() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-10 h-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center hover:bg-blue-100 relative transition-all duration-300 shadow-sm"
+              className="w-10 h-10 rounded-full cursor-pointer bg-blue-50 border border-blue-200 flex items-center justify-center hover:bg-blue-100 relative transition-all duration-300 shadow-sm"
             >
               <ShoppingBag className="text-blue-600 h-5 w-5" strokeWidth={2} />
               {cartCount > 0 && (
@@ -362,7 +362,7 @@ export default function Navbar() {
               onClick={handleProfileClick}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-10 h-10 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 relative transition-all duration-300 shadow-sm"
+              className="w-10 h-10 cursor-pointer rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 relative transition-all duration-300 shadow-sm"
             >
               <FiUser className="text-gray-700 h-5 w-5" strokeWidth={2} />
               {isLoggedIn && (

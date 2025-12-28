@@ -185,7 +185,7 @@ const Hero = () => {
               {group.map((slide, idx) => (
                 <div
                   key={idx}
-                  className="relative h-full group cursor-pointer overflow-hidden"
+                  className="relative h-full group overflow-hidden"
                   onClick={() => router.push(slide.link)}
                 >
                   <Image
