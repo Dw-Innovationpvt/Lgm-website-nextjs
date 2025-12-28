@@ -288,10 +288,12 @@ export const createOrder = async (req, res) => {
     // Send Order Confirmation Email
     try {
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.sendgrid.net",
+        port: 587,
+        secure: false, // true for 465, false for 587
         auth: {
-          user: process.env.EMAIL_USER, // Use env variables
-          pass: process.env.EMAIL_PASS,
+          user: process.env.EMAIL_USER, // must be 'apikey'
+          pass: process.env.EMAIL_PASS, // your SendGrid API key
         },
       });
 
@@ -405,6 +407,7 @@ export const createOrder = async (req, res) => {
       };
 
       await transporter.sendMail(mailOptions);
+      console.log("Order confirmation email sent successfully!");
     } catch (emailError) {
       console.error("Error sending email:", emailError);
     }
