@@ -36,7 +36,7 @@ export default function AcademicDetailsPage() {
   const fetchAcademicDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://64.227.150.72:5000/api/admin/academic-details");
+      const response = await fetch("https://api.lgmsports.in/api/admin/academic-details");
       const data = await response.json();
       
       if (data.success) {

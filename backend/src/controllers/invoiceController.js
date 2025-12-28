@@ -1,26 +1,29 @@
-import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
 
-export async function POST(req) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Generate invoice and send PDF via Express response
+export async function generateInvoice(req, res) {
   try {
-    const { order } = await req.json();
+    const { order } = req.body;
 
-    // Start Puppeteer
+    // Launch puppeteer
     const browser = await puppeteer.launch({
-      headless: "new", // For Next.js on Vercel use headless:true if needed
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
 
-    // === Build HTML Template ===
-    const logoBase64 = getBase64Logo(); // Convert logo.jpg to Base64
+    // Convert logo to base64
+    const logoBase64 = getBase64Logo();
     const html = generateInvoiceHTML(order, logoBase64);
 
-    // Load the HTML into Puppeteer
     await page.setContent(html, { waitUntil: "networkidle0" });
 
-    // Generate the PDF buffer
     const pdfBuffer = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -29,36 +32,42 @@ export async function POST(req) {
 
     await browser.close();
 
-    // Send PDF back as a response
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename=invoice_${order.id}.pdf`,
-      },
-    });
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=invoice_${order.id}.pdf`
+    );
+    return res.status(200).send(pdfBuffer);
   } catch (error) {
     console.error("Invoice generation error:", error);
-    return NextResponse.json(
-      { success: false, message: "Failed to generate invoice" },
-      { status: 500 }
-    );
+    return res.status(500).json({ success: false, message: "Failed to generate invoice" });
   }
 }
 
-// === Helper: Convert logo to Base64 ===
+// Helper: convert logo to base64
 function getBase64Logo() {
-  const logoPath = path.resolve(
-    "E:/Projects/Lgm-website-nextjs/Frontend/public/logo.jpg"
-  );
-  const img = fs.readFileSync(logoPath);
-  return `data:image/jpeg;base64,${img.toString("base64")}`;
+  try {
+    // This file is in: backend/src/...
+    // Logo is in: backend/public/logo.jpg
+    const logoPath = path.join(__dirname, "..", "..", "public", "logo.jpg");
+
+    if (!fs.existsSync(logoPath)) {
+      throw new Error(`Logo not found at ${logoPath}`);
+    }
+
+    const img = fs.readFileSync(logoPath);
+    return `data:image/jpeg;base64,${img.toString("base64")}`;
+  } catch (err) {
+    console.warn("Logo not found, using empty placeholder:", err.message);
+    return "";
+  }
 }
 
-// === Helper: Generate Styled HTML ===
+// HTML generator copied from frontend implementation to keep formatting identical
 function generateInvoiceHTML(order, logo) {
-  const itemsRows = order.items
+  const itemsRows = (order.items || [])
     .map(
-      (item, i) => `
+      (item) => `
       <tr>
         <td>
           ${item.name} 
@@ -85,7 +94,7 @@ function generateInvoiceHTML(order, logo) {
     )
     .join("");
 
-  const subtotal = (order.totalAmount / 100).toFixed(2);
+  const subtotal = ((order.totalAmount || 0) / 100).toFixed(2);
   const discount =
     typeof order.discountAmount === "number" && order.discountAmount > 0
       ? `₹${(order.discountAmount / 100).toFixed(2)}`
@@ -281,4 +290,3 @@ function generateInvoiceHTML(order, logo) {
 </body>
 </html>`;
 }
-

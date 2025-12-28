@@ -23,6 +23,7 @@ import {
   Search,
   Download,
   Calendar,
+  SearchIcon
 } from "lucide-react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
@@ -35,6 +36,7 @@ export default function AdminDashboard() {
   const [stockUpdates, setStockUpdates] = useState({});
   const [academicCount, setAcademicCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [productSearch, setProductSearch] = useState("");
   const [loadingAcademic, setLoadingAcademic] = useState(true);
   const [pricePopover, setPricePopover] = useState({
     open: false,
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
     try {
       setLoadingId(order.id);
 
-      const res = await fetch("/api/generate-invoice", {
+      const res = await fetch("https://api.lgmsports.in/api/generate-invoice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ order }),
@@ -89,7 +91,7 @@ export default function AdminDashboard() {
     try {
       setUpdatingPrice(true); // start loading
       const response = await fetch(
-        `http://64.227.150.72:5000/api/products/${pricePopover.productId}/price`,
+        `https://api.lgmsports.in/api/products/${pricePopover.productId}/price`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -191,20 +193,30 @@ export default function AdminDashboard() {
       detail.order?.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Filter products for Stocks tab based on product name or code
+  const filteredProducts = products.filter((product) => {
+    if (!productSearch) return true;
+    const q = productSearch.toLowerCase();
+    return (
+      (product.name || "").toLowerCase().includes(q) ||
+      (product.code || "").toLowerCase().includes(q)
+    );
+  });
+
   useEffect(() => {
     const admin = localStorage.getItem("admin");
     if (!admin) {
       router.push("/admin-login");
     } else {
       // Fetch orders
-      fetch("http://64.227.150.72:5000/api/admin/orders")
+      fetch("https://api.lgmsports.in/api/admin/orders")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) setOrders(data.orders);
         });
 
       // Fetch products
-      fetch("http://64.227.150.72:5000/api/products")
+      fetch("https://api.lgmsports.in/api/products")
         .then((res) => res.json())
         .then((data) => {
           setProducts(data);
@@ -212,7 +224,7 @@ export default function AdminDashboard() {
 
       // Fetch academic details
       setLoadingAcademic(true);
-      fetch("http://64.227.150.72:5000/api/admin/academic-details")
+      fetch("https://api.lgmsports.in/api/admin/academic-details")
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -248,7 +260,7 @@ export default function AdminDashboard() {
 
     try {
       const res = await fetch(
-        `http://64.227.150.72:5000/api/products/${productId}/stock`,
+        `https://api.lgmsports.in/api/products/${productId}/stock`,
         {
           method: "PUT",
           headers: {
@@ -285,7 +297,7 @@ export default function AdminDashboard() {
   const handleDeliveryStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `http://64.227.150.72:5000/api/orders/${orderId}/status`,
+        `https://api.lgmsports.in/api/orders/${orderId}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -328,7 +340,7 @@ export default function AdminDashboard() {
           </h1>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-all shadow-md"
+            className="flex items-center cursor-pointer gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-all shadow-md"
           >
             <LogOut size={18} />
             Logout
@@ -348,13 +360,13 @@ export default function AdminDashboard() {
           <div className="flex border-b bg-gradient-to-r from-blue-50 to-orange-50">
             <button
               onClick={() => setActiveTab("orders")}
-              className={`px-6 py-4 font-medium transition-all duration-200 ${
+              className={`px-6 py-4 cursor-pointer font-medium transition-all duration-200 ${
                 activeTab === "orders"
                   ? "text-blue-700 border-b-2 border-blue-600 bg-white"
                   : "text-gray-600 hover:text-orange-600"
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 cursor-pointer">
                 <ShoppingBag
                   size={18}
                   className={
@@ -366,7 +378,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab("stocks")}
-              className={`px-6 py-4 font-medium transition-all duration-200 ${
+              className={`px-6 py-4 font-medium cursor-pointer transition-all duration-200 ${
                 activeTab === "stocks"
                   ? "text-orange-700 border-b-2 border-orange-500 bg-white"
                   : "text-gray-600 hover:text-blue-600"
@@ -384,7 +396,7 @@ export default function AdminDashboard() {
             </button>
             <button
               onClick={() => setActiveTab("academic")}
-              className={`px-6 py-4 font-medium transition-all duration-200 ${
+              className={`px-6 py-4 font-medium cursor-pointer transition-all duration-200 ${
                 activeTab === "academic"
                   ? "text-blue-700 border-b-2 border-blue-600 bg-white"
                   : "text-gray-600 hover:text-orange-600"
@@ -442,7 +454,7 @@ export default function AdminDashboard() {
                             <button
                               onClick={() => downloadInvoice(order)}
                               disabled={loadingId === order.id}
-                              className="bg-orange-600 hover:bg-blue-500 text-white px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
+                              className="bg-orange-600 hover:bg-blue-500 text-white cursor-pointer px-6 py-2 rounded-xl font-semibold shadow-md hover:shadow-lg transition"
                             >
                               Download Invoice
                             </button>
@@ -461,7 +473,7 @@ export default function AdminDashboard() {
                                 e.target.value
                               )
                             }
-                            className={`border rounded-lg px-3 py-1 text-sm font-medium focus:outline-none transition-all duration-200 ${
+                            className={`border rounded-lg cursor-pointer px-3 py-1 text-sm font-medium focus:outline-none transition-all duration-200 ${
                               order.deliveryStatus === "Delivered"
                                 ? "bg-green-100 border-green-400 text-green-800"
                                 : order.deliveryStatus === "Shipped"
@@ -592,8 +604,23 @@ export default function AdminDashboard() {
                 Stock Management
               </h2>
 
+              <div className="flex justify-center items-center mb-6">
+                <div className="relative w-full md:w-1/3">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-500" />
+                  <input
+                    type="text"
+                    placeholder="Search products by name or code"
+                    value={productSearch}
+                    onChange={(e) => setProductSearch(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 border border-orange-200 text-gray-700 rounded-lg 
+                              focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                              placeholder-gray-400 shadow-sm"
+                  />
+                </div>
+              </div>
+
               <div className="overflow-x-auto bg-white rounded-xl shadow-md border border-orange-100">
-                <table className="min-w-full text-sm text-left">
+                    <table className="min-w-full text-sm text-left">
                   <thead className="bg-gradient-to-r from-orange-50 to-orange-100 text-orange-800 text-xs uppercase tracking-wider">
                     <tr>
                       <th className="px-6 py-4 font-semibold">
@@ -607,7 +634,14 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-orange-100">
-                    {products.map((product) => (
+                    {filteredProducts.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                          No products found
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredProducts.map((product) => (
                       <tr
                         key={product.id}
                         className="hover:bg-orange-50 transition-colors"
@@ -650,14 +684,14 @@ export default function AdminDashboard() {
                             />
                             <button
                               onClick={() => updateStock(product.id)}
-                              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm"
+                              className="bg-blue-600 text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm"
                             >
                               <CheckCircle className="w-4 h-4" /> Update
                             </button>
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    )))}
                   </tbody>
                 </table>
                 {pricePopover.open && (
@@ -718,7 +752,7 @@ export default function AdminDashboard() {
                 <button
                   onClick={exportToCSV}
                   disabled={academicDetails.length === 0}
-                  className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 cursor-pointer bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   <Download size={18} />
                   Export to CSV
