@@ -63,15 +63,6 @@ const WorkoutGear = () => {
       category: "Professional workout-gear",
       countInStock: 15,
     },
-    // {
-    //   id: "parachute-with-harness-6",
-    //   name: "Parachute With Harness",
-    //   slug: "parachute-with-harness",
-    //   description: "Maximize sprint power and stamina with a parachute and harness training combo.",
-    //   image: "/assets/131 - Parchute With Harness/1000211284.png",
-    //   category: "Professional workout-gear",
-    //   countInStock: 15,
-    // },
   ];
 
   const fetchProducts = () => {

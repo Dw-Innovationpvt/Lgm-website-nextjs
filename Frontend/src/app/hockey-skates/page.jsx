@@ -25,6 +25,7 @@ export default function HockeySkatesPage() {
   const { addToCart } = useCart();
   const router = useRouter();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selections, setSelections] = useState({}); // { [id]: { color, size } }
@@ -33,6 +34,7 @@ export default function HockeySkatesPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const res = await fetch("https://api.lgmsports.in/api/products");
         let data = await res.json();
 
@@ -64,6 +66,8 @@ export default function HockeySkatesPage() {
         setProducts(data);
       } catch (err) {
         console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -148,7 +152,7 @@ export default function HockeySkatesPage() {
             Classic Roller Quad Skates deliver smooth, stable rides with a retro style.
           </p>
           <div className="flex items-center justify-between pb-6">
-            <p className="text-gray-600">{products.length} products</p>
+            <p className="text-gray-600">{loading ? "Loading products..." : `${products.length} products`}</p>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setView("grid")}
@@ -192,7 +196,11 @@ export default function HockeySkatesPage() {
               : "grid-cols-1 gap-6"
           }`}
         >
-          {products.map((product) => {
+          {loading
+            ? [...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl overflow-hidden shadow-lg p-6 animate-pulse h-64" />
+              ))
+            : products.map((product) => {
             const sel = selections[product.id] || { color: "", size: "" };
             return (
               <div

@@ -33,6 +33,7 @@ export default function GuardSet() {
   const { addToCart } = useCart();
   const router = useRouter();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // selections shape: { [productId]: { color: string, size: string } }
@@ -41,6 +42,7 @@ export default function GuardSet() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const res = await fetch("https://api.lgmsports.in/api/products");
         let data = await res.json();
 
@@ -103,6 +105,8 @@ export default function GuardSet() {
         setProducts(data);
       } catch (err) {
         console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -241,7 +245,7 @@ export default function GuardSet() {
             Professional storage solutions for your skating equipment.
           </p>
           <div className="flex items-center justify-between pb-6">
-            <p className="text-gray-600">{products.length} products</p>
+            <p className="text-gray-600">{loading ? "Loading products..." : `${products.length} products`}</p>
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setView("grid")}
@@ -284,7 +288,11 @@ export default function GuardSet() {
               : "grid-cols-1 gap-6"
           }`}
         >
-          {products.map((product) => {
+          {loading
+            ? [...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl overflow-hidden shadow-lg p-6 animate-pulse h-64" />
+              ))
+            : products.map((product) => {
             const sel = selections[product.id] || { color: "", size: "" };
             return (
               <div
