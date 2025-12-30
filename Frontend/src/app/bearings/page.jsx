@@ -49,6 +49,7 @@ export default function BearingsPage() {
   const { addToCart } = useCart();
   const router = useRouter();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selections, setSelections] = useState({}); // { [id]: { color, size } }
@@ -120,8 +121,10 @@ export default function BearingsPage() {
         });
 
         setProducts(data);
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching products:", err);
+        setLoading(false);
       }
     };
 
